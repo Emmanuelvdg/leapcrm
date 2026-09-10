@@ -1,7 +1,16 @@
 # Copy this to ./Caddyfile on the VPS (same directory as docker-compose.yml)
-# and replace the domain below. Caddy issues and renews the Let's Encrypt
-# certificate automatically on first request — no certbot setup needed.
+# and replace the domain below.
+#
+# Every workspace gets its own subdomain (e.g. acme.app.theleapcrm.com) —
+# see IS_MULTIWORKSPACE_ENABLED in twenty-server. That needs a wildcard
+# cert, which needs the DNS-01 challenge (HTTP-01 can't prove wildcards),
+# which is why this uses the GoDaddy DNS plugin instead of Caddy's default
+# automatic HTTPS. Requires GODADDY_API_TOKEN to be set in .env as
+# "<GODADDY_API_KEY>:<GODADDY_API_SECRET>" from developer.godaddy.com/keys.
 
-yourdomain.com {
+app.theleapcrm.com, *.app.theleapcrm.com {
+	tls {
+		dns godaddy {env.GODADDY_API_TOKEN}
+	}
 	reverse_proxy server:3000
 }

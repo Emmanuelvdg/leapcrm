@@ -48,11 +48,17 @@ services:
       SUBSCRIPTION_STRIPE_PUBLISHABLE_KEY: ${SUBSCRIPTION_STRIPE_PUBLISHABLE_KEY}
 
   caddy:
-    image: caddy:2
+    build:
+      context: ./caddy
+    image: leapcrm-caddy:${TAG:-latest}
     restart: always
     ports:
       - "80:80"
       - "443:443"
+    environment:
+      # KEY:SECRET from https://developer.godaddy.com/keys — needed for the
+      # DNS-01 challenge that issues the wildcard cert (*.app.theleapcrm.com).
+      GODADDY_API_TOKEN: ${GODADDY_API_TOKEN}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-data:/data
