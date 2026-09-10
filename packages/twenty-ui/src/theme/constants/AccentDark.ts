@@ -1,0 +1,36 @@
+// See AccentLight.ts — same brand-anchored blue ramp, dark-mode variant.
+const LEAP_BLUE_DARK = {
+  blue1: 'color(display-p3 0.058 0.076 0.141)',
+  blue2: 'color(display-p3 0.074 0.091 0.169)',
+  blue3: 'color(display-p3 0.082 0.133 0.324)',
+  blue4: 'color(display-p3 0.035 0.158 0.457)',
+  blue5: 'color(display-p3 0.084 0.203 0.538)',
+  blue6: 'color(display-p3 0.146 0.256 0.614)',
+  blue7: 'color(display-p3 0.203 0.316 0.713)',
+  blue8: 'color(display-p3 0.250 0.379 0.855)',
+  blue9: 'color(display-p3 0.077 0.212 0.927)',
+  blue10: 'color(display-p3 0.152 0.315 0.990)',
+  blue11: 'color(display-p3 0.476 0.681 1.000)',
+  blue12: 'color(display-p3 0.770 0.893 1.000)',
+};
+
+export const ACCENT_DARK = {
+  primary: LEAP_BLUE_DARK.blue5,
+  secondary: LEAP_BLUE_DARK.blue5,
+  tertiary: LEAP_BLUE_DARK.blue3,
+  quaternary: LEAP_BLUE_DARK.blue2,
+  accent3570: LEAP_BLUE_DARK.blue8,
+  accent4060: LEAP_BLUE_DARK.blue8,
+  accent1: LEAP_BLUE_DARK.blue1,
+  accent2: LEAP_BLUE_DARK.blue2,
+  accent3: LEAP_BLUE_DARK.blue3,
+  accent4: LEAP_BLUE_DARK.blue4,
+  accent5: LEAP_BLUE_DARK.blue5,
+  accent6: LEAP_BLUE_DARK.blue6,
+  accent7: LEAP_BLUE_DARK.blue7,
+  accent8: LEAP_BLUE_DARK.blue8,
+  accent9: LEAP_BLUE_DARK.blue9,
+  accent10: LEAP_BLUE_DARK.blue10,
+  accent11: LEAP_BLUE_DARK.blue11,
+  accent12: LEAP_BLUE_DARK.blue12,
+};
