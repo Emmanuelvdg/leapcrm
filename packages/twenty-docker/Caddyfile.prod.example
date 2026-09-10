@@ -1,0 +1,7 @@
+# Copy this to ./Caddyfile on the VPS (same directory as docker-compose.yml)
+# and replace the domain below. Caddy issues and renews the Let's Encrypt
+# certificate automatically on first request — no certbot setup needed.
+
+yourdomain.com {
+	reverse_proxy server:3000
+}
