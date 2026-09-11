@@ -22,6 +22,13 @@ services:
     environment:
       FRONTEND_URL: ${FRONTEND_URL}
 
+      # Defaults (false/true/30 respectively) would break production if left
+      # unset — see the comments next to each in .env.prod.example.
+      IS_MULTIWORKSPACE_ENABLED: ${IS_MULTIWORKSPACE_ENABLED}
+      IS_WORKSPACE_CREATION_LIMITED_TO_SERVER_ADMINS: ${IS_WORKSPACE_CREATION_LIMITED_TO_SERVER_ADMINS}
+      SUBSCRIPTION_TRIAL_DAYS: ${SUBSCRIPTION_TRIAL_DAYS}
+      SUBSCRIPTION_GRANDFATHER_BEFORE: ${SUBSCRIPTION_GRANDFATHER_BEFORE}
+
       EMAIL_DRIVER: ${EMAIL_DRIVER}
       EMAIL_FROM_ADDRESS: ${EMAIL_FROM_ADDRESS}
       EMAIL_FROM_NAME: ${EMAIL_FROM_NAME}
@@ -43,22 +50,19 @@ services:
     image: leapcrm:${TAG:-latest}
     environment:
       FRONTEND_URL: ${FRONTEND_URL}
+      IS_MULTIWORKSPACE_ENABLED: ${IS_MULTIWORKSPACE_ENABLED}
       IS_SUBSCRIPTION_BILLING_ENABLED: ${IS_SUBSCRIPTION_BILLING_ENABLED}
       SUBSCRIPTION_STRIPE_API_KEY: ${SUBSCRIPTION_STRIPE_API_KEY}
       SUBSCRIPTION_STRIPE_PUBLISHABLE_KEY: ${SUBSCRIPTION_STRIPE_PUBLISHABLE_KEY}
 
+  # Stock Caddy image — on-demand TLS (see Caddyfile.prod.example) needs no
+  # DNS provider plugin, unlike a wildcard cert via DNS-01.
   caddy:
-    build:
-      context: ./caddy
-    image: leapcrm-caddy:${TAG:-latest}
+    image: caddy:2
     restart: always
     ports:
       - "80:80"
       - "443:443"
-    environment:
-      # KEY:SECRET from https://developer.godaddy.com/keys — needed for the
-      # DNS-01 challenge that issues the wildcard cert (*.app.theleapcrm.com).
-      GODADDY_API_TOKEN: ${GODADDY_API_TOKEN}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-data:/data

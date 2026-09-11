@@ -21,6 +21,7 @@ export enum ApiPath {
   PublicAssets = 'public-assets',
   Rest = 'rest',
   RouteTrigger = 's',
+  TlsCertAsk = 'internal/tls-cert-ask',
   Webhooks = 'webhooks',
   WellKnown = '.well-known',
 }

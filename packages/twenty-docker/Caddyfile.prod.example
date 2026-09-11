@@ -1,16 +1,25 @@
-# Copy this to ./Caddyfile on the VPS (same directory as docker-compose.yml)
-# and replace the domain below.
+# Copy this to ./Caddyfile on the VPS (same directory as docker-compose.yml).
 #
-# Every workspace gets its own subdomain (e.g. acme.app.theleapcrm.com) —
-# see IS_MULTIWORKSPACE_ENABLED in twenty-server. That needs a wildcard
-# cert, which needs the DNS-01 challenge (HTTP-01 can't prove wildcards),
-# which is why this uses the GoDaddy DNS plugin instead of Caddy's default
-# automatic HTTPS. Requires GODADDY_API_TOKEN to be set in .env as
-# "<GODADDY_API_KEY>:<GODADDY_API_SECRET>" from developer.godaddy.com/keys.
+# Every workspace gets its own subdomain (e.g. acme.leapcrm.tech) — see
+# IS_MULTIWORKSPACE_ENABLED in twenty-server. Rather than a wildcard cert
+# (which needs a DNS-01 challenge and a provider-specific plugin), this uses
+# Caddy's on-demand TLS: a normal per-hostname cert is issued via HTTP-01 the
+# first time each subdomain is actually visited. The DNS wildcard record
+# (*.leapcrm.tech, already pointed at this VPS) makes every subdomain
+# resolve here; the `ask` endpoint below stops anyone from burning the
+# Let's Encrypt rate limit by requesting certs for made-up subdomains — it
+# only allows the base domain or a hostname that resolves to a real
+# workspace (see TlsCertAskController in twenty-server).
 
-app.theleapcrm.com, *.app.theleapcrm.com {
+{
+	on_demand_tls {
+		ask http://server:3000/internal/tls-cert-ask
+	}
+}
+
+leapcrm.tech, *.leapcrm.tech {
 	tls {
-		dns godaddy {env.GODADDY_API_TOKEN}
+		on_demand
 	}
 	reverse_proxy server:3000
 }

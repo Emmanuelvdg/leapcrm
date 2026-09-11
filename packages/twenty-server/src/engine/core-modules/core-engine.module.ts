@@ -62,6 +62,7 @@ import { SearchModule } from 'src/engine/core-modules/search/search.module';
 import { WorkspaceSSOModule } from 'src/engine/core-modules/sso/sso.module';
 import { WellKnownModule } from 'src/engine/core-modules/well-known/well-known.module';
 import { TelemetryModule } from 'src/engine/core-modules/telemetry/telemetry.module';
+import { TlsCertAskModule } from 'src/engine/core-modules/tls-cert-ask/tls-cert-ask.module';
 import { TwentyConfigModule } from 'src/engine/core-modules/twenty-config/twenty-config.module';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { UsageModule } from 'src/engine/core-modules/usage/usage.module';
@@ -91,6 +92,7 @@ import { FileModule } from './file/file.module';
     EnvironmentModule,
     TwentyConfigModule.forRoot(),
     HealthModule,
+    TlsCertAskModule,
     AuthModule,
     BillingModule,
     BillingWebhookModule,
