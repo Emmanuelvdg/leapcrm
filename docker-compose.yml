@@ -1,0 +1,143 @@
+name: leapcrm
+
+# Self-contained production compose file for Hostinger's Docker Manager,
+# which only runs a docker-compose.yml at the repo root and has no concept
+# of layering a second override file. Builds LeapCRM's own image (not the
+# upstream twentycrm/twenty image) and includes Caddy with on-demand TLS
+# (see packages/twenty-docker/Caddyfile.prod.example for the Caddyfile this
+# expects at ./Caddyfile, and packages/twenty-server/src/engine/core-modules/
+# tls-cert-ask/ for the endpoint Caddy calls to gate cert issuance).
+#
+# All secrets below (${VAR}) are meant to be set through Docker Manager's
+# own environment variable UI — never commit real values for these.
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: packages/twenty-docker/twenty/Dockerfile
+      target: twenty
+    image: leapcrm:${TAG:-latest}
+    volumes:
+      - server-local-data:/app/packages/twenty-server/.local-storage
+    environment:
+      NODE_PORT: 3000
+      PG_DATABASE_URL: postgres://${PG_DATABASE_USER:-postgres}:${PG_DATABASE_PASSWORD}@${PG_DATABASE_HOST:-db}:${PG_DATABASE_PORT:-5432}/default
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      SERVER_URL: ${SERVER_URL}
+      FRONTEND_URL: ${FRONTEND_URL}
+
+      APP_SECRET: ${APP_SECRET}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      FALLBACK_ENCRYPTION_KEY: ${FALLBACK_ENCRYPTION_KEY}
+
+      IS_MULTIWORKSPACE_ENABLED: ${IS_MULTIWORKSPACE_ENABLED:-true}
+      IS_WORKSPACE_CREATION_LIMITED_TO_SERVER_ADMINS: ${IS_WORKSPACE_CREATION_LIMITED_TO_SERVER_ADMINS:-false}
+      SUBSCRIPTION_TRIAL_DAYS: ${SUBSCRIPTION_TRIAL_DAYS:-0}
+      SUBSCRIPTION_GRANDFATHER_BEFORE: ${SUBSCRIPTION_GRANDFATHER_BEFORE}
+
+      STORAGE_TYPE: ${STORAGE_TYPE:-local}
+
+      EMAIL_DRIVER: ${EMAIL_DRIVER}
+      EMAIL_FROM_ADDRESS: ${EMAIL_FROM_ADDRESS}
+      EMAIL_FROM_NAME: ${EMAIL_FROM_NAME}
+      EMAIL_SMTP_HOST: ${EMAIL_SMTP_HOST}
+      EMAIL_SMTP_PORT: ${EMAIL_SMTP_PORT}
+      EMAIL_SMTP_USER: ${EMAIL_SMTP_USER}
+      EMAIL_SMTP_PASSWORD: ${EMAIL_SMTP_PASSWORD}
+
+      IS_SUBSCRIPTION_BILLING_ENABLED: ${IS_SUBSCRIPTION_BILLING_ENABLED:-true}
+      SUBSCRIPTION_STRIPE_API_KEY: ${SUBSCRIPTION_STRIPE_API_KEY}
+      SUBSCRIPTION_STRIPE_PUBLISHABLE_KEY: ${SUBSCRIPTION_STRIPE_PUBLISHABLE_KEY}
+      SUBSCRIPTION_STRIPE_WEBHOOK_SECRET: ${SUBSCRIPTION_STRIPE_WEBHOOK_SECRET}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail http://localhost:3000/healthz
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: always
+
+  worker:
+    build:
+      context: .
+      dockerfile: packages/twenty-docker/twenty/Dockerfile
+      target: twenty
+    image: leapcrm:${TAG:-latest}
+    volumes:
+      - server-local-data:/app/packages/twenty-server/.local-storage
+    command: ["yarn", "worker:prod"]
+    environment:
+      PG_DATABASE_URL: postgres://${PG_DATABASE_USER:-postgres}:${PG_DATABASE_PASSWORD}@${PG_DATABASE_HOST:-db}:${PG_DATABASE_PORT:-5432}/default
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      SERVER_URL: ${SERVER_URL}
+      FRONTEND_URL: ${FRONTEND_URL}
+      DISABLE_DB_MIGRATIONS: "true" # already runs on the server
+      DISABLE_CRON_JOBS_REGISTRATION: "true" # already runs on the server
+
+      APP_SECRET: ${APP_SECRET}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      FALLBACK_ENCRYPTION_KEY: ${FALLBACK_ENCRYPTION_KEY}
+
+      IS_MULTIWORKSPACE_ENABLED: ${IS_MULTIWORKSPACE_ENABLED:-true}
+      STORAGE_TYPE: ${STORAGE_TYPE:-local}
+
+      IS_SUBSCRIPTION_BILLING_ENABLED: ${IS_SUBSCRIPTION_BILLING_ENABLED:-true}
+      SUBSCRIPTION_STRIPE_API_KEY: ${SUBSCRIPTION_STRIPE_API_KEY}
+      SUBSCRIPTION_STRIPE_PUBLISHABLE_KEY: ${SUBSCRIPTION_STRIPE_PUBLISHABLE_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+      server:
+        condition: service_healthy
+    restart: always
+
+  db:
+    image: postgres:16
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: default
+      POSTGRES_PASSWORD: ${PG_DATABASE_PASSWORD}
+      POSTGRES_USER: ${PG_DATABASE_USER:-postgres}
+    healthcheck:
+      test: pg_isready -U ${PG_DATABASE_USER:-postgres} -h localhost -d postgres
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: always
+
+  redis:
+    image: redis
+    restart: always
+    command: ["--maxmemory-policy", "noeviction"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Stock image — on-demand TLS needs no DNS provider plugin, unlike a
+  # wildcard cert via DNS-01.
+  caddy:
+    image: caddy:2
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - server
+
+volumes:
+  db-data:
+  server-local-data:
+  caddy-data:
+  caddy-config:

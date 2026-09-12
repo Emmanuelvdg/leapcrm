@@ -1,0 +1,19 @@
+# On-demand TLS: a normal cert is issued via HTTP-01 the first time each
+# hostname is visited (every workspace gets its own subdomain), instead of a
+# wildcard cert via DNS-01 — leapcrm.tech's DNS is on Hostinger, which has no
+# confirmed Caddy DNS-01 plugin. The `ask` endpoint only allows the base
+# domain or a hostname that resolves to a real workspace, so it can't be
+# abused to burn the shared Let's Encrypt rate limit.
+
+{
+	on_demand_tls {
+		ask http://server:3000/internal/tls-cert-ask
+	}
+}
+
+leapcrm.tech, *.leapcrm.tech {
+	tls {
+		on_demand
+	}
+	reverse_proxy server:3000
+}
