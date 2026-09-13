@@ -223,6 +223,12 @@ export class AiModelRegistryService {
   // for up to WORKSPACE_REGISTRY_TTL_MS.
   invalidateWorkspaceRegistry(workspaceId: string): void {
     this.workspaceRegistryCache.delete(workspaceId);
+    // The registry maps above get rebuilt on next read, but createProvider()
+    // caches its SDK instances by name alone - without also evicting this
+    // workspace's entries, a rebuild would silently keep returning the old
+    // instance (stale baseUrl/apiKey) forever, since the cache key itself
+    // never changes across edits.
+    this.sdkProviderFactory.clearCacheForPrefix(`ws:${workspaceId}:`);
   }
 
   // Workspace-aware counterpart to getModel(): checks the shared instance

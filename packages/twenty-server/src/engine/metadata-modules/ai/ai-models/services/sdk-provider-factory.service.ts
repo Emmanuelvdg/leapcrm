@@ -88,6 +88,20 @@ export class SdkProviderFactoryService {
     this.providerInstances.clear();
   }
 
+  // Evicts only entries whose cache key starts with the given prefix (e.g.
+  // a single workspace's `ws:<workspaceId>:` keys), rather than wiping every
+  // provider instance instance-wide. Without this, updating a workspace's own
+  // AI provider had no way to evict just that provider's cached instance -
+  // createProvider() caches by name alone, so a config change (e.g. a
+  // corrected baseUrl) was silently ignored until the whole process restarted.
+  clearCacheForPrefix(prefix: string): void {
+    for (const key of this.providerInstances.keys()) {
+      if (key.startsWith(prefix)) {
+        this.providerInstances.delete(key);
+      }
+    }
+  }
+
   private buildProviderInstance(
     config: AiProviderConfig,
   ): AiSdkProviderInstance {
