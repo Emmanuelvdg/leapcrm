@@ -7,6 +7,7 @@ import { msg } from '@lingui/core/macro';
 import { WorkspaceWelcomeEmail, renderEmail } from 'twenty-emails';
 import { PermissionFlagType } from 'twenty-shared/constants';
 import { assertIsDefinedOrThrow, isDefined } from 'twenty-shared/utils';
+import { FieldActorSource } from 'twenty-shared/types';
 import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 import {
   DataSource,
@@ -47,6 +48,9 @@ import { InjectMessageQueue } from 'src/engine/core-modules/message-queue/decora
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
 import { MessageQueueService } from 'src/engine/core-modules/message-queue/services/message-queue.service';
 import { SdkClientGenerationService } from 'src/engine/core-modules/sdk-client/sdk-client-generation.service';
+import { GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
+import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
+import { CompanyWorkspaceEntity } from 'src/modules/company/standard-objects/company.workspace-entity';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { UpgradeMigrationService } from 'src/engine/core-modules/upgrade/services/upgrade-migration.service';
 import { UpgradeSequenceReaderService } from 'src/engine/core-modules/upgrade/services/upgrade-sequence-reader.service';
@@ -164,6 +168,7 @@ export class WorkspaceService {
     private readonly emailService: EmailService,
     private readonly i18nService: I18nService,
     private readonly workspaceDomainsService: WorkspaceDomainsService,
+    private readonly globalWorkspaceOrmManager: GlobalWorkspaceOrmManager,
   ) {}
 
   async updateWorkspaceById({
@@ -454,6 +459,16 @@ export class WorkspaceService {
       this.exceptionHandlerService.captureExceptions([error as Error]);
     }
 
+    try {
+      await this.createTenantCompanyInPlatformOpsWorkspace(workspace);
+    } catch (error) {
+      this.logger.error(
+        `failed to create tenant company record in the platform-ops workspace for workspace ${workspace.id}`,
+        error,
+      );
+      this.exceptionHandlerService.captureExceptions([error as Error]);
+    }
+
     await this.coreEntityCacheService.invalidate(
       'workspaceEntity',
       workspace.id,
@@ -493,6 +508,56 @@ export class WorkspaceService {
       text,
       html,
     });
+  }
+
+  // Not a Workflow trigger - a workspace's own automations can't see other
+  // tenants or the platform-level signup event at all, so instead a Company
+  // record for the new tenant is created directly in the platform-ops
+  // workspace, where existing "Record Created" workflow automations on
+  // Company already work normally, same as for any other company.
+  private async createTenantCompanyInPlatformOpsWorkspace(
+    workspace: WorkspaceEntity,
+  ): Promise<void> {
+    const platformOpsWorkspaceId = this.twentyConfigService.get(
+      'PLATFORM_OPS_WORKSPACE_ID',
+    );
+
+    if (!platformOpsWorkspaceId || platformOpsWorkspaceId === workspace.id) {
+      return;
+    }
+
+    const link = this.workspaceDomainsService.buildWorkspaceURL({
+      workspace,
+    });
+
+    const authContext = buildSystemAuthContext(platformOpsWorkspaceId);
+
+    await this.globalWorkspaceOrmManager.executeInWorkspaceContext(
+      async () => {
+        const companyRepository =
+          await this.globalWorkspaceOrmManager.getRepository(
+            platformOpsWorkspaceId,
+            CompanyWorkspaceEntity,
+            { shouldBypassPermissionChecks: true },
+          );
+
+        const lastPosition =
+          (await companyRepository.maximum('position', undefined)) ?? 0;
+
+        await companyRepository.save({
+          name: workspace.displayName,
+          domainName: { primaryLinkUrl: link.toString() },
+          position: lastPosition + 1,
+          createdBy: {
+            source: FieldActorSource.SYSTEM,
+            workspaceMemberId: null,
+            name: 'LeapCRM',
+            context: {},
+          },
+        });
+      },
+      authContext,
+    );
   }
 
   private async activateAndInitializeUpgradeState({

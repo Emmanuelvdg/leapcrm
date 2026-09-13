@@ -44,6 +44,7 @@ import { WorkspaceDataSourceModule } from 'src/engine/workspace-datasource/works
 import { WorkspaceManagerModule } from 'src/engine/workspace-manager/workspace-manager.module';
 import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace-migration/workspace-migration.module';
 import { StandardObjectsPrefillModule } from 'src/engine/workspace-manager/standard-objects-prefill-data/standard-objects-prefill.module';
+import { GlobalWorkspaceDataSourceModule } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-datasource.module';
 
 @Module({
   imports: [
@@ -85,6 +86,7 @@ import { StandardObjectsPrefillModule } from 'src/engine/workspace-manager/stand
     CompanyEnrichmentModule,
     EmailModule,
     I18nModule,
+    GlobalWorkspaceDataSourceModule,
   ],
   exports: [WorkspaceService, CheckCustomDomainValidRecordsCronCommand],
   providers: [

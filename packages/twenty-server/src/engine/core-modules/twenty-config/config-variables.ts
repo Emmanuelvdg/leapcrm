@@ -1158,6 +1158,15 @@ export class ConfigVariables {
   DEFAULT_SUBDOMAIN = 'app';
 
   @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.SERVER_CONFIG,
+    description:
+      'Workspace ID of the platform-operations workspace. When set, a Company record is created there for every new tenant workspace, so existing workflow automations on the Company object (e.g. Record Created) fire for new signups too.',
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  PLATFORM_OPS_WORKSPACE_ID?: string;
+
+  @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description: 'Page ID for Cal.com booking integration',
     isHiddenInAdminPanel: true,
