@@ -29,8 +29,13 @@ export class TlsCertAskController {
     }
 
     const frontHostname = this.domainServerConfigService.getFrontUrl().hostname;
+    // getBaseUrl() adds the DEFAULT_SUBDOMAIN prefix (e.g. "app.") when
+    // multi-workspace is enabled — that's where sign-in/sign-up/onboarding
+    // actually lives, separate from both the bare domain and any workspace's
+    // own subdomain.
+    const baseHostname = this.domainServerConfigService.getBaseUrl().hostname;
 
-    if (hostname === frontHostname) {
+    if (hostname === frontHostname || hostname === baseHostname) {
       return { allowed: true };
     }
 
