@@ -4,6 +4,7 @@ import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import assert from 'assert';
 
 import { msg } from '@lingui/core/macro';
+import { WorkspaceWelcomeEmail, renderEmail } from 'twenty-emails';
 import { PermissionFlagType } from 'twenty-shared/constants';
 import { assertIsDefinedOrThrow, isDefined } from 'twenty-shared/utils';
 import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
@@ -27,6 +28,8 @@ import { BillingService } from 'src/engine/core-modules/billing/services/billing
 import { DnsManagerService } from 'src/engine/core-modules/dns-manager/services/dns-manager.service';
 import { CustomDomainManagerService } from 'src/engine/core-modules/domain/custom-domain-manager/services/custom-domain-manager.service';
 import { SubdomainManagerService } from 'src/engine/core-modules/domain/subdomain-manager/services/subdomain-manager.service';
+import { WorkspaceDomainsService } from 'src/engine/core-modules/domain/workspace-domains/services/workspace-domains.service';
+import { EmailService } from 'src/engine/core-modules/email/email.service';
 import { EmailingDomainEntity } from 'src/engine/core-modules/emailing-domain/emailing-domain.entity';
 import {
   EmailingDomainWorkspaceCleanupJob,
@@ -39,6 +42,7 @@ import {
   FileWorkspaceFolderDeletionJob,
   type FileWorkspaceFolderDeletionJobData,
 } from 'src/engine/core-modules/file/jobs/file-workspace-folder-deletion.job';
+import { I18nService } from 'src/engine/core-modules/i18n/i18n.service';
 import { InjectMessageQueue } from 'src/engine/core-modules/message-queue/decorators/message-queue.decorator';
 import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
 import { MessageQueueService } from 'src/engine/core-modules/message-queue/services/message-queue.service';
@@ -157,6 +161,9 @@ export class WorkspaceService {
     private readonly upgradeMigrationService: UpgradeMigrationService,
     private readonly upgradeSequenceReaderService: UpgradeSequenceReaderService,
     private readonly sdkClientGenerationService: SdkClientGenerationService,
+    private readonly emailService: EmailService,
+    private readonly i18nService: I18nService,
+    private readonly workspaceDomainsService: WorkspaceDomainsService,
   ) {}
 
   async updateWorkspaceById({
@@ -437,6 +444,16 @@ export class WorkspaceService {
       this.exceptionHandlerService.captureExceptions([error as Error]);
     }
 
+    try {
+      await this.sendWorkspaceWelcomeEmail(user, workspace);
+    } catch (error) {
+      this.logger.error(
+        `failed to send welcome email for workspace ${workspace.id}`,
+        error,
+      );
+      this.exceptionHandlerService.captureExceptions([error as Error]);
+    }
+
     await this.coreEntityCacheService.invalidate(
       'workspaceEntity',
       workspace.id,
@@ -444,6 +461,37 @@ export class WorkspaceService {
 
     return await this.workspaceRepository.findOneBy({
       id: workspace.id,
+    });
+  }
+
+  private async sendWorkspaceWelcomeEmail(
+    user: AuthContextUser,
+    workspace: WorkspaceEntity,
+  ): Promise<void> {
+    const link = this.workspaceDomainsService.buildWorkspaceURL({
+      workspace,
+    });
+
+    const emailData = {
+      userFirstName: user.firstName,
+      workspaceDisplayName: workspace.displayName,
+      link: link.toString(),
+      locale: user.locale,
+    };
+
+    const emailTemplate = WorkspaceWelcomeEmail(emailData);
+    const html = await renderEmail(emailTemplate);
+    const text = await renderEmail(emailTemplate, { plainText: true });
+
+    const i18n = this.i18nService.getI18nInstance(user.locale);
+    const subject = i18n._(msg`Welcome to LeapCRM`);
+
+    await this.emailService.send({
+      from: `${this.twentyConfigService.get('EMAIL_FROM_NAME')} <${this.twentyConfigService.get('EMAIL_FROM_ADDRESS')}>`,
+      to: user.email,
+      subject,
+      text,
+      html,
     });
   }
 

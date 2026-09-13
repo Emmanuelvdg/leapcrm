@@ -15,4 +15,5 @@ export * from './emails/send-invite-link.email';
 export * from './emails/server-admin-access-changed.email';
 export * from './emails/validate-approved-access-domain.email';
 export * from './emails/warn-suspended-workspace.email';
+export * from './emails/workspace-welcome.email';
 export * from './utils/email-renderer/email-renderer';

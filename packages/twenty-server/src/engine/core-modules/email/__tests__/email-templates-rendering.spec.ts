@@ -12,6 +12,7 @@ import {
   SendInviteLinkEmail,
   ServerAdminAccessChangedEmail,
   WarnSuspendedWorkspaceEmail,
+  WorkspaceWelcomeEmail,
   EmailRenderError,
   renderEmail,
 } from 'twenty-emails';
@@ -143,6 +144,16 @@ const TEMPLATES = [
       locale: 'en',
     }),
     expectedContent: 'https://app.twenty.com/settings/billing',
+  },
+  {
+    name: 'WorkspaceWelcomeEmail',
+    element: WorkspaceWelcomeEmail({
+      userFirstName: 'Tim',
+      workspaceDisplayName: 'Acme Inc',
+      link: 'https://acme.leapcrm.tech',
+      locale: 'en',
+    }),
+    expectedContent: 'https://acme.leapcrm.tech',
   },
 ];
 

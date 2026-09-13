@@ -12,9 +12,11 @@ import { DnsManagerModule } from 'src/engine/core-modules/dns-manager/dns-manage
 import { CustomDomainManagerModule } from 'src/engine/core-modules/domain/custom-domain-manager/custom-domain-manager.module';
 import { SubdomainManagerModule } from 'src/engine/core-modules/domain/subdomain-manager/subdomain-manager.module';
 import { WorkspaceDomainsModule } from 'src/engine/core-modules/domain/workspace-domains/workspace-domains.module';
+import { EmailModule } from 'src/engine/core-modules/email/email.module';
 import { EnterpriseModule } from 'src/engine/core-modules/enterprise/enterprise.module';
 import { FeatureFlagModule } from 'src/engine/core-modules/feature-flag/feature-flag.module';
 import { FileModule } from 'src/engine/core-modules/file/file.module';
+import { I18nModule } from 'src/engine/core-modules/i18n/i18n.module';
 import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { OnboardingModule } from 'src/engine/core-modules/onboarding/onboarding.module';
 import { SdkClientModule } from 'src/engine/core-modules/sdk-client/sdk-client.module';
@@ -81,6 +83,8 @@ import { StandardObjectsPrefillModule } from 'src/engine/workspace-manager/stand
     UpgradeModule,
     SdkClientModule,
     CompanyEnrichmentModule,
+    EmailModule,
+    I18nModule,
   ],
   exports: [WorkspaceService, CheckCustomDomainValidRecordsCronCommand],
   providers: [
