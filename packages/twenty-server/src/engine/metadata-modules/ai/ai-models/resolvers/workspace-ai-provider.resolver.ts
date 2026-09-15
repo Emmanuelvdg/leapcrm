@@ -14,10 +14,13 @@ import { WorkspaceAiProviderDTO } from 'src/engine/metadata-modules/ai/ai-models
 import { AiModelRegistryService } from 'src/engine/metadata-modules/ai/ai-models/services/ai-model-registry.service';
 import { WorkspaceAiProviderService } from 'src/engine/metadata-modules/ai/ai-models/services/workspace-ai-provider.service';
 
-@UseGuards(
-  WorkspaceAuthGuard,
-  SettingsPermissionGuard(PermissionFlagType.AI_SETTINGS),
-)
+// getWorkspaceAiProviders is read-only workspace-auth-only (below) rather
+// than gated here at class level - toDTO() never exposes the raw apiKey, so
+// there's no security reason to restrict it, and every member needs it to
+// use AI Chat/Agents with the workspace's own provider, not just whoever can
+// configure one. Only the mutations that actually create/edit/delete a
+// provider (including its API key) require AI_SETTINGS.
+@UseGuards(WorkspaceAuthGuard)
 @MetadataResolver()
 export class WorkspaceAiProviderResolver {
   constructor(
@@ -35,6 +38,7 @@ export class WorkspaceAiProviderResolver {
     return rows.map((row) => this.workspaceAiProviderService.toDTO(row));
   }
 
+  @UseGuards(SettingsPermissionGuard(PermissionFlagType.AI_SETTINGS))
   @Mutation(() => WorkspaceAiProviderDTO)
   async addWorkspaceAiProvider(
     @Args('input') input: AddWorkspaceAiProviderInput,
@@ -50,6 +54,7 @@ export class WorkspaceAiProviderResolver {
     return this.workspaceAiProviderService.toDTO(created);
   }
 
+  @UseGuards(SettingsPermissionGuard(PermissionFlagType.AI_SETTINGS))
   @Mutation(() => WorkspaceAiProviderDTO)
   async updateWorkspaceAiProvider(
     @Args('input') input: UpdateWorkspaceAiProviderInput,
@@ -65,6 +70,7 @@ export class WorkspaceAiProviderResolver {
     return this.workspaceAiProviderService.toDTO(updated);
   }
 
+  @UseGuards(SettingsPermissionGuard(PermissionFlagType.AI_SETTINGS))
   @Mutation(() => Boolean)
   async removeWorkspaceAiProvider(
     @Args('id') id: string,
