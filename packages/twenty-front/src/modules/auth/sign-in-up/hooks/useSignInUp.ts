@@ -99,11 +99,23 @@ export const useSignInUp = (form: UseFormReturn<Form>) => {
 
       const exists = data?.checkUserExists.exists ?? false;
 
-      // The user already declared their intent by picking "Sign in" or
-      // "Create account" at the Init step — checkUserExists here is a
-      // validation check against that intent, not the source of truth for
-      // mode, so a mismatch resets to Init instead of silently overriding
-      // their choice.
+      // An invite link never has the user pick "Sign in" vs "Create account"
+      // up front (signInUpMode just sits at its SignIn default, or a value
+      // left over from the auto-continue effect below) - checkUserExists is
+      // authoritative here, not a guess to validate against. Getting this
+      // wrong bounces a brand-new invitee to a false "No account found"
+      // error before they ever see a password field.
+      if (isInviteMode) {
+        setSignInUpMode(exists ? SignInUpMode.SignIn : SignInUpMode.SignUp);
+        setSignInUpStep(SignInUpStep.Password);
+        return;
+      }
+
+      // Outside invite mode, the user already declared their intent by
+      // picking "Sign in" or "Create account" at the Init step —
+      // checkUserExists here is a validation check against that intent, not
+      // the source of truth for mode, so a mismatch resets to Init instead
+      // of silently overriding their choice.
       if (signInUpMode === SignInUpMode.SignIn && !exists) {
         setSignInUpStep(SignInUpStep.Init);
         return enqueueErrorSnackBar({
@@ -130,7 +142,9 @@ export const useSignInUp = (form: UseFormReturn<Form>) => {
     t,
     checkUserExistsQuery,
     signInUpMode,
+    setSignInUpMode,
     setSignInUpStep,
+    isInviteMode,
     errorMsgUserAlreadyExist,
   ]);
 
