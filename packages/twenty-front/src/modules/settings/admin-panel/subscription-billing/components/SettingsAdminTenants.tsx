@@ -13,6 +13,7 @@ import { Section } from 'twenty-ui/layout';
 import { OverflowingTextWithTooltip } from 'twenty-ui/surfaces';
 import { themeCssVariables } from 'twenty-ui/theme-constants';
 import { H2Title } from 'twenty-ui/typography';
+import { isDefined } from 'twenty-shared/utils';
 
 import { AdminTenantsOverviewDocument } from '~/generated-admin/graphql';
 
@@ -99,7 +100,7 @@ export const SettingsAdminTenants = () => {
                   {tenant.activeMembers} / {tenant.seats}
                 </TableCell>
                 <TableCell>
-                  {tenant.estimatedMrrCents !== null
+                  {isDefined(tenant.estimatedMrrCents)
                     ? `${(tenant.estimatedMrrCents / 100).toFixed(2)} USD`
                     : '—'}
                 </TableCell>

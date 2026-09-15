@@ -903,6 +903,23 @@ export class AuthService {
         ? userData.newUserPayload.email
         : userData.existingUser.email;
 
+    // A workspaceInviteHash was supplied but didn't resolve to a real
+    // workspace (findWorkspaceForSignInUp came back empty - stale/mistyped
+    // hash, or the workspace's invite link was regenerated after this email
+    // was sent). Without this check, every branch below only fires when
+    // isTargetAnExistingWorkspace is true, so this case fell through
+    // silently into signUpOnNewWorkspace() - the invited person got a brand
+    // new, unrelated workspace instead of a clear "invite is invalid" error.
+    if (hasPublicInviteLink && !isTargetAnExistingWorkspace) {
+      throw new AuthException(
+        'Invalid or expired invitation link',
+        AuthExceptionCode.FORBIDDEN_EXCEPTION,
+        {
+          userFriendlyMessage: msg`This invite link is invalid or has expired. Ask whoever invited you to send a new one.`,
+        },
+      );
+    }
+
     if (
       workspace?.approvedAccessDomains.some(
         (trustDomain) =>

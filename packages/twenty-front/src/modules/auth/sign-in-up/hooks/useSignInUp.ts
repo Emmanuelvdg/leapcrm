@@ -186,8 +186,11 @@ export const useSignInUp = (form: UseFormReturn<Form>) => {
           );
         }
 
+        // An invited teammate is joining an already-provisioned, already-paying
+        // workspace - they should land in it directly, not be routed through
+        // plan selection meant for someone creating a brand new workspace.
         const verifyEmailRedirectPath = buildAppPathWithQueryParams(
-          AppPath.PlanRequired,
+          isInviteMode ? AppPath.Index : AppPath.PlanRequired,
           await buildSearchParamsFromUrlSyncedStates(),
         );
 
