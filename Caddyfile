@@ -37,10 +37,11 @@ leapcrm.tech, *.leapcrm.tech {
 	# response is received, so it replaces that value instead of the plain
 	# header directive's Set() landing before reverse_proxy copies the
 	# upstream header on top, which produced two stacked Cache-Control
-	# values (browsers then honour the more conservative one).
+	# values. Do NOT also add a "-Cache-Control" delete here: Caddy applies
+	# delete operations after set within the same block, so a delete
+	# alongside this set cancels the set out and the header ships empty.
 	handle /assets/* {
 		reverse_proxy server:3000 {
-			header_down -Cache-Control
 			header_down Cache-Control "public, max-age=31536000, immutable"
 		}
 	}
