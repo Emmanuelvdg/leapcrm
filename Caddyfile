@@ -32,8 +32,20 @@ leapcrm.tech, *.leapcrm.tech {
 		-X-Powered-By
 	}
 
-	@assets path /assets/*
-	header @assets Cache-Control "public, max-age=31536000, immutable"
+	# twenty-server also sends Cache-Control: public, max-age=0 on these
+	# files - reverse_proxy's own header_down runs after the upstream
+	# response is received, so it replaces that value instead of the plain
+	# header directive's Set() landing before reverse_proxy copies the
+	# upstream header on top, which produced two stacked Cache-Control
+	# values (browsers then honour the more conservative one).
+	handle /assets/* {
+		reverse_proxy server:3000 {
+			header_down -Cache-Control
+			header_down Cache-Control "public, max-age=31536000, immutable"
+		}
+	}
 
-	reverse_proxy server:3000
+	handle {
+		reverse_proxy server:3000
+	}
 }
