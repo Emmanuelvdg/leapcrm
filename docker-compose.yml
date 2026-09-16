@@ -36,6 +36,11 @@ services:
       SUBSCRIPTION_TRIAL_DAYS: ${SUBSCRIPTION_TRIAL_DAYS:-0}
       SUBSCRIPTION_GRANDFATHER_BEFORE: ${SUBSCRIPTION_GRANDFATHER_BEFORE}
 
+      # LOCAL runs workflow Code steps as a plain child process on this host,
+      # no container/VM sandboxing - acceptable while testers are trusted,
+      # closed-user-testing accounts; revisit (LAMBDA) before opening signups.
+      LOGIC_FUNCTION_TYPE: ${LOGIC_FUNCTION_TYPE:-LOCAL}
+
       STORAGE_TYPE: ${STORAGE_TYPE:-local}
 
       EMAIL_DRIVER: ${EMAIL_DRIVER}
@@ -85,6 +90,7 @@ services:
 
       IS_MULTIWORKSPACE_ENABLED: ${IS_MULTIWORKSPACE_ENABLED:-true}
       STORAGE_TYPE: ${STORAGE_TYPE:-local}
+      LOGIC_FUNCTION_TYPE: ${LOGIC_FUNCTION_TYPE:-LOCAL}
 
       IS_SUBSCRIPTION_BILLING_ENABLED: ${IS_SUBSCRIPTION_BILLING_ENABLED:-true}
       SUBSCRIPTION_STRIPE_API_KEY: ${SUBSCRIPTION_STRIPE_API_KEY}

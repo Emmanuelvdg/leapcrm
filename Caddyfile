@@ -4,7 +4,6 @@
 # confirmed Caddy DNS-01 plugin. The `ask` endpoint only allows the base
 # domain or a hostname that resolves to a real workspace, so it can't be
 # abused to burn the shared Let's Encrypt rate limit.
-
 {
 	on_demand_tls {
 		ask http://server:3000/internal/tls-cert-ask
@@ -15,5 +14,26 @@ leapcrm.tech, *.leapcrm.tech {
 	tls {
 		on_demand
 	}
+
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		# Report-only for now: index.html has un-nonced inline <script>/<style>
+		# tags (env config injection, iOS zoom fix), so an enforcing policy
+		# without 'unsafe-inline' would break the app on the first request.
+		# Check the browser console for violations, then switch this to
+		# Content-Security-Policy once it's confirmed clean.
+		Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
+		# twenty-server runs on Express, which sets this by default.
+		-X-Powered-By
+	}
+
+	@assets path /assets/*
+	header @assets Cache-Control "public, max-age=31536000, immutable"
+
 	reverse_proxy server:3000
 }
