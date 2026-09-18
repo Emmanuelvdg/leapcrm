@@ -1,0 +1,19 @@
+diff --git a/lib/utils/tree-kill.js b/lib/utils/tree-kill.js
+index 47f78a070523e7278c5137c584feed3689c62620..b29f90df5c492f6b9f2591dd27b9ddb3e0ae7b8a 100644
+--- a/lib/utils/tree-kill.js
++++ b/lib/utils/tree-kill.js
+@@ -4,7 +4,13 @@ exports.treeKillSync = treeKillSync;
+ const child_process_1 = require("child_process");
+ function treeKillSync(pid, signal) {
+     if (process.platform === 'win32') {
+-        (0, child_process_1.execSync)('taskkill /pid ' + pid + ' /T /F');
++        try {
++            (0, child_process_1.execSync)('taskkill /pid ' + pid + ' /T /F');
++        }
++        catch (err) {
++            // taskkill exits non-zero (and execSync throws) when the target process
++            // already exited before the kill ran - benign, matches the ESRCH handling below.
++        }
+         return;
+     }
+     const childs = getAllChilds(pid);

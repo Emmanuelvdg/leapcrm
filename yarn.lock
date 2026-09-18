@@ -11639,7 +11639,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/cli@npm:^11.0.16":
+"@nestjs/cli@npm:11.0.16":
   version: 11.0.16
   resolution: "@nestjs/cli@npm:11.0.16"
   dependencies:
@@ -11672,6 +11672,42 @@ __metadata:
   bin:
     nest: bin/nest.js
   checksum: 10c0/de6271367621ed7e3442ad736bb3f5c65e7896d8b7300d19477f4a3e0749c881aa21fb763b4984426290fd51354f229c3116938244a74f7537cb2b9e91cf1e44
+  languageName: node
+  linkType: hard
+
+"@nestjs/cli@patch:@nestjs/cli@npm%3A11.0.16#~/.yarn/patches/@nestjs-cli-npm-11.0.16-cf7a6cce01.patch":
+  version: 11.0.16
+  resolution: "@nestjs/cli@patch:@nestjs/cli@npm%3A11.0.16#~/.yarn/patches/@nestjs-cli-npm-11.0.16-cf7a6cce01.patch::version=11.0.16&hash=b8f50f"
+  dependencies:
+    "@angular-devkit/core": "npm:19.2.19"
+    "@angular-devkit/schematics": "npm:19.2.19"
+    "@angular-devkit/schematics-cli": "npm:19.2.19"
+    "@inquirer/prompts": "npm:7.10.1"
+    "@nestjs/schematics": "npm:^11.0.1"
+    ansis: "npm:4.2.0"
+    chokidar: "npm:4.0.3"
+    cli-table3: "npm:0.6.5"
+    commander: "npm:4.1.1"
+    fork-ts-checker-webpack-plugin: "npm:9.1.0"
+    glob: "npm:13.0.0"
+    node-emoji: "npm:1.11.0"
+    ora: "npm:5.4.1"
+    tsconfig-paths: "npm:4.2.0"
+    tsconfig-paths-webpack-plugin: "npm:4.2.0"
+    typescript: "npm:5.9.3"
+    webpack: "npm:5.104.1"
+    webpack-node-externals: "npm:3.0.0"
+  peerDependencies:
+    "@swc/cli": ^0.1.62 || ^0.3.0 || ^0.4.0 || ^0.5.0 || ^0.6.0 || ^0.7.0
+    "@swc/core": ^1.3.62
+  peerDependenciesMeta:
+    "@swc/cli":
+      optional: true
+    "@swc/core":
+      optional: true
+  bin:
+    nest: bin/nest.js
+  checksum: 10c0/086b7b5996cbff18f77e2bacd2a0a56976bc558f1f089d5548ed3275b6f7346cb2d23f444d6ed63d0645cb009632bdf23bc60fe0476cc827cd29b75e6364f722
   languageName: node
   linkType: hard
 
@@ -50102,7 +50138,7 @@ __metadata:
     "@microsoft/microsoft-graph-types": "npm:^2.40.0"
     "@nestjs/axios": "npm:3.1.2"
     "@nestjs/cache-manager": "npm:^2.3.0"
-    "@nestjs/cli": "npm:^11.0.16"
+    "@nestjs/cli": "patch:@nestjs/cli@npm%3A11.0.16#~/.yarn/patches/@nestjs-cli-npm-11.0.16-cf7a6cce01.patch"
     "@nestjs/common": "npm:11.1.24"
     "@nestjs/config": "npm:^4.0.4"
     "@nestjs/core": "npm:^11.1.24"
