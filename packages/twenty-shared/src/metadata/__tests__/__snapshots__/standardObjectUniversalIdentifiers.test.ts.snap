@@ -4,6 +4,9 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
 {
   "attachment": {
     "fields": {
+      "conversationMessage": {
+        "universalIdentifier": "614884ae-5253-43cc-862c-8e4b32237f0b",
+      },
       "createdAt": {
         "universalIdentifier": "14f3d540-3a5f-587f-aff1-566282884255",
       },
@@ -65,6 +68,9 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
     "indexes": {
       "companyIdIndex": {
         "universalIdentifier": "4137ba06-184d-438f-b484-080f02a97659",
+      },
+      "conversationMessageIdIndex": {
+        "universalIdentifier": "65c71c1e-6ceb-4eb3-a3a5-12d53c39467b",
       },
       "dashboardIdIndex": {
         "universalIdentifier": "c10eba2d-ff1a-4eab-9285-50481c12a003",
@@ -736,6 +742,9 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
       "attachments": {
         "universalIdentifier": "a4399ae3-fe89-59fe-a282-aec77d4e63a8",
       },
+      "conversations": {
+        "universalIdentifier": "ea8cb83e-5098-495c-90c1-7084141fddf4",
+      },
       "createdAt": {
         "universalIdentifier": "d206d586-fd61-56e1-80a8-9993beb7be0b",
       },
@@ -889,6 +898,250 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
         },
       },
     },
+  },
+  "conversation": {
+    "fields": {
+      "assignedTo": {
+        "universalIdentifier": "cbc11519-2cec-4b19-b781-be3c22100eee",
+      },
+      "channelType": {
+        "universalIdentifier": "1556e973-33bd-41b5-b5f9-66276857d68b",
+      },
+      "company": {
+        "universalIdentifier": "6016afd4-7bfc-48f2-baf3-6a5818ecdc82",
+      },
+      "createdAt": {
+        "universalIdentifier": "c0e8f6d4-eb61-57bf-8175-cb6611aa7b0c",
+      },
+      "createdBy": {
+        "universalIdentifier": "5dfd9da3-99e7-5c05-8910-e9358ab4efcc",
+      },
+      "deletedAt": {
+        "universalIdentifier": "6650879c-41a6-5ba0-b0db-37642f115c32",
+      },
+      "id": {
+        "universalIdentifier": "8fbc8166-b245-5b99-83a2-583d421cfe73",
+      },
+      "isUnread": {
+        "universalIdentifier": "fed408e6-caf1-4049-b1bd-4ddf53e53c68",
+      },
+      "lastInboundAt": {
+        "universalIdentifier": "4a999f57-0867-4cb7-89ef-65415f62d924",
+      },
+      "lastMessageAt": {
+        "universalIdentifier": "d5e7aef0-9111-489b-bb10-2a2ef5905d67",
+      },
+      "lastOutboundAt": {
+        "universalIdentifier": "e7d4290d-6379-4a32-87e7-2537f4112552",
+      },
+      "messages": {
+        "universalIdentifier": "19df8197-e14e-4ad5-87d7-9e1c05efd3bc",
+      },
+      "opportunity": {
+        "universalIdentifier": "95001a4a-c675-4384-a874-2583d3f8635c",
+      },
+      "participants": {
+        "universalIdentifier": "c0ca83e0-181c-4d06-a734-ff15988758a0",
+      },
+      "person": {
+        "universalIdentifier": "cec17a8c-938d-43b6-9f25-9b963253fcd6",
+      },
+      "position": {
+        "universalIdentifier": "b3891213-a16e-5953-b6d8-f2c250c5c95c",
+      },
+      "searchVector": {
+        "universalIdentifier": "0a9f6bb6-dd77-5f72-9c44-bce81222021a",
+      },
+      "status": {
+        "universalIdentifier": "f59fd83d-658b-4b02-b1a6-83f66612adde",
+      },
+      "subject": {
+        "universalIdentifier": "67bf671d-f13e-4b94-ba58-f118e7a3310d",
+      },
+      "updatedAt": {
+        "universalIdentifier": "53db6245-6ce6-5b26-a175-8a5acfe32ade",
+      },
+      "updatedBy": {
+        "universalIdentifier": "452c6bb8-7d9f-598c-9782-bfcba93539d3",
+      },
+    },
+    "indexes": {
+      "assignedToIdIndex": {
+        "universalIdentifier": "bc4fa895-1a9a-4930-9d30-1a8503bd1cc8",
+      },
+      "companyIdIndex": {
+        "universalIdentifier": "9a09407b-2d1b-4e0e-97c6-5f16653aeb00",
+      },
+      "opportunityIdIndex": {
+        "universalIdentifier": "6113c466-6460-443a-9fb0-e1da0db49cbc",
+      },
+      "personIdIndex": {
+        "universalIdentifier": "b9450150-068f-474c-832e-2ae1340aa65d",
+      },
+      "searchVectorGinIndex": {
+        "universalIdentifier": "bbd5cc56-4e54-4e4a-83e1-c37c5c2c0209",
+      },
+    },
+    "universalIdentifier": "9e37d874-7497-4cb2-8e6f-9bcc3c4da793",
+    "views": {
+      "allConversations": {
+        "universalIdentifier": "e9b4a06c-5f69-59db-93c1-38ba0c20d565",
+        "viewFields": {
+          "assignedTo": {
+            "universalIdentifier": "eccaf85e-177f-5903-838f-41d26c533722",
+          },
+          "channelType": {
+            "universalIdentifier": "22e43aeb-542d-5712-a6d8-c4793e4ecebb",
+          },
+          "company": {
+            "universalIdentifier": "944b9081-58e9-5fd9-82fd-a1f32d3a5f09",
+          },
+          "createdAt": {
+            "universalIdentifier": "7bb6ae9e-cb9d-531a-bbd7-438f04a2015d",
+          },
+          "lastMessageAt": {
+            "universalIdentifier": "fbca49e9-47b7-52a9-8b26-b9d0ca52f198",
+          },
+          "person": {
+            "universalIdentifier": "f1467956-e48d-5bc1-add4-90e9b839e3e9",
+          },
+          "status": {
+            "universalIdentifier": "f6d79314-dff1-5aa7-940c-b43b7eac818f",
+          },
+          "subject": {
+            "universalIdentifier": "08be9d37-fd16-5756-8063-7eae4b43dc81",
+          },
+        },
+      },
+    },
+  },
+  "conversationMessage": {
+    "fields": {
+      "attachments": {
+        "universalIdentifier": "102913e7-7a12-439a-a47b-ce802eb6d2b7",
+      },
+      "body": {
+        "universalIdentifier": "cf20588f-4c79-424f-88ca-2305e72888f5",
+      },
+      "channelType": {
+        "universalIdentifier": "0eb1173b-15ca-4b14-b918-6c62045f5b67",
+      },
+      "conversation": {
+        "universalIdentifier": "19b9e83d-d5b7-4b23-b25f-7255618048f8",
+      },
+      "createdAt": {
+        "universalIdentifier": "7a7a9345-7d4d-5733-a0e0-64503aa0ccdf",
+      },
+      "createdBy": {
+        "universalIdentifier": "79594e8e-c4d3-5b7c-b2e6-97e287238da1",
+      },
+      "deletedAt": {
+        "universalIdentifier": "331a7709-e372-57e4-8322-213715e1a4cd",
+      },
+      "deliveryStatus": {
+        "universalIdentifier": "7677d131-051e-4307-85dc-06e65f7f6c29",
+      },
+      "direction": {
+        "universalIdentifier": "5f56c541-b6f9-430f-a149-40305eeb89fa",
+      },
+      "externalMessageId": {
+        "universalIdentifier": "b004caff-9468-4564-97e8-6db6c8d58da5",
+      },
+      "id": {
+        "universalIdentifier": "e20fcac7-0ef2-5926-bdec-045927d91db0",
+      },
+      "isDraft": {
+        "universalIdentifier": "9efbc767-b55c-4c90-8c92-a3f88ff72c1e",
+      },
+      "isInternalNote": {
+        "universalIdentifier": "c36c9481-83ed-44a8-b6e1-87bef8ee6b3c",
+      },
+      "position": {
+        "universalIdentifier": "ab9f6ad1-6649-5533-92e2-3cdc410ce06b",
+      },
+      "rawPayload": {
+        "universalIdentifier": "51ad6a4f-4ce3-4deb-bf57-c90a561666b3",
+      },
+      "receivedAt": {
+        "universalIdentifier": "c0c2f04c-8f89-4d86-aa1d-672b662ca452",
+      },
+      "searchVector": {
+        "universalIdentifier": "5891fb20-1990-5180-a57f-cee990014739",
+      },
+      "sentAt": {
+        "universalIdentifier": "1541136e-e848-43df-b1eb-50dc6264052c",
+      },
+      "updatedAt": {
+        "universalIdentifier": "935d81cd-3758-5869-9272-ff1f41ae0fb5",
+      },
+      "updatedBy": {
+        "universalIdentifier": "70296488-bc46-5dd7-be57-b5fad8504b85",
+      },
+    },
+    "indexes": {
+      "conversationIdIndex": {
+        "universalIdentifier": "afc8b279-558d-4320-8283-23d55c751bbb",
+      },
+    },
+    "universalIdentifier": "3b8d25b9-aef1-4330-acb3-26806e05f228",
+  },
+  "conversationParticipant": {
+    "fields": {
+      "channelHandle": {
+        "universalIdentifier": "9e3199be-1c82-4994-8f35-395c7375657c",
+      },
+      "conversation": {
+        "universalIdentifier": "26d75219-0e02-4c4a-9b05-20dec1e47dad",
+      },
+      "createdAt": {
+        "universalIdentifier": "de02e965-7019-564e-8088-3a694d017110",
+      },
+      "createdBy": {
+        "universalIdentifier": "c045b33d-a157-5eb6-b51a-f3c54f68a9b9",
+      },
+      "deletedAt": {
+        "universalIdentifier": "b3d5cc02-d33c-5fbc-9324-50020f97be9f",
+      },
+      "displayName": {
+        "universalIdentifier": "f49a7508-97ac-4b62-a4a0-58b51140ddfe",
+      },
+      "id": {
+        "universalIdentifier": "b0bccec6-4c03-54b7-a006-e93c9639669a",
+      },
+      "person": {
+        "universalIdentifier": "7388d76c-0a8c-4ce4-b0dc-56bfc5e6dcd5",
+      },
+      "position": {
+        "universalIdentifier": "8608d888-59b1-5d12-b0d9-e501de55334e",
+      },
+      "role": {
+        "universalIdentifier": "3b728a58-987c-419a-ae93-899634800313",
+      },
+      "searchVector": {
+        "universalIdentifier": "bc66983e-af3c-528d-8ffb-48753c0ae3a0",
+      },
+      "updatedAt": {
+        "universalIdentifier": "ed3c277c-9f28-57f3-ae14-2b34401c98f4",
+      },
+      "updatedBy": {
+        "universalIdentifier": "112d3f58-9cc6-51f4-bd7b-3bbab83a1294",
+      },
+      "workspaceMember": {
+        "universalIdentifier": "0db3a30e-b4ea-4b60-a8b4-47436c3dcae3",
+      },
+    },
+    "indexes": {
+      "conversationIdIndex": {
+        "universalIdentifier": "6070f85f-f5d4-4448-a232-b49dcfc4db61",
+      },
+      "personIdIndex": {
+        "universalIdentifier": "012df92e-fe8b-47d7-a23a-578fbf7b2049",
+      },
+      "workspaceMemberIdIndex": {
+        "universalIdentifier": "590ba788-2f55-4fb4-a6e2-cbdbd8ae29e7",
+      },
+    },
+    "universalIdentifier": "c074cd6c-d5a3-4243-9ad3-fa350eb0122b",
   },
   "dashboard": {
     "fields": {
@@ -1903,6 +2156,9 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
       "company": {
         "universalIdentifier": "20202020-cbac-457e-b565-adece5fc815f",
       },
+      "conversations": {
+        "universalIdentifier": "90e5dfb2-ef79-4c15-ab3c-e134206cf02e",
+      },
       "createdAt": {
         "universalIdentifier": "457eece4-2a35-5a54-99fe-87d8579fa733",
       },
@@ -2104,6 +2360,12 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
       },
       "company": {
         "universalIdentifier": "20202020-e2f3-448e-b34c-2d625f0025fd",
+      },
+      "conversationParticipants": {
+        "universalIdentifier": "3f3faa39-e204-4f07-850a-ccee947c7841",
+      },
+      "conversations": {
+        "universalIdentifier": "8e056655-f194-4342-bc6f-82e60add7891",
       },
       "createdAt": {
         "universalIdentifier": "11e31107-be74-53e5-ba99-e536c6b73ee6",
@@ -3175,6 +3437,9 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
       "accountOwnerForCompanies": {
         "universalIdentifier": "20202020-dc29-4bd4-a3c1-29eafa324bee",
       },
+      "assignedConversations": {
+        "universalIdentifier": "ee0ed1cf-1b1c-4d87-b8a8-57b23091fded",
+      },
       "assignedTasks": {
         "universalIdentifier": "20202020-61dc-4a1c-99e8-38ebf8d2bbeb",
       },
@@ -3192,6 +3457,9 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
       },
       "colorScheme": {
         "universalIdentifier": "20202020-66bc-47f2-adac-f2ef7c598b63",
+      },
+      "conversationParticipants": {
+        "universalIdentifier": "e611fdc0-ea93-4007-9094-522f32e6a6e1",
       },
       "createdAt": {
         "universalIdentifier": "0838742d-9f92-5ec8-8dfe-31ed96e9b98f",

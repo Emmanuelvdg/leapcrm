@@ -1168,6 +1168,46 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    description:
+      'Meta App ID for the WhatsApp Business Cloud API integration. One Meta app per LeapCRM deployment; per-channel phoneNumberId/accessToken/wabaId live on the WhatsappChannel entity instead.',
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  WHATSAPP_APP_ID?: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    isSensitive: true,
+    isHiddenInAdminPanel: true,
+    description:
+      'Meta App Secret used to verify the X-Hub-Signature-256 HMAC on incoming WhatsApp webhook events.',
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  WHATSAPP_APP_SECRET?: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    isSensitive: true,
+    isHiddenInAdminPanel: true,
+    description:
+      "Instance-wide fallback verify token for Meta's WhatsApp webhook GET verification handshake, used when a WhatsappChannel has no per-channel override.",
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  WHATSAPP_WEBHOOK_VERIFY_TOKEN?: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    description:
+      "Meta config_id for the WhatsApp Embedded Signup flow (FB.login popup), created in the app's WhatsApp > Embedded Signup dashboard. Not sensitive - it's read by the browser to launch the popup, same trust level as WHATSAPP_APP_ID.",
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  WHATSAPP_EMBEDDED_SIGNUP_CONFIG_ID?: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description: 'Page ID for Cal.com booking integration',
     isHiddenInAdminPanel: true,
     type: ConfigVariableType.STRING,
@@ -2071,6 +2111,24 @@ export class ConfigVariables {
   })
   @IsOptional()
   ENTERPRISE_API_URL: string = 'https://twenty.com/api/enterprise';
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.SERVER_CONFIG,
+    description:
+      'Base URL for a company-enrichment service, called as GET {url}/{domainName} and expected to return { name, city }. Company auto-enrichment on record creation is skipped when unset.',
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  COMPANY_ENRICHMENT_BASE_URL: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.SERVER_CONFIG,
+    description:
+      'Base URL for a company-logo-by-domain service, called as GET {url}/{domain} and expected to return an image. Auto logo-fetch on sign-up is skipped when unset.',
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  WORKSPACE_LOGO_ENRICHMENT_BASE_URL: string;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,

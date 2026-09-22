@@ -12,9 +12,11 @@ import { ListOrphanedWorkspaceEntitiesCommand } from 'src/database/commands/list
 import { ConfirmationQuestion } from 'src/database/commands/questions/confirmation.question';
 import { RebuildApplicationDefaultDepsCommand } from 'src/database/commands/rebuild-application-default-deps.command';
 import { RunInstanceCommandsCommand } from 'src/database/commands/run-instance-commands.command';
+import { SeedWhatsappChannelCommand } from 'src/database/commands/seed-whatsapp-channel.command';
 import { UpgradeVersionCommandModule } from 'src/database/commands/upgrade-version-command/upgrade-version-command.module';
 import { WorkspaceExportModule } from 'src/database/commands/workspace-export/workspace-export.module';
 import { TypeORMModule } from 'src/database/typeorm/typeorm.module';
+import { WhatsappChannelModule } from 'src/engine/metadata-modules/whatsapp-channel/whatsapp-channel.module';
 import { ApiKeyModule } from 'src/engine/core-modules/api-key/api-key.module';
 import { GenerateApiKeyCommand } from 'src/engine/core-modules/api-key/commands/generate-api-key.command';
 import { ApplicationInstallModule } from 'src/engine/core-modules/application/application-install/application-install.module';
@@ -99,6 +101,7 @@ import { WorkflowCoreConsistencyModule } from 'src/modules/workflow/workflow-cor
     UpgradeModule,
     SecretEncryptionRotationModule,
     UserSessionModule,
+    WhatsappChannelModule,
   ],
   providers: [
     DataSeedWorkspaceCommand,
@@ -114,6 +117,7 @@ import { WorkflowCoreConsistencyModule } from 'src/modules/workflow/workflow-cor
     UpgradeStatusCommand,
     RebuildApplicationDefaultDepsCommand,
     InstallPreInstalledAppsCommand,
+    SeedWhatsappChannelCommand,
     provideWorkspaceScopedRepository(RoleEntity),
   ],
 })

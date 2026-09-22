@@ -7,6 +7,9 @@
 export const STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS = {
   timelineActivity: '20202020-6736-4337-b5c4-8b39fae325a5',
   attachment: '20202020-bd3d-4c60-8dca-571c71d4447a',
+  conversation: '9e37d874-7497-4cb2-8e6f-9bcc3c4da793',
+  conversationMessage: '3b8d25b9-aef1-4330-acb3-26806e05f228',
+  conversationParticipant: 'c074cd6c-d5a3-4243-9ad3-fa350eb0122b',
   blocklist: '20202020-0408-4f38-b8a8-4d5e3e26e24d',
   calendarChannelEventAssociation: '20202020-491b-4aaa-9825-afd1bae6ae00',
   calendarEvent: '20202020-8f1d-4eef-9f85-0d1965e27221',

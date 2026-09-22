@@ -15,7 +15,7 @@ import {
 export default defineApplication({
   universalIdentifier: APPLICATION_UNIVERSAL_IDENTIFIER,
   logoUrl: 'public/logo.png',
-  author: 'Twenty',
+  author: 'Leap',
   category: 'Productivity',
   screenshots: ['public/gallery/cover.png'],
   displayName: APP_DISPLAY_NAME,

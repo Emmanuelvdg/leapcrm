@@ -33,6 +33,7 @@ import { SearchFieldMetadataModule } from 'src/engine/metadata-modules/search-fi
 import { SkillModule } from 'src/engine/metadata-modules/skill/skill.module';
 import { ViewModule } from 'src/engine/metadata-modules/view/view.module';
 import { WebhookModule } from 'src/engine/metadata-modules/webhook/webhook.module';
+import { WhatsappChannelModule } from 'src/engine/metadata-modules/whatsapp-channel/whatsapp-channel.module';
 import { WorkspaceMetadataVersionModule } from 'src/engine/metadata-modules/workspace-metadata-version/workspace-metadata-version.module';
 
 @Module({
@@ -68,6 +69,7 @@ import { WorkspaceMetadataVersionModule } from 'src/engine/metadata-modules/work
     MessageChannelMetadataModule,
     CalendarChannelMetadataModule,
     MessageFolderMetadataModule,
+    WhatsappChannelModule,
   ],
   providers: [
     {
@@ -100,6 +102,7 @@ import { WorkspaceMetadataVersionModule } from 'src/engine/metadata-modules/work
     MessageChannelMetadataModule,
     CalendarChannelMetadataModule,
     MessageFolderMetadataModule,
+    WhatsappChannelModule,
   ],
 })
 export class MetadataEngineModule {}

@@ -5,20 +5,20 @@ export default defineApplication({
   universalIdentifier: APPLICATION_UNIVERSAL_IDENTIFIER,
   displayName: 'Linear',
   description:
-    'Connect Linear to Twenty. Each workspace member connects their own Linear account; logic functions can then create issues and read team data on their behalf.',
+    'Connect Linear to LeapCRM. Each workspace member connects their own Linear account; logic functions can then create issues and read team data on their behalf.',
   logoUrl: 'public/linear-logomark.svg',
   applicationVariables: undefined,
-  author: 'Twenty',
+  author: 'Leap',
   category: 'Product management',
-  emailSupport: 'contact@twenty.com',
+  emailSupport: 'support@theleapcrm.com',
   screenshots: [
     'public/gallery/command-menu-item-1.png',
     'public/gallery/command-menu-item-2.png',
     'public/gallery/command-menu-item-3.png',
     'public/gallery/command-menu-item-4.png',
   ],
-  termsUrl: 'https://github.com/twentyhq/twenty?tab=License-1-ov-file#readme',
-  websiteUrl: 'https://www.twenty.com',
+  termsUrl: 'https://theleapcrm.com/terms',
+  websiteUrl: 'https://theleapcrm.com',
   serverVariables: {
     LINEAR_CLIENT_ID: {
       description:

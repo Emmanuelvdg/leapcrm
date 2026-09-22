@@ -650,4 +650,39 @@ export const buildAttachmentStandardFlatFieldMetadatas = ({
     twentyStandardApplicationId,
     now,
   }),
+  conversationMessage: createStandardRelationFieldFlatMetadata({
+    objectName,
+    workspaceId,
+    context: {
+      type: FieldMetadataType.RELATION,
+      morphId: null,
+      fieldName: 'conversationMessage',
+      label: i18nLabel(
+        msg({
+          message: `Conversation Message`,
+          context: 'fieldMetadata.label',
+        }),
+      ),
+      description: i18nLabel(
+        msg({
+          message: `The conversation message this attachment belongs to`,
+          context: 'fieldMetadata.description',
+        }),
+      ),
+      icon: 'IconFileImport',
+      isNullable: true,
+      isUIEditable: false,
+      targetObjectName: 'conversationMessage',
+      targetFieldName: 'attachments',
+      settings: {
+        relationType: RelationType.MANY_TO_ONE,
+        onDelete: RelationOnDeleteAction.SET_NULL,
+        joinColumnName: 'conversationMessageId',
+      },
+    },
+    standardObjectMetadataRelatedEntityIds,
+    dependencyFlatEntityMaps,
+    twentyStandardApplicationId,
+    now,
+  }),
 });

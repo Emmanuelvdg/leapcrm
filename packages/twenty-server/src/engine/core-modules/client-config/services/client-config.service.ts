@@ -49,6 +49,10 @@ export class ClientConfigService {
     const calendarBookingPageId = this.twentyConfigService.get(
       'CALENDAR_BOOKING_PAGE_ID',
     );
+    const whatsappAppId = this.twentyConfigService.get('WHATSAPP_APP_ID');
+    const whatsappEmbeddedSignupConfigId = this.twentyConfigService.get(
+      'WHATSAPP_EMBEDDED_SIGNUP_CONFIG_ID',
+    );
     const isBookCallOnboardingStepEnabled = isDefined(
       readBookCallStepMinEmployeeCount(this.twentyConfigService),
     );
@@ -289,6 +293,14 @@ export class ClientConfigService {
       ),
       calendarBookingPageId: isNonEmptyString(calendarBookingPageId)
         ? calendarBookingPageId
+        : undefined,
+      whatsappAppId: isNonEmptyString(whatsappAppId)
+        ? whatsappAppId
+        : undefined,
+      whatsappEmbeddedSignupConfigId: isNonEmptyString(
+        whatsappEmbeddedSignupConfigId,
+      )
+        ? whatsappEmbeddedSignupConfigId
         : undefined,
       isBookCallOnboardingStepEnabled,
       isCompanyEnrichmentEnabled,

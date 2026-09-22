@@ -55,6 +55,13 @@ export const STANDARD_NAVIGATION_MENU_ITEMS = {
         .universalIdentifier,
     position: 7,
   },
+  allConversations: {
+    universalIdentifier: '06c5e66f-2ea2-495a-b012-084908eb4e42',
+    type: NavigationMenuItemType.OBJECT,
+    viewUniversalIdentifier:
+      STANDARD_OBJECTS.conversation.views.allConversations.universalIdentifier,
+    position: 8,
+  },
   workflowsFolder: {
     universalIdentifier: '20202020-b007-4b07-8b07-c0aba11c0007',
     type: NavigationMenuItemType.FOLDER,
@@ -101,6 +108,7 @@ export const STANDARD_NAVIGATION_MENU_ITEM_DEFAULT_COLORS: Partial<
   allOpportunities: 'red',
   workflowsFolder: 'orange',
   allMessageCampaigns: 'gray',
+  allConversations: 'green',
   allDashboards: 'gray',
   workflowsFolderAllWorkflows: 'gray',
   workflowsFolderAllWorkflowRuns: 'gray',

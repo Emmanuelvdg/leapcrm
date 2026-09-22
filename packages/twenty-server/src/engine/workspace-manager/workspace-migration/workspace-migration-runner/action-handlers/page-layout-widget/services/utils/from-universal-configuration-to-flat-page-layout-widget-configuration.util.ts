@@ -383,6 +383,7 @@ export const fromUniversalConfigurationToFlatPageLayoutWidgetConfiguration = ({
     case WidgetConfigurationType.NOTES:
     case WidgetConfigurationType.FILES:
     case WidgetConfigurationType.EMAILS:
+    case WidgetConfigurationType.CONVERSATIONS:
     case WidgetConfigurationType.CALENDAR:
     case WidgetConfigurationType.FIELD_RICH_TEXT:
     case WidgetConfigurationType.WORKFLOW:

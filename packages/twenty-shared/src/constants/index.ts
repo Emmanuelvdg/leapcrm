@@ -63,7 +63,5 @@ export { RESERVED_SUBDOMAINS } from './ReservedSubdomains';
 export { STANDARD_OBJECT_RECORDS_UNDER_OBJECT_RECORDS_PERMISSIONS } from './StandardObjectRecordsUnderObjectRecordsPermissions';
 export { SUBDOMAIN_PATTERN } from './SubdomainPattern';
 export { SystemPermissionFlag } from './SystemPermissionFlag';
-export { TWENTY_COMPANIES_BASE_URL } from './TwentyCompaniesBaseUrl';
-export { TWENTY_ICONS_BASE_URL } from './TwentyIconsBaseUrl';
 export { UI_SCALE_VALUES } from './UiScaleValues';
 export { VIEW_GROUP_VISIBLE_OPTIONS_MAX } from './ViewGroupVisibleOptionsMax';

@@ -7,7 +7,7 @@ const logoStyle = {
 export const Logo = () => {
   return (
     <Img
-      src="https://app.twenty.com/images/icons/windows11/Square150x150Logo.scale-100.png"
+      src="https://leapcrm.tech/images/branding/leap-logo.png"
       alt="Leap CRM logo"
       width="40"
       height="40"

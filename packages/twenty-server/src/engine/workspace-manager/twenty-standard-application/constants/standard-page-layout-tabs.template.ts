@@ -127,6 +127,12 @@ export const TAB_PROPS = {
     icon: 'IconMail',
     layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
   },
+  conversations: {
+    title: 'Conversations',
+    position: 65,
+    icon: 'IconBrandWhatsapp',
+    layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
+  },
   calendar: {
     title: 'Calendar',
     position: 70,
@@ -193,6 +199,12 @@ export const WIDGET_PROPS = {
   emails: {
     title: 'Emails',
     type: WidgetType.EMAILS,
+    gridPosition: GRID_POSITIONS.HALF_HEIGHT,
+    position: VERTICAL_LIST_LAYOUT_POSITIONS.FIRST,
+  },
+  conversations: {
+    title: 'Conversations',
+    type: WidgetType.CONVERSATIONS,
     gridPosition: GRID_POSITIONS.HALF_HEIGHT,
     position: VERTICAL_LIST_LAYOUT_POSITIONS.FIRST,
   },

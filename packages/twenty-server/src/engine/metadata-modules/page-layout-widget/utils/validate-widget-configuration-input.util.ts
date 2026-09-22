@@ -197,6 +197,11 @@ export const validateWidgetConfigurationInput = ({
         'Emails configuration is not supported yet',
         PageLayoutWidgetExceptionCode.INVALID_PAGE_LAYOUT_WIDGET_DATA,
       );
+    case WidgetConfigurationType.CONVERSATIONS:
+      throw new PageLayoutWidgetException(
+        'Conversations configuration is not supported yet',
+        PageLayoutWidgetExceptionCode.INVALID_PAGE_LAYOUT_WIDGET_DATA,
+      );
     case WidgetConfigurationType.CALENDAR:
       throw new PageLayoutWidgetException(
         'Calendar configuration is not supported yet',

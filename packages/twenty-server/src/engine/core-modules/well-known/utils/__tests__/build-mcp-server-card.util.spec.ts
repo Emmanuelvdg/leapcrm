@@ -25,9 +25,8 @@ describe('buildMcpServerCard', () => {
     expect(card.$schema).toBe(
       'https://static.modelcontextprotocol.io/schemas/v1/server-card.schema.json',
     );
-    expect(card.name).toBe('com.twenty/twenty');
+    expect(card.name).toBe('com.theleapcrm/leapcrm');
     expect(card.version).toBe('0.42.0');
-    expect(card.repository.source).toBe('github');
   });
 
   it('marks the Authorization header optional and secret (OAuth or API key)', () => {

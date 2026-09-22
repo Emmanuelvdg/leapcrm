@@ -5,6 +5,7 @@ import {
   type CalendarConfiguration,
   type CallRecordingSummaryConfiguration,
   type CallRecordingTranscriptConfiguration,
+  type ConversationsConfiguration,
   type EmailThreadConfiguration,
   type EmailsConfiguration,
   type FieldRichTextConfiguration,
@@ -80,6 +81,12 @@ type WidgetConfigurationTypenameMap = {
   };
   EmailsConfiguration: Omit<EmailsConfiguration, 'configurationType'> & {
     configurationType: WidgetConfigurationType.EMAILS;
+  };
+  ConversationsConfiguration: Omit<
+    ConversationsConfiguration,
+    'configurationType'
+  > & {
+    configurationType: WidgetConfigurationType.CONVERSATIONS;
   };
   FieldConfiguration: Omit<FieldConfiguration, 'configurationType'> & {
     configurationType: WidgetConfigurationType.FIELD;

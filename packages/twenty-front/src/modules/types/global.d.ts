@@ -11,5 +11,7 @@ declare global {
       ComponentInstanceStateContext<any>
     >;
     FrontChat?: (method: string, ...args: any[]) => void;
+    FB?: any;
+    fbAsyncInit?: () => void;
   }
 }

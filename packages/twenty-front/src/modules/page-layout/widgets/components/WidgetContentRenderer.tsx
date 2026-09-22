@@ -2,6 +2,7 @@ import { type PageLayoutWidget } from '@/page-layout/types/PageLayoutWidget';
 import { CalendarWidget } from '@/page-layout/widgets/calendar/components/CalendarWidget';
 import { CallRecordingSummaryWidget } from '@/page-layout/widgets/call-recording-summary/components/CallRecordingSummaryWidget';
 import { CallRecordingTranscriptWidget } from '@/page-layout/widgets/call-recording-transcript/components/CallRecordingTranscriptWidget';
+import { ConversationsWidget } from '@/page-layout/widgets/conversations/components/ConversationsWidget';
 import { EmailThreadWidget } from '@/page-layout/widgets/email-thread/components/EmailThreadWidget';
 import { EmailWidget } from '@/page-layout/widgets/emails/components/EmailWidget';
 import { FieldRichTextWidgetRenderer } from '@/page-layout/widgets/field-rich-text/components/FieldRichTextWidgetRenderer';
@@ -59,6 +60,9 @@ export const WidgetContentRenderer = ({
 
     case WidgetType.EMAILS:
       return <EmailWidget widget={widget} />;
+
+    case WidgetType.CONVERSATIONS:
+      return <ConversationsWidget widget={widget} />;
 
     case WidgetType.CALENDAR:
       return <CalendarWidget widget={widget} />;

@@ -5,6 +5,8 @@ import { appVersionState } from '@/client-config/states/appVersionState';
 import { authProvidersState } from '@/client-config/states/authProvidersState';
 import { billingState } from '@/client-config/states/billingState';
 import { calendarBookingPageIdState } from '@/client-config/states/calendarBookingPageIdState';
+import { whatsappAppIdState } from '@/client-config/states/whatsappAppIdState';
+import { whatsappEmbeddedSignupConfigIdState } from '@/client-config/states/whatsappEmbeddedSignupConfigIdState';
 import { canManageFeatureFlagsState } from '@/client-config/states/canManageFeatureFlagsState';
 import { captchaState } from '@/client-config/states/captchaState';
 import { isBookCallOnboardingStepEnabledState } from '@/client-config/states/isBookCallOnboardingStepEnabledState';
@@ -106,6 +108,12 @@ export const useClientConfig = (): UseClientConfigResult => {
   );
 
   const setCalendarBookingPageId = useSetAtomState(calendarBookingPageIdState);
+
+  const setWhatsappAppId = useSetAtomState(whatsappAppIdState);
+
+  const setWhatsappEmbeddedSignupConfigId = useSetAtomState(
+    whatsappEmbeddedSignupConfigIdState,
+  );
 
   const setIsBookCallOnboardingStepEnabled = useSetAtomState(
     isBookCallOnboardingStepEnabledState,
@@ -220,6 +228,10 @@ export const useClientConfig = (): UseClientConfigResult => {
       }));
 
       setCalendarBookingPageId(clientConfig?.calendarBookingPageId ?? null);
+      setWhatsappAppId(clientConfig?.whatsappAppId ?? null);
+      setWhatsappEmbeddedSignupConfigId(
+        clientConfig?.whatsappEmbeddedSignupConfigId ?? null,
+      );
       setIsBookCallOnboardingStepEnabled(
         clientConfig?.isBookCallOnboardingStepEnabled ?? false,
       );
@@ -291,6 +303,8 @@ export const useClientConfig = (): UseClientConfigResult => {
     setSentryConfig,
     setSupportChat,
     setAllowRequestsToTwentyIcons,
+    setWhatsappAppId,
+    setWhatsappEmbeddedSignupConfigId,
   ]);
 
   return {

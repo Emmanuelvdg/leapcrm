@@ -27,15 +27,6 @@ export const Footer = ({ i18n }: FooterProps) => {
         <Column>
           <ShadowText>
             <Link
-              href="https://github.com/twentyhq/twenty"
-              value={i18n._('Github')}
-              aria-label={i18n._("Visit Twenty's GitHub repository")}
-            />
-          </ShadowText>
-        </Column>
-        <Column>
-          <ShadowText>
-            <Link
               href="https://docs.theleapcrm.com/getting-started/introduction"
               value={i18n._('User guide')}
               aria-label={i18n._("Read Leap's user guide")}

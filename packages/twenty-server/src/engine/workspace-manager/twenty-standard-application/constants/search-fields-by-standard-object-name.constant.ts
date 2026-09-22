@@ -16,6 +16,11 @@ export const SEARCH_FIELDS_BY_STANDARD_OBJECT_NAME = {
     { name: 'name', type: FieldMetadataType.TEXT },
     { name: 'domainName', type: FieldMetadataType.LINKS },
   ],
+  conversation: [{ name: 'subject', type: FieldMetadataType.TEXT }],
+  conversationMessage: [{ name: 'body', type: FieldMetadataType.TEXT }],
+  conversationParticipant: [
+    { name: 'channelHandle', type: FieldMetadataType.TEXT },
+  ],
   dashboard: [{ name: 'title', type: FieldMetadataType.TEXT }],
   message: [{ name: 'subject', type: FieldMetadataType.TEXT }],
   messageCampaign: [

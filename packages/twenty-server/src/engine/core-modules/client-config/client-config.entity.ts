@@ -344,6 +344,14 @@ export class ClientConfig {
   @Field(() => String, { nullable: true })
   calendarBookingPageId?: string;
 
+  // Meta App ID for the WhatsApp Embedded Signup FB.init() call. Not sensitive -
+  // it's a public identifier the browser needs to load the FB JS SDK popup.
+  @Field(() => String, { nullable: true })
+  whatsappAppId?: string;
+
+  @Field(() => String, { nullable: true })
+  whatsappEmbeddedSignupConfigId?: string;
+
   @Field(() => Boolean)
   isBookCallOnboardingStepEnabled: boolean;
 

@@ -215,6 +215,7 @@ export type {
   NotesConfiguration,
   FilesConfiguration,
   EmailsConfiguration,
+  ConversationsConfiguration,
   EmailThreadConfiguration,
   MessageCampaignBodyConfiguration,
   MessageCampaignDetailsConfiguration,

@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 
 import { msg } from '@lingui/core/macro';
-import { TWENTY_ICONS_BASE_URL } from 'twenty-shared/constants';
 import { isDefined } from 'twenty-shared/utils';
 import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 import {
@@ -603,8 +602,12 @@ export class SignInUpService {
               queryRunner,
             );
 
-          if (isWorkEmailFound) {
-            const logoUrl = `${TWENTY_ICONS_BASE_URL}/${getDomainFromEmailOrThrow(email)}`;
+          const workspaceLogoEnrichmentBaseUrl = this.twentyConfigService.get(
+            'WORKSPACE_LOGO_ENRICHMENT_BASE_URL',
+          );
+
+          if (isWorkEmailFound && isDefined(workspaceLogoEnrichmentBaseUrl)) {
+            const logoUrl = `${workspaceLogoEnrichmentBaseUrl}/${getDomainFromEmailOrThrow(email)}`;
             const logoFile =
               await this.fileCorePictureService.uploadWorkspaceLogoFromUrl({
                 imageUrl: logoUrl,

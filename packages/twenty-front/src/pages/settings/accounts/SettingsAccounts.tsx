@@ -1,6 +1,7 @@
 import { SettingsAccountsBlocklistSection } from '@/settings/accounts/components/SettingsAccountsBlocklistSection';
 import { SettingsAccountsConnectedAccountsListCard } from '@/settings/accounts/components/SettingsAccountsConnectedAccountsListCard';
 import { SettingsAccountsSettingsSection } from '@/settings/accounts/components/SettingsAccountsSettingsSection';
+import { SettingsWhatsappConnectedAccountsListCard } from '@/settings/accounts/components/SettingsWhatsappConnectedAccountsListCard';
 import { useMyConnectedAccounts } from '@/settings/accounts/hooks/useMyConnectedAccounts';
 import { SettingsPageContainer } from '@/settings/components/SettingsPageContainer';
 import { SettingsSectionSkeletonLoader } from '@/settings/components/SettingsSectionSkeletonLoader';
@@ -40,6 +41,13 @@ export const SettingsAccounts = () => {
               <SettingsAccountsConnectedAccountsListCard
                 accounts={allAccounts}
               />
+            </Section>
+            <Section>
+              <H2Title
+                title={t`WhatsApp`}
+                description={t`Connect a WhatsApp Business account to send and receive messages from this workspace.`}
+              />
+              <SettingsWhatsappConnectedAccountsListCard />
             </Section>
             <SettingsAccountsBlocklistSection />
             <SettingsAccountsSettingsSection />

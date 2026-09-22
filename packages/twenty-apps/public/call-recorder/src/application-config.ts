@@ -45,7 +45,7 @@ export default defineApplication({
   description: APP_DESCRIPTION,
   logo: 'public/logo.svg',
   category: 'Productivity',
-  author: 'Twenty',
+  author: 'Leap',
   galleryImages: ['public/gallery/call-recorder-cover.png'],
   applicationVariables: {
     [CALL_RECORDER_NAME_ENV_VAR_NAME]: {

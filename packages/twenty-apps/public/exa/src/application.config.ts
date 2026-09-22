@@ -9,14 +9,14 @@ export default defineApplication({
   universalIdentifier: APPLICATION_UNIVERSAL_IDENTIFIER,
   displayName: 'Exa',
   description:
-    'Structured web search powered by Exa. Surfaces entity-aware results (companies, people, research, news) to Twenty AI agents.',
-  author: 'Twenty',
+    'Structured web search powered by Exa. Surfaces entity-aware results (companies, people, research, news) to LeapCRM AI agents.',
+  author: 'Leap',
   category: 'Search',
   logoUrl: 'public/exa-logomark.svg',
-  websiteUrl: 'https://docs.twenty.com/developers/extend/apps/getting-started',
-  termsUrl: 'https://www.twenty.com/terms',
-  emailSupport: 'contact@twenty.com',
-  issueReportUrl: 'https://github.com/twentyhq/twenty/issues',
+  websiteUrl:
+    'https://docs.theleapcrm.com/developers/extend/apps/getting-started',
+  termsUrl: 'https://theleapcrm.com/terms',
+  emailSupport: 'support@theleapcrm.com',
   defaultRoleUniversalIdentifier: DEFAULT_ROLE_UNIVERSAL_IDENTIFIER,
   serverVariables: {
     EXA_API_KEY: {

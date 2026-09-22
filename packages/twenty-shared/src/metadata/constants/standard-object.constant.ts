@@ -48,6 +48,9 @@ export const STANDARD_OBJECTS = {
       workflowIdIndex: {
         universalIdentifier: 'fadeab4b-79ee-4173-af79-72c51fbad888',
       },
+      conversationMessageIdIndex: {
+        universalIdentifier: '65c71c1e-6ceb-4eb3-a3a5-12d53c39467b',
+      },
     },
     views: {
       allAttachments: buildStandardObjectIndexView({
@@ -337,6 +340,70 @@ export const STANDARD_OBJECTS = {
           system: 'System',
         },
       }),
+    },
+  },
+  conversation: {
+    universalIdentifier: STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.conversation,
+    fields: STANDARD_OBJECT_FIELDS.conversation,
+    indexes: {
+      assignedToIdIndex: {
+        universalIdentifier: 'bc4fa895-1a9a-4930-9d30-1a8503bd1cc8',
+      },
+      personIdIndex: {
+        universalIdentifier: 'b9450150-068f-474c-832e-2ae1340aa65d',
+      },
+      companyIdIndex: {
+        universalIdentifier: '9a09407b-2d1b-4e0e-97c6-5f16653aeb00',
+      },
+      opportunityIdIndex: {
+        universalIdentifier: '6113c466-6460-443a-9fb0-e1da0db49cbc',
+      },
+      searchVectorGinIndex: {
+        universalIdentifier: 'bbd5cc56-4e54-4e4a-83e1-c37c5c2c0209',
+      },
+    },
+    views: {
+      allConversations: buildStandardObjectIndexView({
+        objectUniversalIdentifier:
+          STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.conversation,
+        fields: STANDARD_OBJECT_FIELDS.conversation,
+        viewFieldNames: [
+          'subject',
+          'channelType',
+          'status',
+          'person',
+          'company',
+          'assignedTo',
+          'lastMessageAt',
+          'createdAt',
+        ],
+      }),
+    },
+  },
+  conversationMessage: {
+    universalIdentifier:
+      STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.conversationMessage,
+    fields: STANDARD_OBJECT_FIELDS.conversationMessage,
+    indexes: {
+      conversationIdIndex: {
+        universalIdentifier: 'afc8b279-558d-4320-8283-23d55c751bbb',
+      },
+    },
+  },
+  conversationParticipant: {
+    universalIdentifier:
+      STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.conversationParticipant,
+    fields: STANDARD_OBJECT_FIELDS.conversationParticipant,
+    indexes: {
+      conversationIdIndex: {
+        universalIdentifier: '6070f85f-f5d4-4448-a232-b49dcfc4db61',
+      },
+      personIdIndex: {
+        universalIdentifier: '012df92e-fe8b-47d7-a23a-578fbf7b2049',
+      },
+      workspaceMemberIdIndex: {
+        universalIdentifier: '590ba788-2f55-4fb4-a6e2-cbdbd8ae29e7',
+      },
     },
   },
   dashboard: {

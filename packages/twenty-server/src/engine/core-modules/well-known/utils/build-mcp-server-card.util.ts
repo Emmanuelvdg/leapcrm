@@ -11,16 +11,12 @@ export const buildMcpServerCard = ({
 }: BuildMcpServerCardArgs) => ({
   $schema:
     'https://static.modelcontextprotocol.io/schemas/v1/server-card.schema.json',
-  name: 'com.twenty/twenty',
+  name: 'com.theleapcrm/leapcrm',
   version,
   title: 'LeapCRM',
   description:
     'Read and write your LeapCRM data - companies, people, opportunities, tasks, notes and any custom objects - from AI assistants. Tools are discovered at runtime and scoped to the authenticated workspace.',
-  websiteUrl: 'https://twenty.com',
-  repository: {
-    url: 'https://github.com/twentyhq/twenty',
-    source: 'github',
-  },
+  websiteUrl: 'https://theleapcrm.com',
   remotes: [
     {
       type: 'streamable-http',

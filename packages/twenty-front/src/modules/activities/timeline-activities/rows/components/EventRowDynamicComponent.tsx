@@ -4,6 +4,7 @@ import { type EventRowDynamicComponentProps } from '@/activities/timeline-activi
 import { EventRowGenericLinked } from '@/activities/timeline-activities/rows/generic/components/EventRowGenericLinked';
 import { EventRowMainObject } from '@/activities/timeline-activities/rows/main-object/components/EventRowMainObject';
 import { EventRowMessage } from '@/activities/timeline-activities/rows/message/components/EventRowMessage';
+import { EventRowConversationMessage } from '@/activities/timeline-activities/rows/whatsapp/components/EventRowConversationMessage';
 import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 
@@ -29,6 +30,16 @@ export const EventRowDynamicComponent = (
     case CoreObjectNameSingular.Message:
       return (
         <EventRowMessage
+          labelIdentifierValue={props.labelIdentifierValue}
+          event={props.event}
+          mainObjectMetadataItem={props.mainObjectMetadataItem}
+          linkedObjectMetadataItem={props.linkedObjectMetadataItem}
+          authorFullName={props.authorFullName}
+        />
+      );
+    case 'conversationMessage':
+      return (
+        <EventRowConversationMessage
           labelIdentifierValue={props.labelIdentifierValue}
           event={props.event}
           mainObjectMetadataItem={props.mainObjectMetadataItem}

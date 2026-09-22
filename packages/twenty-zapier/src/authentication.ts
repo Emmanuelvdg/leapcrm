@@ -21,8 +21,7 @@ export default {
       required: true,
       label: 'Api Key',
       type: 'string',
-      helpText:
-        'Create an API key in [your twenty workspace](https://app.twenty.com/settings/apis)',
+      helpText: 'Create an API key in your workspace under Settings → APIs',
     },
     {
       computed: false,
@@ -31,7 +30,7 @@ export default {
       label: 'Self hosted instance url',
       type: 'string',
       placeholder: 'https://crm.custom-url.com',
-      helpText: 'Set this only if you self-host Twenty',
+      helpText: 'Set this only if you self-host LeapCRM',
     },
   ],
   connectionLabel: '{{data.currentWorkspace.displayName}}',

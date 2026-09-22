@@ -153,6 +153,8 @@ import { AddAuthenticatedAtToUserSessionFastInstanceCommand } from 'src/database
 import { BackfillAuthenticatedAtOnUserSessionSlowInstanceCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-instance-command-slow-1788281726318-backfill-authenticated-at-on-user-session';
 import { CreateWorkspaceAiProviderTableFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-instance-command-fast-1788834221128-create-workspace-ai-provider-table';
 import { AddFirstPeriodCouponToSubscriptionPlanFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-instance-command-fast-1789002775868-add-first-period-coupon-to-subscription-plan';
+import { AddWhatsappChannelFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-instance-command-fast-1789613168377-add_whatsapp_channel';
+import { AddConversationsWidgetTypeFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-instance-command-fast-1789782196246-add-conversations-widget-type';
 
 export const INSTANCE_COMMANDS = [
   AddViewFieldGroupIdIndexOnViewFieldFastInstanceCommand,
@@ -308,4 +310,6 @@ export const INSTANCE_COMMANDS = [
   BackfillAuthenticatedAtOnUserSessionSlowInstanceCommand,
   CreateWorkspaceAiProviderTableFastInstanceCommand,
   AddFirstPeriodCouponToSubscriptionPlanFastInstanceCommand,
+  AddWhatsappChannelFastInstanceCommand,
+  AddConversationsWidgetTypeFastInstanceCommand,
 ];

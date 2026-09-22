@@ -236,6 +236,9 @@ export const STANDARD_OBJECT_FIELDS = {
           STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.workflow,
       }),
     },
+    conversationMessage: {
+      universalIdentifier: '614884ae-5253-43cc-862c-8e4b32237f0b',
+    },
   },
   blocklist: {
     ...buildStandardObjectSystemFields(
@@ -440,6 +443,9 @@ export const STANDARD_OBJECT_FIELDS = {
         relationTargetObjectUniversalIdentifier:
           STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.timelineActivity,
       }),
+    },
+    conversations: {
+      universalIdentifier: 'ea8cb83e-5098-495c-90c1-7084141fddf4',
     },
   },
   dashboard: {
@@ -774,6 +780,9 @@ export const STANDARD_OBJECT_FIELDS = {
           STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.timelineActivity,
       }),
     },
+    conversations: {
+      universalIdentifier: '90e5dfb2-ef79-4c15-ab3c-e134206cf02e',
+    },
   },
   person: {
     ...buildStandardObjectSystemFields(
@@ -840,6 +849,12 @@ export const STANDARD_OBJECT_FIELDS = {
     },
     listMemberships: {
       universalIdentifier: '8b8d1be0-4c94-4413-a2c9-c7ede205a81d',
+    },
+    conversations: {
+      universalIdentifier: '8e056655-f194-4342-bc6f-82e60add7891',
+    },
+    conversationParticipants: {
+      universalIdentifier: '3f3faa39-e204-4f07-850a-ccee947c7841',
     },
   },
   task: {
@@ -1089,6 +1104,94 @@ export const STANDARD_OBJECT_FIELDS = {
     },
     numberFormat: {
       universalIdentifier: '20202020-7f40-4e7f-b126-11c0eda6b141',
+    },
+    assignedConversations: {
+      universalIdentifier: 'ee0ed1cf-1b1c-4d87-b8a8-57b23091fded',
+    },
+    conversationParticipants: {
+      universalIdentifier: 'e611fdc0-ea93-4007-9094-522f32e6a6e1',
+    },
+  },
+  conversation: {
+    ...buildStandardObjectSystemFields(
+      STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.conversation,
+    ),
+    channelType: {
+      universalIdentifier: '1556e973-33bd-41b5-b5f9-66276857d68b',
+    },
+    subject: { universalIdentifier: '67bf671d-f13e-4b94-ba58-f118e7a3310d' },
+    status: { universalIdentifier: 'f59fd83d-658b-4b02-b1a6-83f66612adde' },
+    isUnread: { universalIdentifier: 'fed408e6-caf1-4049-b1bd-4ddf53e53c68' },
+    lastMessageAt: {
+      universalIdentifier: 'd5e7aef0-9111-489b-bb10-2a2ef5905d67',
+    },
+    lastInboundAt: {
+      universalIdentifier: '4a999f57-0867-4cb7-89ef-65415f62d924',
+    },
+    lastOutboundAt: {
+      universalIdentifier: 'e7d4290d-6379-4a32-87e7-2537f4112552',
+    },
+    assignedTo: { universalIdentifier: 'cbc11519-2cec-4b19-b781-be3c22100eee' },
+    person: { universalIdentifier: 'cec17a8c-938d-43b6-9f25-9b963253fcd6' },
+    company: { universalIdentifier: '6016afd4-7bfc-48f2-baf3-6a5818ecdc82' },
+    opportunity: {
+      universalIdentifier: '95001a4a-c675-4384-a874-2583d3f8635c',
+    },
+    messages: { universalIdentifier: '19df8197-e14e-4ad5-87d7-9e1c05efd3bc' },
+    participants: {
+      universalIdentifier: 'c0ca83e0-181c-4d06-a734-ff15988758a0',
+    },
+  },
+  conversationMessage: {
+    ...buildStandardObjectSystemFields(
+      STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.conversationMessage,
+    ),
+    conversation: {
+      universalIdentifier: '19b9e83d-d5b7-4b23-b25f-7255618048f8',
+    },
+    direction: { universalIdentifier: '5f56c541-b6f9-430f-a149-40305eeb89fa' },
+    channelType: {
+      universalIdentifier: '0eb1173b-15ca-4b14-b918-6c62045f5b67',
+    },
+    externalMessageId: {
+      universalIdentifier: 'b004caff-9468-4564-97e8-6db6c8d58da5',
+    },
+    body: { universalIdentifier: 'cf20588f-4c79-424f-88ca-2305e72888f5' },
+    sentAt: { universalIdentifier: '1541136e-e848-43df-b1eb-50dc6264052c' },
+    receivedAt: {
+      universalIdentifier: 'c0c2f04c-8f89-4d86-aa1d-672b662ca452',
+    },
+    deliveryStatus: {
+      universalIdentifier: '7677d131-051e-4307-85dc-06e65f7f6c29',
+    },
+    isDraft: { universalIdentifier: '9efbc767-b55c-4c90-8c92-a3f88ff72c1e' },
+    isInternalNote: {
+      universalIdentifier: 'c36c9481-83ed-44a8-b6e1-87bef8ee6b3c',
+    },
+    rawPayload: {
+      universalIdentifier: '51ad6a4f-4ce3-4deb-bf57-c90a561666b3',
+    },
+    attachments: {
+      universalIdentifier: '102913e7-7a12-439a-a47b-ce802eb6d2b7',
+    },
+  },
+  conversationParticipant: {
+    ...buildStandardObjectSystemFields(
+      STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.conversationParticipant,
+    ),
+    conversation: {
+      universalIdentifier: '26d75219-0e02-4c4a-9b05-20dec1e47dad',
+    },
+    role: { universalIdentifier: '3b728a58-987c-419a-ae93-899634800313' },
+    channelHandle: {
+      universalIdentifier: '9e3199be-1c82-4994-8f35-395c7375657c',
+    },
+    displayName: {
+      universalIdentifier: 'f49a7508-97ac-4b62-a4a0-58b51140ddfe',
+    },
+    person: { universalIdentifier: '7388d76c-0a8c-4ce4-b0dc-56bfc5e6dcd5' },
+    workspaceMember: {
+      universalIdentifier: '0db3a30e-b4ea-4b60-a8b4-47436c3dcae3',
     },
   },
 } satisfies Record<string, Record<string, { universalIdentifier: string }>>;

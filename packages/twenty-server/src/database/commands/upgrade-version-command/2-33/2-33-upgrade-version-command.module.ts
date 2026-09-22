@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { WorkspaceIteratorModule } from 'src/database/commands/command-runners/workspace-iterator.module';
 import { BackfillActivityTargetsJunctionTargetCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1787123540000-backfill-activity-targets-junction-target.command';
 import { MigrateCommandMenuItemLabelsToPlaceholdersCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1787127900000-migrate-command-menu-item-labels-to-placeholders.command';
+import { SyncConversationStandardObjectsCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1789100000000-sync-conversation-standard-objects.command';
+import { AddPersonConversationsTabCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1789782287414-add-person-conversations-tab.command';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
 import { FieldMetadataEntity } from 'src/engine/metadata-modules/field-metadata/field-metadata.entity';
 import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache.module';
@@ -22,6 +24,8 @@ import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace
   providers: [
     BackfillActivityTargetsJunctionTargetCommand,
     MigrateCommandMenuItemLabelsToPlaceholdersCommand,
+    SyncConversationStandardObjectsCommand,
+    AddPersonConversationsTabCommand,
   ],
 })
 export class V2_33_UpgradeVersionCommandModule {}

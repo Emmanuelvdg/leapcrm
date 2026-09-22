@@ -8,12 +8,12 @@ export default defineApplication({
   description:
     'Your CRM, in the conversation. Mention the bot or DM it to ask about your records and create, update or soft-delete them without leaving Slack, and use the Slack steps to post messages, ephemerals, updates, deletes and reactions from your workflows.',
   logoUrl: 'public/slack.svg',
-  author: 'Twenty',
+  author: 'Leap',
   category: 'Communication',
-  websiteUrl: 'https://docs.twenty.com/developers/extend/apps/getting-started',
-  termsUrl: 'https://www.twenty.com/terms',
-  emailSupport: 'contact@twenty.com',
-  issueReportUrl: 'https://github.com/twentyhq/twenty/issues',
+  websiteUrl:
+    'https://docs.theleapcrm.com/developers/extend/apps/getting-started',
+  termsUrl: 'https://theleapcrm.com/terms',
+  emailSupport: 'support@theleapcrm.com',
   serverVariables: {
     SLACK_CLIENT_ID: {
       description:

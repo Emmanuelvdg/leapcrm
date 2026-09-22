@@ -135,6 +135,12 @@ export const STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS = {
           emails: 'Emails',
         },
       },
+      conversations: {
+        title: 'Conversations',
+        widgets: {
+          conversations: 'Conversations',
+        },
+      },
       calendar: {
         title: 'Calendar',
         widgets: {

@@ -19,11 +19,10 @@ export default defineApplication({
     'public/gallery/03-documents.png',
     'public/gallery/04-generated-document.png',
   ],
-  author: 'Twenty',
+  author: 'Leap',
   category: 'Productivity',
   websiteUrl:
-    'https://docs.twenty.com/developers/extend/apps/tutorials/document-generator/overview',
-  termsUrl: 'https://www.twenty.com/terms',
-  emailSupport: 'contact@twenty.com',
-  issueReportUrl: 'https://github.com/twentyhq/twenty/issues',
+    'https://docs.theleapcrm.com/developers/extend/apps/tutorials/document-generator/overview',
+  termsUrl: 'https://theleapcrm.com/terms',
+  emailSupport: 'support@theleapcrm.com',
 });

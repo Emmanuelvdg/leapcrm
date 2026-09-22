@@ -7,16 +7,16 @@ import {
 
 export default defineApplication({
   universalIdentifier: APPLICATION_UNIVERSAL_IDENTIFIER,
-  displayName: 'Twenty Discord',
+  displayName: 'Discord',
   description:
-    'Connect Discord to Twenty. Workflow steps post, update, and delete bot messages and add reactions using a Discord bot token shared across the deployment.',
+    'Connect Discord to LeapCRM. Workflow steps post, update, and delete bot messages and add reactions using a Discord bot token shared across the deployment.',
   logoUrl: 'public/twenty-discord.svg',
-  author: 'Twenty',
+  author: 'Leap',
   category: 'Communication',
-  websiteUrl: 'https://docs.twenty.com/developers/extend/apps/getting-started',
-  termsUrl: 'https://www.twenty.com/terms',
-  emailSupport: 'contact@twenty.com',
-  issueReportUrl: 'https://github.com/twentyhq/twenty/issues',
+  websiteUrl:
+    'https://docs.theleapcrm.com/developers/extend/apps/getting-started',
+  termsUrl: 'https://theleapcrm.com/terms',
+  emailSupport: 'support@theleapcrm.com',
   applicationVariables: {
     DISCORD_BOT_TOKEN: {
       universalIdentifier: DISCORD_BOT_TOKEN_VARIABLE_UNIVERSAL_IDENTIFIER,
