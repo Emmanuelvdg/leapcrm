@@ -31,6 +31,15 @@ services:
       ENCRYPTION_KEY: ${ENCRYPTION_KEY}
       FALLBACK_ENCRYPTION_KEY: ${FALLBACK_ENCRYPTION_KEY}
 
+      # WhatsApp Business Platform (Meta) — app-level config only; per-channel
+      # phoneNumberId/accessToken/wabaId live on the WhatsappChannel entity,
+      # not in env. Only the server needs these — inbound/outbound WhatsApp
+      # processing is synchronous in the request path, not queue-based.
+      WHATSAPP_APP_ID: ${WHATSAPP_APP_ID}
+      WHATSAPP_APP_SECRET: ${WHATSAPP_APP_SECRET}
+      WHATSAPP_WEBHOOK_VERIFY_TOKEN: ${WHATSAPP_WEBHOOK_VERIFY_TOKEN}
+      WHATSAPP_EMBEDDED_SIGNUP_CONFIG_ID: ${WHATSAPP_EMBEDDED_SIGNUP_CONFIG_ID}
+
       IS_MULTIWORKSPACE_ENABLED: ${IS_MULTIWORKSPACE_ENABLED:-true}
       IS_WORKSPACE_CREATION_LIMITED_TO_SERVER_ADMINS: ${IS_WORKSPACE_CREATION_LIMITED_TO_SERVER_ADMINS:-false}
       SUBSCRIPTION_TRIAL_DAYS: ${SUBSCRIPTION_TRIAL_DAYS:-0}
