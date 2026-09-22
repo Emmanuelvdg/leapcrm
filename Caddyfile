@@ -46,6 +46,14 @@ leapcrm.tech, *.leapcrm.tech {
 		}
 	}
 
+	# Static legal pages (e.g. Privacy Policy, needed as a reachable URL for
+	# the Meta App Dashboard) — served directly by Caddy so they don't depend
+	# on the frontend SPA build or twenty-server being healthy.
+	handle_path /legal/* {
+		root * /srv/legal
+		file_server
+	}
+
 	handle {
 		reverse_proxy server:3000
 	}
