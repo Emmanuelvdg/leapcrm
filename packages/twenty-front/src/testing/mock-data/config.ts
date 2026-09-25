@@ -27,6 +27,7 @@ export const mockedClientConfig: ClientConfig = {
   },
   billing: {
     isBillingEnabled: true,
+    isSubscriptionBillingEnabled: false,
     billingUrl: '',
     trialPeriods: [
       {

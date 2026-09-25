@@ -22,6 +22,12 @@ export type WorkspaceSubscriptionStatusResult = {
   currentPeriodEnd: Date | null;
   seats: number;
   activeMembers: number;
+  // True only once Stripe Checkout has actually run - distinct from `status`,
+  // which can already read TRIALING/ACTIVE (granting access) for a workspace
+  // that has never subscribed, via grandfathering or the disabled-billing
+  // short-circuit below. Seat changes and the billing portal both require a
+  // real Stripe subscription regardless of what `status` says.
+  hasStripeSubscription: boolean;
 };
 
 const ACCESS_GRANTING_STATUSES = new Set<WorkspaceSubscriptionStatus>([
@@ -92,6 +98,7 @@ export class WorkspaceSubscriptionService {
         currentPeriodEnd: null,
         seats: activeMembers,
         activeMembers,
+        hasStripeSubscription: false,
       };
     }
 
@@ -107,6 +114,7 @@ export class WorkspaceSubscriptionService {
         currentPeriodEnd: null,
         seats: 0,
         activeMembers,
+        hasStripeSubscription: false,
       };
     }
 
@@ -123,6 +131,7 @@ export class WorkspaceSubscriptionService {
       currentPeriodEnd: existing.currentPeriodEnd ?? null,
       seats: existing.seats,
       activeMembers,
+      hasStripeSubscription: !!existing.stripeSubscriptionId,
     };
   }
 

@@ -28,6 +28,7 @@ import { type CodeExecutionStreamEmitter } from 'src/engine/core-modules/tool-pr
 import { CodeInterpreterService } from 'src/engine/core-modules/code-interpreter/code-interpreter.service';
 import { WorkspaceDomainsService } from 'src/engine/core-modules/domain/workspace-domains/services/workspace-domains.service';
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
+import { FileService } from 'src/engine/core-modules/file/services/file.service';
 import { ToolRegistryService } from 'src/engine/core-modules/tool-provider/services/tool-registry.service';
 import {
   createExecuteToolTool,
@@ -72,6 +73,7 @@ import { type ExtractedFile } from 'src/engine/metadata-modules/ai/ai-chat/types
 import { buildWorkspaceSetupChatThreadId } from 'src/engine/metadata-modules/ai/ai-chat/utils/build-workspace-setup-chat-thread-id.util';
 import { hasSucceededWorkspaceSetupCompletion } from 'src/engine/metadata-modules/ai/ai-chat/utils/has-succeeded-workspace-setup-completion.util';
 import { extractCodeInterpreterFiles } from 'src/engine/metadata-modules/ai/ai-chat/utils/extract-code-interpreter-files.util';
+import { extractSpreadsheetTextParts } from 'src/engine/metadata-modules/ai/ai-chat/utils/extract-spreadsheet-text-parts.util';
 import { injectMessageTimestamps } from 'src/engine/metadata-modules/ai/ai-chat/utils/inject-message-timestamps.util';
 import {
   getCacheProviderOptions,
@@ -129,6 +131,7 @@ export class ChatExecutionService {
     private readonly nativeToolBinder: NativeToolBinderService,
     private readonly messagePruningService: MessagePruningService,
     private readonly metricsService: MetricsService,
+    private readonly fileService: FileService,
   ) {}
 
   async streamChat({
@@ -275,8 +278,20 @@ export class ChatExecutionService {
 
     const isCodeInterpreterEnabled = this.codeInterpreterService.isEnabled();
 
-    let processedMessages: ExtendedUIMessage[] = replaceUnsupportedFileParts(
-      messages,
+    // Without the code interpreter, a spreadsheet would otherwise be
+    // stubbed out as "not supported for direct analysis" by
+    // replaceUnsupportedFileParts below - extract its content as text first
+    // so the model can still read it.
+    let processedMessages: ExtendedUIMessage[] = isCodeInterpreterEnabled
+      ? messages
+      : await extractSpreadsheetTextParts(
+          messages,
+          workspace.id,
+          this.fileService,
+        );
+
+    processedMessages = replaceUnsupportedFileParts(
+      processedMessages,
       modelConfig.modalities,
       isCodeInterpreterEnabled,
     );

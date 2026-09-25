@@ -70,9 +70,7 @@ export const SettingsSubscriptionBilling = () => {
   );
 
   const status = data?.mySubscriptionStatus;
-  const hasBillableSubscription =
-    status?.status === WorkspaceSubscriptionStatus.ACTIVE ||
-    status?.status === WorkspaceSubscriptionStatus.TRIALING;
+  const hasBillableSubscription = status?.hasStripeSubscription ?? false;
 
   const [seats, setSeats] = useState(1);
 

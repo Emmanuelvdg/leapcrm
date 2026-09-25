@@ -65,6 +65,9 @@ export class ClientConfigService {
       EmailingDomainDriver.LOG;
 
     const isBillingEnabled = this.twentyConfigService.get('IS_BILLING_ENABLED');
+    const isSubscriptionBillingEnabled = this.twentyConfigService.get(
+      'IS_SUBSCRIPTION_BILLING_ENABLED',
+    );
 
     const availableModels =
       this.aiModelRegistryService.getAdminFilteredModels();
@@ -175,6 +178,7 @@ export class ClientConfigService {
       appVersion: this.twentyConfigService.get('APP_VERSION'),
       billing: {
         isBillingEnabled,
+        isSubscriptionBillingEnabled,
         billingUrl: this.twentyConfigService.get('BILLING_PLAN_REQUIRED_LINK'),
         stripePublishableKey: this.twentyConfigService.get(
           'BILLING_STRIPE_PUBLISHABLE_KEY',

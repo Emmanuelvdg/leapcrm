@@ -162,6 +162,9 @@ export class Billing {
   @Field(() => Boolean)
   isBillingEnabled: boolean;
 
+  @Field(() => Boolean)
+  isSubscriptionBillingEnabled: boolean;
+
   @Field(() => String, { nullable: true })
   billingUrl?: string;
 

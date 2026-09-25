@@ -63,6 +63,8 @@ const useSettingsNavigationItems = (): SettingsNavigationSection[] => {
   const supportChat = useAtomStateValue(supportChatState);
 
   const isBillingEnabled = billing?.isBillingEnabled ?? false;
+  const isSubscriptionBillingEnabled =
+    billing?.isSubscriptionBillingEnabled ?? false;
   const currentUser = useAtomStateValue(currentUserState);
   const isAdminEnabled =
     (currentUser?.canImpersonate || currentUser?.canAccessFullAdminPanel) ??
@@ -146,6 +148,14 @@ const useSettingsNavigationItems = (): SettingsNavigationSection[] => {
           Icon: IconCurrencyDollar,
           isHidden:
             !isBillingEnabled || !permissionMap[PermissionFlagType.WORKSPACE],
+        },
+        {
+          label: t`Billing`,
+          path: SettingsPath.SubscriptionBilling,
+          Icon: IconCurrencyDollar,
+          isHidden:
+            !isSubscriptionBillingEnabled ||
+            !permissionMap[PermissionFlagType.WORKSPACE],
         },
         {
           label: t`MCP & APIs`,

@@ -9,6 +9,7 @@ export const UPDATE_SUBSCRIPTION_SEATS = gql`
       currentPeriodEnd
       seats
       activeMembers
+      hasStripeSubscription
     }
   }
 `;

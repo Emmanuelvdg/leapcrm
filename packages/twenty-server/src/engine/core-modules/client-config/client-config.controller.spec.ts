@@ -39,6 +39,7 @@ describe('ClientConfigController', () => {
       const mockClientConfig = {
         billing: {
           isBillingEnabled: true,
+          isSubscriptionBillingEnabled: false,
           billingUrl: 'https://billing.example.com',
           trialPeriods: [
             {

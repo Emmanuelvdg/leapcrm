@@ -44,6 +44,7 @@ const mockCurrentUser = {
 
 const mockBilling: Billing = {
   isBillingEnabled: false,
+  isSubscriptionBillingEnabled: false,
   billingUrl: '',
   trialPeriods: [],
   __typename: 'Billing',
@@ -145,11 +146,14 @@ describe('useSettingsNavigationItems', () => {
       (section) => section.label === 'Workspace',
     );
     const billingItem = workspaceSection?.items.find(
-      (item) => item.label === 'Billing',
+      (item) => item.path === SettingsPath.Billing,
+    );
+    const subscriptionBillingItem = workspaceSection?.items.find(
+      (item) => item.path === SettingsPath.SubscriptionBilling,
     );
 
     expect(billingItem?.isHidden).toBe(true);
-    expect(billingItem?.path).toBe(SettingsPath.Billing);
+    expect(subscriptionBillingItem?.isHidden).toBe(true);
   });
 
   it('should hide billing navigation until billing config is loaded', () => {
@@ -173,9 +177,47 @@ describe('useSettingsNavigationItems', () => {
       (section) => section.label === 'Workspace',
     );
     const billingItem = workspaceSection?.items.find(
-      (item) => item.label === 'Billing',
+      (item) => item.path === SettingsPath.Billing,
+    );
+    const subscriptionBillingItem = workspaceSection?.items.find(
+      (item) => item.path === SettingsPath.SubscriptionBilling,
     );
 
+    expect(billingItem?.isHidden).toBe(true);
+    expect(subscriptionBillingItem?.isHidden).toBe(true);
+  });
+
+  it('should show the subscription-billing navigation item when subscription billing is enabled', () => {
+    jotaiStore.set(billingState.atom, {
+      ...mockBilling,
+      isSubscriptionBillingEnabled: true,
+    });
+
+    (usePermissionFlagMap as jest.Mock).mockImplementation(() => ({
+      [PermissionFlagType.WORKSPACE]: true,
+      [PermissionFlagType.WORKSPACE_MEMBERS]: true,
+      [PermissionFlagType.DATA_MODEL]: true,
+      [PermissionFlagType.API_KEYS_AND_WEBHOOKS]: true,
+      [PermissionFlagType.ROLES]: true,
+      [PermissionFlagType.SECURITY]: true,
+      [PermissionFlagType.CONNECTED_ACCOUNTS]: true,
+    }));
+
+    const { result } = renderHook(() => useSettingsNavigationItems(), {
+      wrapper: Wrapper,
+    });
+
+    const workspaceSection = result.current.find(
+      (section) => section.label === 'Workspace',
+    );
+    const subscriptionBillingItem = workspaceSection?.items.find(
+      (item) => item.path === SettingsPath.SubscriptionBilling,
+    );
+    const billingItem = workspaceSection?.items.find(
+      (item) => item.path === SettingsPath.Billing,
+    );
+
+    expect(subscriptionBillingItem?.isHidden).toBe(false);
     expect(billingItem?.isHidden).toBe(true);
   });
 

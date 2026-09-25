@@ -56,6 +56,7 @@ const renderHooks = ({
     result.current.setBilling({
       __typename: 'Billing',
       isBillingEnabled,
+      isSubscriptionBillingEnabled: false,
       trialPeriods: [],
       stripePublishableKey,
     });

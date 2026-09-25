@@ -21,4 +21,7 @@ export class SubscriptionStatusDto {
 
   @Field(() => Int)
   activeMembers: number;
+
+  @Field()
+  hasStripeSubscription: boolean;
 }
