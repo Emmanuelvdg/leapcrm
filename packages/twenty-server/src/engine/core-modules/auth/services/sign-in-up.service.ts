@@ -331,6 +331,7 @@ export class SignInUpService {
       await this.activateOnboardingForUser({
         user,
         workspace: params.workspace,
+        shouldShowGettingStartedVideoStep: false,
         shouldShowConnectAccountStep: true,
         shouldShowInstallAppsStep: false,
       });
@@ -364,16 +365,29 @@ export class SignInUpService {
     {
       user,
       workspace,
+      shouldShowGettingStartedVideoStep,
       shouldShowConnectAccountStep,
       shouldShowInstallAppsStep,
     }: {
       user: Pick<UserEntity, 'id' | 'firstName' | 'lastName'>;
       workspace: WorkspaceEntity;
+      shouldShowGettingStartedVideoStep: boolean;
       shouldShowConnectAccountStep: boolean;
       shouldShowInstallAppsStep: boolean;
     },
     queryRunner?: QueryRunner,
   ) {
+    if (shouldShowGettingStartedVideoStep) {
+      await this.onboardingService.setOnboardingGettingStartedVideoPending(
+        {
+          userId: user.id,
+          workspaceId: workspace.id,
+          value: true,
+        },
+        queryRunner,
+      );
+    }
+
     if (shouldShowConnectAccountStep) {
       await this.onboardingService.setOnboardingConnectAccountPending(
         {
@@ -656,6 +670,7 @@ export class SignInUpService {
             {
               user,
               workspace,
+              shouldShowGettingStartedVideoStep: true,
               shouldShowConnectAccountStep: true,
               shouldShowInstallAppsStep: true,
             },

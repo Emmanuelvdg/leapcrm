@@ -32,6 +32,7 @@ import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 
 export enum OnboardingStepKeys {
+  ONBOARDING_GETTING_STARTED_VIDEO_PENDING = 'ONBOARDING_GETTING_STARTED_VIDEO_PENDING',
   ONBOARDING_CONNECT_ACCOUNT_PENDING = 'ONBOARDING_CONNECT_ACCOUNT_PENDING',
   ONBOARDING_INVITE_TEAM_PENDING = 'ONBOARDING_INVITE_TEAM_PENDING',
   ONBOARDING_CREATE_PROFILE_PENDING = 'ONBOARDING_CREATE_PROFILE_PENDING',
@@ -42,6 +43,7 @@ export enum OnboardingStepKeys {
 }
 
 export type OnboardingKeyValueTypeMap = {
+  [OnboardingStepKeys.ONBOARDING_GETTING_STARTED_VIDEO_PENDING]: boolean;
   [OnboardingStepKeys.ONBOARDING_CONNECT_ACCOUNT_PENDING]: boolean;
   [OnboardingStepKeys.ONBOARDING_INVITE_TEAM_PENDING]: boolean;
   [OnboardingStepKeys.ONBOARDING_CREATE_PROFILE_PENDING]: boolean;
@@ -135,6 +137,11 @@ export class OnboardingService {
       workspaceId: workspace.id,
     });
 
+    const isGettingStartedVideoPending =
+      userVars.get(
+        OnboardingStepKeys.ONBOARDING_GETTING_STARTED_VIDEO_PENDING,
+      ) === true;
+
     const isProfileCreationPending =
       userVars.get(OnboardingStepKeys.ONBOARDING_CREATE_PROFILE_PENDING) ===
       true;
@@ -151,6 +158,10 @@ export class OnboardingService {
 
     const isBookCallPending =
       userVars.get(OnboardingStepKeys.ONBOARDING_BOOK_CALL_PENDING) === true;
+
+    if (isGettingStartedVideoPending) {
+      return OnboardingStatus.GETTING_STARTED_VIDEO;
+    }
 
     if (isConnectAccountPending) {
       return OnboardingStatus.SYNC_EMAIL;
@@ -433,6 +444,81 @@ export class OnboardingService {
       default:
         assertUnreachable(step);
     }
+  }
+
+  async setOnboardingGettingStartedVideoPending(
+    {
+      userId,
+      workspaceId,
+      value,
+    }: {
+      userId: string;
+      workspaceId: string;
+      value: boolean;
+    },
+    queryRunner?: QueryRunner,
+  ) {
+    if (!value) {
+      await this.userVarsService.delete(
+        {
+          userId,
+          workspaceId,
+          key: OnboardingStepKeys.ONBOARDING_GETTING_STARTED_VIDEO_PENDING,
+        },
+        queryRunner,
+      );
+
+      return;
+    }
+
+    await this.userVarsService.set(
+      {
+        userId,
+        workspaceId,
+        key: OnboardingStepKeys.ONBOARDING_GETTING_STARTED_VIDEO_PENDING,
+        value: true,
+      },
+      queryRunner,
+    );
+  }
+
+  async completeOnboardingGettingStartedVideoStep({
+    userId,
+    workspaceId,
+  }: {
+    userId: string;
+    workspaceId: string;
+  }) {
+    await this.runStepTransitionInLockedTransaction(
+      { userId, workspaceId },
+      async (queryRunner) =>
+        this.claimOnboardingGettingStartedVideoStep(
+          { userId, workspaceId },
+          queryRunner,
+        ),
+    );
+  }
+
+  private async claimOnboardingGettingStartedVideoStep(
+    {
+      userId,
+      workspaceId,
+    }: {
+      userId: string;
+      workspaceId: string;
+    },
+    queryRunner?: QueryRunner,
+  ): Promise<boolean> {
+    const affectedRows = await this.userVarsService.delete(
+      {
+        userId,
+        workspaceId,
+        key: OnboardingStepKeys.ONBOARDING_GETTING_STARTED_VIDEO_PENDING,
+      },
+      queryRunner,
+    );
+
+    return isDefined(affectedRows) && affectedRows > 0;
   }
 
   async setOnboardingConnectAccountPending(

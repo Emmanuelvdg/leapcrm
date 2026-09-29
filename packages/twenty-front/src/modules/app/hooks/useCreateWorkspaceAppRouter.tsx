@@ -63,6 +63,12 @@ const WorkspaceActivation = lazyWithPreload(() =>
   })),
 );
 
+const GettingStartedVideo = lazyWithPreload(() =>
+  import('~/pages/onboarding/GettingStartedVideo').then((module) => ({
+    default: module.GettingStartedVideo,
+  })),
+);
+
 const CreateProfile = lazyWithPreload(() =>
   import('~/pages/onboarding/CreateProfile').then((module) => ({
     default: module.CreateProfile,
@@ -149,6 +155,7 @@ const NotFound = lazy(() =>
 
 const preloadOnboardingPages = () => {
   WorkspaceActivation.preload();
+  GettingStartedVideo.preload();
   CreateProfile.preload();
   SyncEmails.preload();
   InstallApps.preload();
@@ -320,6 +327,14 @@ const createWorkspaceAppRouter = (
             element={<OnboardingStepLayout />}
             loader={preloadOnboardingPages}
           >
+            <Route
+              path={AppPath.GettingStartedVideo}
+              element={
+                <LazyRoute fallback={<OnboardingStepPageLoader />}>
+                  <GettingStartedVideo />
+                </LazyRoute>
+              }
+            />
             <Route
               path={AppPath.CreateProfile}
               element={

@@ -53,6 +53,10 @@ const getNextOnboardingStatus = ({
       : statusAfterBookCall;
 
   if (currentUser?.onboardingStatus === OnboardingStatus.WORKSPACE_ACTIVATION) {
+    return OnboardingStatus.GETTING_STARTED_VIDEO;
+  }
+
+  if (currentUser?.onboardingStatus === OnboardingStatus.GETTING_STARTED_VIDEO) {
     return OnboardingStatus.SYNC_EMAIL;
   }
 

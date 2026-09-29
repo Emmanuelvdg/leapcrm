@@ -44,6 +44,20 @@ export class OnboardingResolver {
 
   @Mutation(() => OnboardingStepSuccessDTO)
   @UseGuards(NoPermissionGuard)
+  async completeGettingStartedVideoOnboardingStep(
+    @AuthUser() user: AuthContextUser,
+    @AuthWorkspace() workspace: WorkspaceEntity,
+  ): Promise<OnboardingStepSuccessDTO> {
+    await this.onboardingService.completeOnboardingGettingStartedVideoStep({
+      userId: user.id,
+      workspaceId: workspace.id,
+    });
+
+    return { success: true };
+  }
+
+  @Mutation(() => OnboardingStepSuccessDTO)
+  @UseGuards(NoPermissionGuard)
   async skipSyncEmailOnboardingStep(
     @AuthUser() user: AuthContextUser,
     @AuthWorkspace() workspace: WorkspaceEntity,

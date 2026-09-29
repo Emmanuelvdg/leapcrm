@@ -146,11 +146,28 @@ export const usePageChangeEffectNavigateLocation = () => {
     return;
   }
 
-  if (
-    onboardingStatus === OnboardingStatus.WORKSPACE_ACTIVATION &&
-    !isMatchingLocation(location, AppPath.WorkspaceActivation)
-  ) {
-    return AppPath.WorkspaceActivation;
+  if (onboardingStatus === OnboardingStatus.WORKSPACE_ACTIVATION) {
+    if (!isMatchingLocation(location, AppPath.WorkspaceActivation)) {
+      return AppPath.WorkspaceActivation;
+    }
+
+    // Stop here rather than falling through to the isSubscriptionLocked
+    // check below: activation isn't done yet, so the founder's BILLING
+    // permission may not exist, and mySubscriptionStatus can read back an
+    // unrelated stale/locked answer mid-activation. Falling through would
+    // bounce this in-progress activation to the paywall and back.
+    return;
+  }
+
+  if (onboardingStatus === OnboardingStatus.GETTING_STARTED_VIDEO) {
+    if (!isMatchingLocation(location, AppPath.GettingStartedVideo)) {
+      return AppPath.GettingStartedVideo;
+    }
+
+    // Stop here for the same reason as the isSubscriptionLocked branch
+    // below: once already on this step, falling through to that check
+    // would bounce to /subscription-required and back — an infinite loop.
+    return;
   }
 
   // Checked only after workspace activation finishes, so the founder's

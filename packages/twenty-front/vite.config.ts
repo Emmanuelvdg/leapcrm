@@ -274,6 +274,14 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       tsconfigPaths: true,
+      // twenty-ui is reached through the node_modules/twenty-ui symlink
+      // (excluded from optimizeDeps below, so its own internal chunk-split
+      // relative imports, e.g. icon.mjs -> ./TablerIcons-xxx.js, are resolved
+      // on demand). Without this, some of those resolutions intermittently
+      // fail ("Failed to resolve import" 500s, a different chunk each time) -
+      // consistent with the resolver mixing the symlinked path and its
+      // realpath as two different identities for the same file.
+      preserveSymlinks: true,
       alias: [
         // wyw-in-js 1.x resolves modules in its CSS evaluator via vite's
         // resolve.alias (not resolve.tsconfigPaths), so the `@/` and `~/`

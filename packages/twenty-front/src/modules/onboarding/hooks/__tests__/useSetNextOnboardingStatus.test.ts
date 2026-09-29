@@ -142,12 +142,23 @@ describe('useSetNextOnboardingStatus', () => {
     resetJotaiStore();
   });
 
-  it('should sync emails right after workspace activation', () => {
+  it('should show the getting started video right after workspace activation', () => {
     const {
       nextOnboardingStatus,
       isWelcomeAnimationVisible,
       shouldOpenAiChatAfterOnboarding,
     } = renderHooks(OnboardingStatus.WORKSPACE_ACTIVATION);
+    expect(nextOnboardingStatus).toEqual(OnboardingStatus.GETTING_STARTED_VIDEO);
+    expect(isWelcomeAnimationVisible).toBe(false);
+    expect(shouldOpenAiChatAfterOnboarding).toBe(false);
+  });
+
+  it('should sync emails right after the getting started video', () => {
+    const {
+      nextOnboardingStatus,
+      isWelcomeAnimationVisible,
+      shouldOpenAiChatAfterOnboarding,
+    } = renderHooks(OnboardingStatus.GETTING_STARTED_VIDEO);
     expect(nextOnboardingStatus).toEqual(OnboardingStatus.SYNC_EMAIL);
     expect(isWelcomeAnimationVisible).toBe(false);
     expect(shouldOpenAiChatAfterOnboarding).toBe(false);
@@ -482,7 +493,7 @@ describe('useSetNextOnboardingStatus', () => {
     );
   });
 
-  it('should still sync emails when the server status landed before advancing', () => {
+  it('should still show the getting started video when the server status landed before advancing', () => {
     jotaiStore.set(currentUserState.atom, {
       ...mockedUserData,
       onboardingStatus: OnboardingStatus.WORKSPACE_ACTIVATION,
@@ -502,13 +513,13 @@ describe('useSetNextOnboardingStatus', () => {
     act(() => {
       jotaiStore.set(currentUserState.atom, {
         ...mockedUserData,
-        onboardingStatus: OnboardingStatus.SYNC_EMAIL,
+        onboardingStatus: OnboardingStatus.GETTING_STARTED_VIDEO,
       });
       advanceCapturedBeforeActivation({ stepHistoryEffect: 'leaveUnchanged' });
     });
 
     expect(jotaiStore.get(currentUserState.atom)?.onboardingStatus).toEqual(
-      OnboardingStatus.SYNC_EMAIL,
+      OnboardingStatus.GETTING_STARTED_VIDEO,
     );
   });
 });

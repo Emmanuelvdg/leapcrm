@@ -25,6 +25,30 @@ const replaceProcessEnvReferences = (code: string): string =>
 const escapeClosingScriptTags = (code: string): string =>
   code.replace(/<\/script/gi, '<\\/script');
 
+const RESOLVABLE_EXTENSIONS = ['.ts', '.tsx', '.js', '.jsx'];
+
+const resolveAtAliasPath = (bareResolvedPath: string): string | null => {
+  if (fs.existsSync(bareResolvedPath) && fs.statSync(bareResolvedPath).isFile()) {
+    return bareResolvedPath;
+  }
+
+  for (const extension of RESOLVABLE_EXTENSIONS) {
+    const withExtension = `${bareResolvedPath}${extension}`;
+    if (fs.existsSync(withExtension)) {
+      return withExtension;
+    }
+  }
+
+  for (const extension of RESOLVABLE_EXTENSIONS) {
+    const indexFile = path.join(bareResolvedPath, `index${extension}`);
+    if (fs.existsSync(indexFile)) {
+      return indexFile;
+    }
+  }
+
+  return null;
+};
+
 const buildSandboxDocument = async (): Promise<void> => {
   const buildResult = await build({
     configFile: false,
@@ -53,6 +77,24 @@ const buildSandboxDocument = async (): Promise<void> => {
           },
         ],
       },
+    },
+    // The inline `?worker&inline` build spawns its own rolldown bundling
+    // context, which doesn't inherit the `resolve.alias` above (regression
+    // in this Vite version) - resolve the `@/` prefix explicitly for it.
+    worker: {
+      plugins: () => [
+        {
+          name: 'resolve-at-alias-for-worker',
+          resolveId(source: string) {
+            if (source.startsWith('@/')) {
+              return resolveAtAliasPath(
+                path.resolve(projectRoot, 'src', source.slice('@/'.length)),
+              );
+            }
+            return null;
+          },
+        },
+      ],
     },
     logLevel: 'warn',
   });
