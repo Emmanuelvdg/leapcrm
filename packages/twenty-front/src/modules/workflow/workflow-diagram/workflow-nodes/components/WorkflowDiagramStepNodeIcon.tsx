@@ -34,6 +34,7 @@ export const WorkflowDiagramStepNodeIcon = ({
       switch (data.actionType) {
         case 'CODE':
         case 'HTTP_REQUEST':
+        case 'MCP_TOOL_CALL':
         case 'SEND_EMAIL':
         case 'DRAFT_EMAIL':
         case 'CREATE_CALENDAR_EVENT': {

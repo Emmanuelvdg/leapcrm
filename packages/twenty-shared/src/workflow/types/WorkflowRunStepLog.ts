@@ -11,3 +11,8 @@ export type AiAgentStepLogDetails = Extract<
 >;
 
 export type AiToolCallLog = AiAgentStepLogDetails['toolCalls'][number];
+
+export type McpToolCallStepLogDetails = Extract<
+  WorkflowRunStepLog['details'],
+  { type: 'MCP_TOOL_CALL' }
+>;

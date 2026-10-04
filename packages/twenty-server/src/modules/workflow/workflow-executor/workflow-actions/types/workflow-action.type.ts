@@ -7,6 +7,7 @@ import { type WorkflowDelayActionSettings } from 'src/modules/workflow/workflow-
 import { type WorkflowFilterActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/filter/types/workflow-filter-action-settings.type';
 import { type WorkflowFormActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/form/types/workflow-form-action-settings.type';
 import { type WorkflowHttpRequestActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/http-request/types/workflow-http-request-action-settings.type';
+import { type WorkflowMcpToolCallActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/mcp-tool-call/types/workflow-mcp-tool-call-action-settings.type';
 import { type WorkflowIfElseActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/if-else/types/workflow-if-else-action-settings.type';
 import { type WorkflowIteratorActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/iterator/types/workflow-iterator-action-settings.type';
 import { type WorkflowLogicFunctionActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/logic-function/types/workflow-logic-function-action-settings.type';
@@ -109,6 +110,11 @@ export type WorkflowHttpRequestAction = BaseWorkflowAction & {
   settings: WorkflowHttpRequestActionSettings;
 };
 
+export type WorkflowMcpToolCallAction = BaseWorkflowAction & {
+  type: WorkflowActionType.MCP_TOOL_CALL;
+  settings: WorkflowMcpToolCallActionSettings;
+};
+
 export type WorkflowAiAgentAction = BaseWorkflowAction & {
   type: WorkflowActionType.AI_AGENT;
   settings: WorkflowAiAgentActionSettings;
@@ -144,6 +150,7 @@ export type WorkflowAction =
   | WorkflowFilterAction
   | WorkflowIfElseAction
   | WorkflowHttpRequestAction
+  | WorkflowMcpToolCallAction
   | WorkflowAiAgentAction
   | WorkflowIteratorAction
   | WorkflowEmptyAction

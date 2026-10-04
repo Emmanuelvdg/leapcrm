@@ -14,6 +14,7 @@ export enum WorkflowActionType {
   FILTER = 'FILTER',
   IF_ELSE = 'IF_ELSE',
   HTTP_REQUEST = 'HTTP_REQUEST',
+  MCP_TOOL_CALL = 'MCP_TOOL_CALL',
   AI_AGENT = 'AI_AGENT',
   ITERATOR = 'ITERATOR',
   EMPTY = 'EMPTY',

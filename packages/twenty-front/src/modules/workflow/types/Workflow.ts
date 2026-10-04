@@ -20,6 +20,7 @@ import {
   type workflowIteratorActionSchema,
   type workflowLogicFunctionActionSchema,
   type workflowManualTriggerSchema,
+  type workflowMcpToolCallActionSchema,
   type workflowPickRecordActionSchema,
   type workflowRunSchema,
   type workflowRunStateSchema,
@@ -71,6 +72,9 @@ export type WorkflowIfElseAction = z.infer<typeof workflowIfElseActionSchema>;
 export type WorkflowHttpRequestAction = z.infer<
   typeof workflowHttpRequestActionSchema
 >;
+export type WorkflowMcpToolCallAction = z.infer<
+  typeof workflowMcpToolCallActionSchema
+>;
 export type WorkflowIteratorAction = z.infer<
   typeof workflowIteratorActionSchema
 >;
@@ -93,6 +97,7 @@ export type WorkflowAction =
   | WorkflowIfElseAction
   | WorkflowFormAction
   | WorkflowHttpRequestAction
+  | WorkflowMcpToolCallAction
   | WorkflowAiAgentAction
   | WorkflowIteratorAction
   | WorkflowDelayAction

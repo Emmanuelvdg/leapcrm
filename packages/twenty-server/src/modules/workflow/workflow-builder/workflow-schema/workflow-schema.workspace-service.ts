@@ -146,7 +146,8 @@ export class WorkflowSchemaWorkspaceService {
       }
       case WorkflowTriggerType.WEBHOOK:
       case WorkflowActionType.CODE:
-      case WorkflowActionType.HTTP_REQUEST: {
+      case WorkflowActionType.HTTP_REQUEST:
+      case WorkflowActionType.MCP_TOOL_CALL: {
         const expectedOutputSchema =
           'expectedOutputSchema' in step.settings
             ? step.settings.expectedOutputSchema
@@ -676,6 +677,7 @@ export class WorkflowSchemaWorkspaceService {
       }
       case WorkflowActionType.CODE:
       case WorkflowActionType.HTTP_REQUEST:
+      case WorkflowActionType.MCP_TOOL_CALL:
       case WorkflowActionType.LOGIC_FUNCTION: {
         const propertyPath = extractPropertyPathFromVariable(items);
         const outputSchema = this.getOutputSchemaWithExpectedFallback(

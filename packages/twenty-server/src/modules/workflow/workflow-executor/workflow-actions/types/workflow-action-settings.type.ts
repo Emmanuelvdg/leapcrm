@@ -8,6 +8,7 @@ import { type WorkflowFormActionSettings } from 'src/modules/workflow/workflow-e
 import { type WorkflowHttpRequestActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/http-request/types/workflow-http-request-action-settings.type';
 import { type WorkflowIfElseActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/if-else/types/workflow-if-else-action-settings.type';
 import { type WorkflowIteratorActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/iterator/types/workflow-iterator-action-settings.type';
+import { type WorkflowMcpToolCallActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/mcp-tool-call/types/workflow-mcp-tool-call-action-settings.type';
 import { type WorkflowLogicFunctionActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/logic-function/types/workflow-logic-function-action-settings.type';
 import { type WorkflowSendEmailActionSettings } from 'src/modules/workflow/workflow-executor/workflow-actions/mail-sender/types/workflow-send-email-action-settings.type';
 import {
@@ -50,6 +51,7 @@ export type WorkflowActionSettings =
   | WorkflowFilterActionSettings
   | WorkflowIfElseActionSettings
   | WorkflowHttpRequestActionSettings
+  | WorkflowMcpToolCallActionSettings
   | WorkflowAiAgentActionSettings
   | WorkflowDelayActionSettings
   | WorkflowIteratorActionSettings;

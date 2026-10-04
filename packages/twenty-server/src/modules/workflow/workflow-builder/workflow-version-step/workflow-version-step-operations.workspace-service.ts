@@ -581,6 +581,24 @@ export class WorkflowVersionStepOperationsWorkspaceService {
           },
         };
       }
+      case WorkflowActionType.MCP_TOOL_CALL: {
+        return {
+          builtStep: {
+            ...baseStep,
+            name: 'MCP Tool',
+            type: WorkflowActionType.MCP_TOOL_CALL,
+            settings: {
+              ...BASE_STEP_DEFINITION,
+              expectedOutputSchema: {},
+              input: {
+                connectionId: null,
+                toolName: null,
+                arguments: {},
+              },
+            },
+          },
+        };
+      }
       case WorkflowActionType.AI_AGENT: {
         const newAgent = await this.agentService.createOneAgent(
           {

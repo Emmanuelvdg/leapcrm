@@ -11,6 +11,7 @@ import { AuthWorkspace } from 'src/engine/decorators/auth/auth-workspace.decorat
 import { SettingsPermissionGuard } from 'src/engine/guards/settings-permission.guard';
 import { WorkspaceAuthGuard } from 'src/engine/guards/workspace-auth.guard';
 import { CreateMcpServerConnectionInput } from 'src/engine/core-modules/mcp-connection/dtos/create-mcp-server-connection.input';
+import { McpRemoteToolDTO } from 'src/engine/core-modules/mcp-connection/dtos/mcp-remote-tool.dto';
 import { McpServerConnectionDTO } from 'src/engine/core-modules/mcp-connection/dtos/mcp-server-connection.dto';
 import { UpdateMcpServerConnectionInput } from 'src/engine/core-modules/mcp-connection/dtos/update-mcp-server-connection.input';
 import { McpConnectionGraphqlApiExceptionInterceptor } from 'src/engine/core-modules/mcp-connection/interceptors/mcp-connection-graphql-api-exception.interceptor';
@@ -73,6 +74,42 @@ export class McpConnectionResolver {
     @AuthWorkspace() workspace: WorkspaceEntity,
   ): Promise<McpServerConnectionDTO> {
     return await this.mcpConnectionService.findByIdOrThrow(id, workspace.id);
+  }
+
+  // Workflow builders pick a connection and tool without needing the
+  // settings-level MCP_SERVERS permission that manages connections.
+  @Query(() => [McpServerConnectionDTO])
+  @UseGuards(SettingsPermissionGuard(PermissionFlagType.WORKFLOWS))
+  async connectedMcpServerConnections(
+    @AuthWorkspace() workspace: WorkspaceEntity,
+  ): Promise<McpServerConnectionDTO[]> {
+    const connections = await this.mcpConnectionService.findAllByWorkspace(
+      workspace.id,
+    );
+
+    return connections.filter(
+      (connection) => connection.status === McpServerConnectionStatus.CONNECTED,
+    );
+  }
+
+  @Query(() => [McpRemoteToolDTO])
+  @UseGuards(SettingsPermissionGuard(PermissionFlagType.WORKFLOWS))
+  async mcpServerConnectionTools(
+    @Args('connectionId', { type: () => UUIDScalarType }) connectionId: string,
+    @AuthWorkspace() workspace: WorkspaceEntity,
+  ): Promise<McpRemoteToolDTO[]> {
+    const connection = await this.mcpConnectionService.findByIdOrThrow(
+      connectionId,
+      workspace.id,
+    );
+
+    const remoteTools = await this.mcpClientService.listTools(connection);
+
+    return remoteTools.map((remoteTool) => ({
+      name: remoteTool.name,
+      description: remoteTool.description ?? null,
+      inputSchema: remoteTool.inputSchema ?? null,
+    }));
   }
 
   @Mutation(() => McpServerConnectionDTO)

@@ -74,6 +74,20 @@ const httpRequestStepLogDetailsSchema = z.object({
   durationMs: z.number(),
 });
 
+const mcpToolCallStepLogDetailsSchema = z.object({
+  type: z.literal('MCP_TOOL_CALL'),
+  connectionId: z.string(),
+  toolName: z.string(),
+  arguments: z.string().optional(),
+  argumentsBytes: z.number().optional(),
+  argumentsTruncated: z.boolean().optional(),
+  result: z.string().optional(),
+  resultBytes: z.number().optional(),
+  resultTruncated: z.boolean().optional(),
+  error: z.string().optional(),
+  durationMs: z.number(),
+});
+
 const emailStepLogDetailsSchema = z.object({
   type: z.literal('EMAIL'),
   mode: z.enum(['SEND', 'DRAFT']),
@@ -112,6 +126,7 @@ const stepLogDetailsSchema = z.discriminatedUnion('type', [
   aiAgentStepLogDetailsSchema,
   codeStepLogDetailsSchema,
   httpRequestStepLogDetailsSchema,
+  mcpToolCallStepLogDetailsSchema,
   emailStepLogDetailsSchema,
   createCalendarEventStepLogDetailsSchema,
 ]);

@@ -1,4 +1,7 @@
-import { type WorkflowHttpRequestAction } from '@/workflow/types/Workflow';
+import {
+  type WorkflowHttpRequestAction,
+  type WorkflowMcpToolCallAction,
+} from '@/workflow/types/Workflow';
 import { parseAndValidateVariableFriendlyStringifiedJson } from '@/workflow/utils/parseAndValidateVariableFriendlyStringifiedJson';
 import { convertOutputSchemaToJson } from '@/workflow/workflow-steps/workflow-actions/http-request-action/utils/convertOutputSchemaToJson';
 import { getHttpRequestOutputSchema } from '@/workflow/workflow-steps/workflow-actions/http-request-action/utils/getHttpRequestOutputSchema';
@@ -7,14 +10,20 @@ import { useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { type BaseOutputSchemaV2 } from 'twenty-shared/workflow';
 
-type UseHttpRequestOutputSchemaProps = {
-  action: WorkflowHttpRequestAction;
-  onActionUpdate?: (action: WorkflowHttpRequestAction) => void;
+type ActionWithExpectedOutputSchema =
+  | WorkflowHttpRequestAction
+  | WorkflowMcpToolCallAction;
+
+type UseHttpRequestOutputSchemaProps<
+  TAction extends ActionWithExpectedOutputSchema,
+> = {
+  action: TAction;
+  onActionUpdate?: (action: TAction) => void;
   readonly?: boolean;
 };
 
 const getInitialExpectedBody = (
-  action: WorkflowHttpRequestAction,
+  action: ActionWithExpectedOutputSchema,
 ): object | undefined => {
   const expectedOutputSchema = action.settings.expectedOutputSchema;
 
@@ -34,11 +43,13 @@ const getInitialExpectedBody = (
   return undefined;
 };
 
-export const useHttpRequestOutputSchema = ({
+export const useHttpRequestOutputSchema = <
+  TAction extends ActionWithExpectedOutputSchema,
+>({
   action,
   onActionUpdate,
   readonly,
-}: UseHttpRequestOutputSchemaProps) => {
+}: UseHttpRequestOutputSchemaProps<TAction>) => {
   const initialExpectedBody = getInitialExpectedBody(action);
 
   const [outputSchema, setOutputSchema] = useState<string | null>(

@@ -2448,6 +2448,13 @@ export type MarketplaceAppRoleObjectPermission = {
   universalIdentifier: Scalars['String']['output'];
 };
 
+export type McpRemoteTool = {
+  __typename?: 'McpRemoteTool';
+  description?: Maybe<Scalars['String']['output']>;
+  inputSchema?: Maybe<Scalars['JSON']['output']>;
+  name: Scalars['String']['output'];
+};
+
 export type McpServerConnection = {
   __typename?: 'McpServerConnection';
   authMethod: McpServerConnectionAuthMethod;
@@ -4708,6 +4715,7 @@ export type Query = {
   checkWorkspaceSubdomainAvailability: SubdomainAvailabilityDto;
   commandMenuItem?: Maybe<CommandMenuItem>;
   commandMenuItems: Array<CommandMenuItem>;
+  connectedMcpServerConnections: Array<McpServerConnection>;
   currentSeatPrice?: Maybe<SeatPrice>;
   currentUser: User;
   currentUserApplicationAuthorizations: Array<ApplicationAuthorization>;
@@ -4786,6 +4794,7 @@ export type Query = {
   lineChartData: LineChartData;
   listPlans: Array<BillingPlan>;
   mcpServerConnection: McpServerConnection;
+  mcpServerConnectionTools: Array<McpRemoteTool>;
   mcpServerConnections: Array<McpServerConnection>;
   messageSuppressions: MessageSuppressionList;
   minimalMetadata: MinimalMetadata;
@@ -5162,6 +5171,11 @@ export type QueryLineChartDataArgs = {
 
 export type QueryMcpServerConnectionArgs = {
   id: Scalars['UUID']['input'];
+};
+
+
+export type QueryMcpServerConnectionToolsArgs = {
+  connectionId: Scalars['UUID']['input'];
 };
 
 
@@ -9002,12 +9016,24 @@ export type UpdateMcpServerConnectionMutationVariables = Exact<{
 
 export type UpdateMcpServerConnectionMutation = { __typename?: 'Mutation', updateMcpServerConnection: { __typename?: 'McpServerConnection', id: string, name: string, serverUrl: string, authMethod: McpServerConnectionAuthMethod, usesManualOverrides: boolean, status: McpServerConnectionStatus, lastErrorMessage?: string | null, createdAt: string, updatedAt: string } };
 
+export type GetConnectedMcpServerConnectionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetConnectedMcpServerConnectionsQuery = { __typename?: 'Query', connectedMcpServerConnections: Array<{ __typename?: 'McpServerConnection', id: string, name: string }> };
+
 export type GetMcpServerConnectionQueryVariables = Exact<{
   id: Scalars['UUID']['input'];
 }>;
 
 
 export type GetMcpServerConnectionQuery = { __typename?: 'Query', mcpServerConnection: { __typename?: 'McpServerConnection', id: string, name: string, serverUrl: string, authMethod: McpServerConnectionAuthMethod, usesManualOverrides: boolean, status: McpServerConnectionStatus, lastErrorMessage?: string | null, createdAt: string, updatedAt: string } };
+
+export type GetMcpServerConnectionToolsQueryVariables = Exact<{
+  connectionId: Scalars['UUID']['input'];
+}>;
+
+
+export type GetMcpServerConnectionToolsQuery = { __typename?: 'Query', mcpServerConnectionTools: Array<{ __typename?: 'McpRemoteTool', name: string, description?: string | null, inputSchema?: any | null }> };
 
 export type GetMcpServerConnectionsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -9996,7 +10022,9 @@ export const UpdateLabPublicFeatureFlagDocument = {"kind":"Document","definition
 export const CreateMcpServerConnectionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateMcpServerConnection"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateMcpServerConnectionInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createMcpServerConnection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"McpServerConnectionFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"McpServerConnectionFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"McpServerConnection"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"serverUrl"}},{"kind":"Field","name":{"kind":"Name","value":"authMethod"}},{"kind":"Field","name":{"kind":"Name","value":"usesManualOverrides"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"lastErrorMessage"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<CreateMcpServerConnectionMutation, CreateMcpServerConnectionMutationVariables>;
 export const DeleteMcpServerConnectionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteMcpServerConnection"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteMcpServerConnection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"McpServerConnectionFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"McpServerConnectionFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"McpServerConnection"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"serverUrl"}},{"kind":"Field","name":{"kind":"Name","value":"authMethod"}},{"kind":"Field","name":{"kind":"Name","value":"usesManualOverrides"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"lastErrorMessage"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<DeleteMcpServerConnectionMutation, DeleteMcpServerConnectionMutationVariables>;
 export const UpdateMcpServerConnectionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateMcpServerConnection"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateMcpServerConnectionInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateMcpServerConnection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"McpServerConnectionFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"McpServerConnectionFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"McpServerConnection"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"serverUrl"}},{"kind":"Field","name":{"kind":"Name","value":"authMethod"}},{"kind":"Field","name":{"kind":"Name","value":"usesManualOverrides"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"lastErrorMessage"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<UpdateMcpServerConnectionMutation, UpdateMcpServerConnectionMutationVariables>;
+export const GetConnectedMcpServerConnectionsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetConnectedMcpServerConnections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"connectedMcpServerConnections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<GetConnectedMcpServerConnectionsQuery, GetConnectedMcpServerConnectionsQueryVariables>;
 export const GetMcpServerConnectionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMcpServerConnection"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mcpServerConnection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"McpServerConnectionFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"McpServerConnectionFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"McpServerConnection"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"serverUrl"}},{"kind":"Field","name":{"kind":"Name","value":"authMethod"}},{"kind":"Field","name":{"kind":"Name","value":"usesManualOverrides"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"lastErrorMessage"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<GetMcpServerConnectionQuery, GetMcpServerConnectionQueryVariables>;
+export const GetMcpServerConnectionToolsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMcpServerConnectionTools"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"connectionId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mcpServerConnectionTools"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"connectionId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"connectionId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"inputSchema"}}]}}]}}]} as unknown as DocumentNode<GetMcpServerConnectionToolsQuery, GetMcpServerConnectionToolsQueryVariables>;
 export const GetMcpServerConnectionsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMcpServerConnections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mcpServerConnections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"McpServerConnectionFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"McpServerConnectionFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"McpServerConnection"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"serverUrl"}},{"kind":"Field","name":{"kind":"Name","value":"authMethod"}},{"kind":"Field","name":{"kind":"Name","value":"usesManualOverrides"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"lastErrorMessage"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<GetMcpServerConnectionsQuery, GetMcpServerConnectionsQueryVariables>;
 export const UploadWorkspaceMemberProfilePictureDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UploadWorkspaceMemberProfilePicture"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"file"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Upload"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uploadWorkspaceMemberProfilePicture"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"file"},"value":{"kind":"Variable","name":{"kind":"Name","value":"file"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}}]} as unknown as DocumentNode<UploadWorkspaceMemberProfilePictureMutation, UploadWorkspaceMemberProfilePictureMutationVariables>;
 export const RevokeAllOtherUserSessionsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RevokeAllOtherUserSessions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"revokeAllOtherUserSessions"}}]}}]} as unknown as DocumentNode<RevokeAllOtherUserSessionsMutation, RevokeAllOtherUserSessionsMutationVariables>;

@@ -180,10 +180,14 @@ export class WorkflowValidationWorkspaceService {
         return step;
       }
 
+      // Widened so the spread does not distribute over every step-settings
+      // variant, which exceeds TypeScript's union complexity limit.
+      const settings: object = step.settings;
+
       return {
         ...step,
-        settings: { ...step.settings, outputSchema: computedSchema },
-      };
+        settings: { ...settings, outputSchema: computedSchema },
+      } as TStep;
     } catch {
       // Output schema enrichment is best-effort: if it cannot be computed,
       // validation still runs against the step's existing settings rather

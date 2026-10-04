@@ -11,6 +11,7 @@ import { McpConnectionTokenRefreshService } from 'src/engine/core-modules/mcp-co
 import { McpConnectionService } from 'src/engine/core-modules/mcp-connection/services/mcp-connection.service';
 import { McpDynamicClientRegistrationService } from 'src/engine/core-modules/mcp-connection/services/mcp-dynamic-client-registration.service';
 import { McpOAuthDiscoveryService } from 'src/engine/core-modules/mcp-connection/services/mcp-oauth-discovery.service';
+import { McpToolCallTool } from 'src/engine/core-modules/mcp-connection/tools/mcp-tool-call.tool';
 import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permissions.module';
 import { SecretEncryptionModule } from 'src/engine/core-modules/secret-encryption/secret-encryption.module';
 import { SecureHttpClientModule } from 'src/engine/core-modules/secure-http-client/secure-http-client.module';
@@ -31,6 +32,7 @@ import { provideWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspac
     McpConnectionOAuthFlowService,
     McpConnectionTokenRefreshService,
     McpClientService,
+    McpToolCallTool,
     McpConnectionResolver,
     McpConnectionGraphqlApiExceptionInterceptor,
     provideWorkspaceScopedRepository(McpServerConnectionEntity),
@@ -39,6 +41,7 @@ import { provideWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspac
     McpConnectionService,
     McpClientService,
     McpConnectionOAuthFlowService,
+    McpToolCallTool,
   ],
 })
 export class McpConnectionModule {}

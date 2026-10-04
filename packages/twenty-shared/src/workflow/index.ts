@@ -65,6 +65,8 @@ export { workflowIteratorActionSettingsSchema } from './schemas/iterator-action-
 export { workflowLogicFunctionActionSchema } from './schemas/logic-function-action-schema';
 export { workflowLogicFunctionActionSettingsSchema } from './schemas/logic-function-action-settings-schema';
 export { workflowManualTriggerSchema } from './schemas/manual-trigger-schema';
+export { workflowMcpToolCallActionSchema } from './schemas/mcp-tool-call-action-schema';
+export { workflowMcpToolCallActionSettingsSchema } from './schemas/mcp-tool-call-action-settings-schema';
 export { objectRecordSchema } from './schemas/object-record-schema';
 export { workflowPickRecordActionSchema } from './schemas/pick-record-action-schema';
 export {
@@ -122,6 +124,7 @@ export type {
   WorkflowRunStepLogs,
   AiAgentStepLogDetails,
   AiToolCallLog,
+  McpToolCallStepLogDetails,
 } from './types/WorkflowRunStepLog';
 export { canObjectBeManagedByAutomation } from './utils/canObjectBeManagedByAutomation';
 export { extractRawVariableNamePart } from './utils/extractRawVariableNameParts';
