@@ -163,13 +163,12 @@ const useSettingsNavigationItems = (): SettingsNavigationSection[] => {
           Icon: IconPlug,
           isHidden: !permissionMap[PermissionFlagType.API_KEYS_AND_WEBHOOKS],
         },
-        // TODO: Re-enable when integrations page is ready
-        // {
-        //   label: t`Integrations`,
-        //   path: SettingsPath.Integrations,
-        //   Icon: IconApps,
-        //   isHidden: !permissionMap[PermissionFlagType.API_KEYS_AND_WEBHOOKS],
-        // },
+        {
+          label: t`Integrations`,
+          path: SettingsPath.Integrations,
+          Icon: IconApps,
+          isHidden: !permissionMap[PermissionFlagType.MCP_SERVERS],
+        },
         {
           label: t`Apps`,
           path: SettingsPath.Applications,

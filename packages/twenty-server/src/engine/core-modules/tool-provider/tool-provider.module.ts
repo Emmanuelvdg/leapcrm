@@ -1,12 +1,14 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { McpConnectionModule } from 'src/engine/core-modules/mcp-connection/mcp-connection.module';
 import { RecordCrudModule } from 'src/engine/core-modules/record-crud/record-crud.module';
 import { TOOL_PROVIDERS } from 'src/engine/core-modules/tool-provider/constants/tool-providers.token';
 import { ActionToolProvider } from 'src/engine/core-modules/tool-provider/providers/action-tool.provider';
 import { DashboardToolProvider } from 'src/engine/core-modules/tool-provider/providers/dashboard-tool.provider';
 import { DatabaseToolProvider } from 'src/engine/core-modules/tool-provider/providers/database-tool.provider';
 import { LogicFunctionToolProvider } from 'src/engine/core-modules/tool-provider/providers/logic-function-tool.provider';
+import { McpConnectionToolProvider } from 'src/engine/core-modules/tool-provider/providers/mcp-connection-tool.provider';
 import { MetadataToolProvider } from 'src/engine/core-modules/tool-provider/providers/metadata-tool.provider';
 import { NavigationMenuItemToolProvider } from 'src/engine/core-modules/tool-provider/providers/navigation-menu-item-tool.provider';
 import { RoleToolProvider } from 'src/engine/core-modules/tool-provider/providers/role-tool.provider';
@@ -66,6 +68,7 @@ import { ToolRegistryService } from './services/tool-registry.service';
     LogicFunctionModule,
     NavigationMenuItemModule,
     WebhookModule,
+    McpConnectionModule,
     RoleModule,
     UserRoleModule,
     EmailingModule,
@@ -84,6 +87,7 @@ import { ToolRegistryService } from './services/tool-registry.service';
     ViewToolProvider,
     WebhookToolProvider,
     WorkflowToolProvider,
+    McpConnectionToolProvider,
     {
       // TOOL_PROVIDERS contains only providers implementing ToolProvider
       // (registry tools with descriptors). The native tool binder is a
@@ -101,6 +105,7 @@ import { ToolRegistryService } from './services/tool-registry.service';
         webhookProvider: WebhookToolProvider,
         workflowProvider: WorkflowToolProvider,
         dashboardProvider: DashboardToolProvider,
+        mcpConnectionProvider: McpConnectionToolProvider,
       ) => [
         actionProvider,
         databaseProvider,
@@ -112,6 +117,7 @@ import { ToolRegistryService } from './services/tool-registry.service';
         webhookProvider,
         workflowProvider,
         dashboardProvider,
+        mcpConnectionProvider,
       ],
       inject: [
         ActionToolProvider,
@@ -124,6 +130,7 @@ import { ToolRegistryService } from './services/tool-registry.service';
         WebhookToolProvider,
         WorkflowToolProvider,
         DashboardToolProvider,
+        McpConnectionToolProvider,
       ],
     },
     ToolRegistryService,

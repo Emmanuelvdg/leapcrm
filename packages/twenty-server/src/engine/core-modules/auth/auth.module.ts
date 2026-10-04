@@ -48,6 +48,8 @@ import { GuardRedirectModule } from 'src/engine/core-modules/guard-redirect/guar
 import { ImpersonationAuthorizationModule } from 'src/engine/core-modules/impersonation/impersonation-authorization.module';
 import { JwtModule } from 'src/engine/core-modules/jwt/jwt.module';
 import { KeyValuePairEntity } from 'src/engine/core-modules/key-value-pair/key-value-pair.entity';
+import { McpConnectionOAuthController } from 'src/engine/core-modules/mcp-connection/controllers/mcp-connection-oauth.controller';
+import { McpConnectionModule } from 'src/engine/core-modules/mcp-connection/mcp-connection.module';
 import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { OnboardingModule } from 'src/engine/core-modules/onboarding/onboarding.module';
 import { SecureHttpClientModule } from 'src/engine/core-modules/secure-http-client/secure-http-client.module';
@@ -127,6 +129,7 @@ import { JwtAuthStrategy } from './strategies/jwt.auth.strategy';
     ApplicationModule,
     ConnectionProviderModule,
     ApplicationConnectionsModule,
+    McpConnectionModule,
     WorkspaceCacheModule,
     CoreEntityCacheModule,
     SecureHttpClientModule,
@@ -145,6 +148,7 @@ import { JwtAuthStrategy } from './strategies/jwt.auth.strategy';
     OAuthPropagatorController,
     SSOAuthController,
     ConnectionProviderOAuthController,
+    McpConnectionOAuthController,
   ],
   providers: [
     SignInUpService,

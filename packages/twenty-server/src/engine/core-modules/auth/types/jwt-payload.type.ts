@@ -9,6 +9,7 @@ import { type FileTokenJwtPayload } from 'src/engine/core-modules/auth/types/fil
 import { type FileUploadTokenJwtPayload } from 'src/engine/core-modules/auth/types/file-upload-token-jwt-payload.type';
 import { type FileTokenJwtPayloadLegacy } from 'src/engine/core-modules/auth/types/file-token-jwt-payload-legacy.type';
 import { type LoginTokenJwtPayload } from 'src/engine/core-modules/auth/types/login-token-jwt-payload.type';
+import { type McpConnectionOAuthStateJwtPayload } from 'src/engine/core-modules/mcp-connection/types/mcp-connection-oauth-state-jwt-payload.type';
 import { type PlaygroundTokenJwtPayload } from 'src/engine/core-modules/auth/types/playground-token-jwt-payload.type';
 import { type RefreshTokenJwtPayload } from 'src/engine/core-modules/auth/types/refresh-token-jwt-payload.type';
 import { type TransientTokenJwtPayload } from 'src/engine/core-modules/auth/types/transient-token-jwt-payload.type';
@@ -29,4 +30,5 @@ export type JwtPayload =
   | AppOAuthStateJwtPayload
   | ApplicationRegistrationGithubClaimStateJwtPayload
   | ApprovedAccessDomainJwtPayload
-  | PlaygroundTokenJwtPayload;
+  | PlaygroundTokenJwtPayload
+  | McpConnectionOAuthStateJwtPayload;

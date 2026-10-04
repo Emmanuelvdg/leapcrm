@@ -27,4 +27,5 @@ export const SystemPermissionFlag = {
   EXPORT_CSV: '88efced9-ca6d-5316-a695-f1b9158e7370',
   CONNECTED_ACCOUNTS: 'e5f63b2d-5369-5df6-8f32-a8bd9e79e653',
   PROFILE_INFORMATION: '7c13f23f-78d8-5e7d-8963-a7c8772fb4e8',
+  MCP_SERVERS: '1422eef4-5d6b-488c-a9fe-425a5a5eb5c6',
 } as const satisfies Record<PermissionFlagType, string>;

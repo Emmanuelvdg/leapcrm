@@ -29,6 +29,8 @@ const getCategoryLabel = (category: ToolCategory): string => {
       return 'Webhook Tools (outgoing webhooks)';
     case ToolCategory.ROLE:
       return 'Role Tools (manage roles and permissions)';
+    case ToolCategory.MCP_SERVER:
+      return 'MCP Server Tools (connected external MCP servers)';
     default:
       return assertUnreachable(category);
   }

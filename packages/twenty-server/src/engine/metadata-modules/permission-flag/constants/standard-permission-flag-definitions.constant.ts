@@ -154,6 +154,11 @@ const STANDARD_PERMISSION_FLAG_METADATA: Record<
     description: 'Edit own profile information',
     icon: 'IconUser',
   },
+  [PermissionFlagType.MCP_SERVERS]: {
+    label: 'MCP Servers',
+    description: 'Connect and manage external MCP servers',
+    icon: 'IconPlug',
+  },
 };
 
 export const STANDARD_PERMISSION_FLAG_DEFINITIONS: StandardPermissionFlagDefinition[] =

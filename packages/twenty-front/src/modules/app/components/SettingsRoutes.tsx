@@ -480,6 +480,30 @@ const SettingsDevelopersWebhookDetail = lazy(() =>
   ),
 );
 
+const SettingsMcpServerConnections = lazy(() =>
+  import('~/pages/settings/mcp-connections/SettingsMcpServerConnections').then(
+    (module) => ({
+      default: module.SettingsMcpServerConnections,
+    }),
+  ),
+);
+
+const SettingsMcpServerConnectionNew = lazy(() =>
+  import('~/pages/settings/mcp-connections/SettingsMcpServerConnectionNew').then(
+    (module) => ({
+      default: module.SettingsMcpServerConnectionNew,
+    }),
+  ),
+);
+
+const SettingsMcpServerConnectionDetail = lazy(() =>
+  import('~/pages/settings/mcp-connections/SettingsMcpServerConnectionDetail').then(
+    (module) => ({
+      default: module.SettingsMcpServerConnectionDetail,
+    }),
+  ),
+);
+
 const SettingsObjectNewFieldSelect = lazy(() =>
   import('~/pages/settings/data-model/new-field/SettingsObjectNewFieldSelect').then(
     (module) => ({
@@ -965,6 +989,27 @@ export const SettingsRoutes = ({ isAdminPageEnabled }: SettingsRoutesProps) => (
         <Route
           path={SettingsPath.WebhookDetail}
           element={<SettingsDevelopersWebhookDetail />}
+        />
+      </Route>
+
+      <Route
+        element={
+          <SettingsProtectedRouteWrapper
+            settingsPermission={PermissionFlagType.MCP_SERVERS}
+          />
+        }
+      >
+        <Route
+          path={SettingsPath.Integrations}
+          element={<SettingsMcpServerConnections />}
+        />
+        <Route
+          path={SettingsPath.NewMcpServerConnection}
+          element={<SettingsMcpServerConnectionNew />}
+        />
+        <Route
+          path={SettingsPath.McpServerConnectionDetail}
+          element={<SettingsMcpServerConnectionDetail />}
         />
       </Route>
 
