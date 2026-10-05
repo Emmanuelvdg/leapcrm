@@ -40,23 +40,49 @@ export class LocalChildProcessRunnerService {
       withFileTypes: true,
     });
 
-    const symlinkPromises = entries
+    const linkPromises = entries
       .filter((entry) => entry.name !== 'twenty-client-sdk')
       .map((entry) =>
-        fs.symlink(
-          join(depsNodeModules, entry.name),
-          join(execNodeModules, entry.name),
-          entry.isDirectory() ? 'dir' : 'file',
-        ),
+        this.linkNodeModulesEntry({
+          source: join(depsNodeModules, entry.name),
+          target: join(execNodeModules, entry.name),
+          isDirectory: entry.isDirectory(),
+        }),
       );
 
-    await Promise.all(symlinkPromises);
+    await Promise.all(linkPromises);
 
-    await fs.symlink(
-      join(sdkNodeModules, 'twenty-client-sdk'),
-      join(execNodeModules, 'twenty-client-sdk'),
-      'dir',
-    );
+    await this.linkNodeModulesEntry({
+      source: join(sdkNodeModules, 'twenty-client-sdk'),
+      target: join(execNodeModules, 'twenty-client-sdk'),
+      isDirectory: true,
+    });
+  }
+
+  // Windows only allows file and directory symlinks with admin rights or
+  // Developer Mode; junctions and plain copies need neither.
+  private async linkNodeModulesEntry({
+    source,
+    target,
+    isDirectory,
+  }: {
+    source: string;
+    target: string;
+    isDirectory: boolean;
+  }): Promise<void> {
+    if (process.platform !== 'win32') {
+      await fs.symlink(source, target, isDirectory ? 'dir' : 'file');
+
+      return;
+    }
+
+    if (isDirectory) {
+      await fs.symlink(source, target, 'junction');
+
+      return;
+    }
+
+    await fs.copyFile(source, target);
   }
 
   async writeBootstrapRunner({
