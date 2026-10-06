@@ -1,0 +1,32 @@
+import {
+  defineField,
+  FieldType,
+  STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS,
+} from 'twenty-sdk/define';
+
+import { buildDataQualityOptions } from 'src/constants/data-quality-options';
+import {
+  COMPANY_DATA_QUALITY_CLEAN_OPTION_ID,
+  COMPANY_DATA_QUALITY_FIELD_UNIVERSAL_IDENTIFIER,
+  COMPANY_DATA_QUALITY_INCOMPLETE_OPTION_ID,
+  COMPANY_DATA_QUALITY_POSSIBLE_DUPLICATE_OPTION_ID,
+} from 'src/constants/universal-identifiers';
+
+export default defineField({
+  universalIdentifier: COMPANY_DATA_QUALITY_FIELD_UNIVERSAL_IDENTIFIER,
+  objectUniversalIdentifier:
+    STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.company.universalIdentifier,
+  name: 'dataQuality',
+  type: FieldType.SELECT,
+  label: 'Data quality',
+  description:
+    'Whether this company looks clean, is missing key details, or may be a duplicate of another company.',
+  icon: 'IconSparkles',
+  isNullable: true,
+  isUIEditable: false,
+  options: buildDataQualityOptions({
+    cleanOptionId: COMPANY_DATA_QUALITY_CLEAN_OPTION_ID,
+    incompleteOptionId: COMPANY_DATA_QUALITY_INCOMPLETE_OPTION_ID,
+    possibleDuplicateOptionId: COMPANY_DATA_QUALITY_POSSIBLE_DUPLICATE_OPTION_ID,
+  }),
+});
