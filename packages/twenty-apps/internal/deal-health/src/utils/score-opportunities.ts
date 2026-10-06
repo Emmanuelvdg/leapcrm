@@ -129,10 +129,11 @@ export const scoreOpportunities = async ({
     );
 
     // Writing only on change keeps the deal timeline free of no-op updates.
+    // The API returns an empty string for text stored as null.
     if (
       stageChangedAt === opportunity.stageChangedAt &&
       healthStatus === opportunity.healthStatus &&
-      healthReasons === opportunity.healthReasons
+      healthReasons === (opportunity.healthReasons || null)
     ) {
       continue;
     }

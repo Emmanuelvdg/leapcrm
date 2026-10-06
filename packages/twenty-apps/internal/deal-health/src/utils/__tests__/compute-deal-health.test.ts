@@ -55,7 +55,7 @@ describe('computeDealHealth', () => {
       ),
     ).toEqual({
       healthStatus: 'AT_RISK',
-      healthReasons: 'Close date passed 12 days ago',
+      healthReasons: 'Close date passed (22 Sep 2026)',
     });
   });
 
@@ -73,7 +73,7 @@ describe('computeDealHealth', () => {
       ),
     ).toEqual({
       healthStatus: 'AT_RISK',
-      healthReasons: 'Same stage for 34 days · No open task',
+      healthReasons: 'In this stage since 31 Aug 2026 · No open task',
     });
   });
 
@@ -91,7 +91,7 @@ describe('computeDealHealth', () => {
       ),
     ).toEqual({
       healthStatus: 'WATCH',
-      healthReasons: 'Same stage for 25 days',
+      healthReasons: 'In this stage since 9 Sep 2026',
     });
   });
 
@@ -128,6 +128,20 @@ describe('computeDealHealth', () => {
     ).toBe('HEALTHY');
   });
 
+  it('keeps the same reasons from one day to the next', () => {
+    const input = {
+      stage: 'SCREENING',
+      closeDate: daysAgo(3),
+      stageChangedAt: daysAgo(30),
+      openTaskCount: 0,
+    };
+    const tomorrow = new Date(NOW.getTime() + 24 * 60 * 60 * 1000);
+
+    expect(computeDealHealth(input, SETTINGS, tomorrow)).toEqual(
+      computeDealHealth(input, SETTINGS, NOW),
+    );
+  });
+
   it('respects a custom stall threshold', () => {
     expect(
       computeDealHealth(
@@ -140,6 +154,9 @@ describe('computeDealHealth', () => {
         { ...SETTINGS, stalledAfterDays: 7 },
         NOW,
       ),
-    ).toEqual({ healthStatus: 'WATCH', healthReasons: 'Same stage for 8 days' });
+    ).toEqual({
+      healthStatus: 'WATCH',
+      healthReasons: 'In this stage since 26 Sep 2026',
+    });
   });
 });

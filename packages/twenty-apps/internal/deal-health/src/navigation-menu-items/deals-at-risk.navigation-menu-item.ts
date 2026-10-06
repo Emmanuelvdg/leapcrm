@@ -13,7 +13,7 @@ export default defineNavigationMenuItem({
   name: 'Deals at risk',
   icon: 'IconHeartbeat',
   color: 'red',
-  position: 1,
+  position: 2.5,
   type: NavigationMenuItemType.VIEW,
   viewUniversalIdentifier: DEALS_AT_RISK_VIEW_UNIVERSAL_IDENTIFIER,
 });

@@ -91,6 +91,21 @@ describe('scoreOpportunities', () => {
     expect(mutationMock).not.toHaveBeenCalled();
   });
 
+  it('treats the empty string the API returns for no reasons as unchanged', async () => {
+    mockTaskTargets([{ targetOpportunityId: 'opportunity-1', status: 'TODO' }]);
+
+    const updatedCount = await scoreOpportunities({
+      client,
+      opportunities: [
+        buildOpportunity({ healthStatus: 'HEALTHY', healthReasons: '' }),
+      ],
+      settings: SETTINGS,
+      now: NOW,
+    });
+
+    expect(updatedCount).toBe(0);
+  });
+
   it('backfills the stage clock from the last update for deals that predate the app', async () => {
     mockTaskTargets([{ targetOpportunityId: 'opportunity-1', status: 'TODO' }]);
 
@@ -110,7 +125,7 @@ describe('scoreOpportunities', () => {
       {
         stageChangedAt: '2026-08-01T00:00:00.000Z',
         healthStatus: 'WATCH',
-        healthReasons: 'Same stage for 64 days',
+        healthReasons: 'In this stage since 1 Aug 2026',
       },
     );
   });

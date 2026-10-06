@@ -22,8 +22,23 @@ export type DealHealth = {
 const wholeDaysBetween = (from: Date, to: Date): number =>
   Math.floor((to.getTime() - from.getTime()) / DAY_IN_MS);
 
-const pluralizeDays = (days: number): string =>
-  days === 1 ? '1 day' : `${days} days`;
+const MONTH_LABELS = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+
+const formatDate = (date: Date): string =>
+  `${date.getUTCDate()} ${MONTH_LABELS[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
 
 export const computeDealHealth = (
   input: DealHealthInput,
@@ -34,6 +49,8 @@ export const computeDealHealth = (
     return { healthStatus: null, healthReasons: null };
   }
 
+  // Reasons name fixed dates rather than day counts so the text, and with it
+  // the record, only changes when the deal does, not every night.
   const reasons: string[] = [];
 
   let isOverdue = false;
@@ -45,7 +62,9 @@ export const computeDealHealth = (
 
     if (daysPastCloseDate > 0) {
       isOverdue = true;
-      reasons.push(`Close date passed ${pluralizeDays(daysPastCloseDate)} ago`);
+      reasons.push(
+        `Close date passed (${formatDate(new Date(input.closeDate))})`,
+      );
     }
   }
 
@@ -56,7 +75,9 @@ export const computeDealHealth = (
 
     if (daysInStage >= settings.stalledAfterDays) {
       isStalled = true;
-      reasons.push(`Same stage for ${pluralizeDays(daysInStage)}`);
+      reasons.push(
+        `In this stage since ${formatDate(new Date(input.stageChangedAt))}`,
+      );
     }
   }
 

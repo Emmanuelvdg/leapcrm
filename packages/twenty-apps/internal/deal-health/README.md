@@ -12,8 +12,8 @@
 
 | Signal | Reason shown |
 |---|---|
-| Close date is in the past | Close date passed N days ago |
-| No stage change for `STALLED_AFTER_DAYS` (default 21) | Same stage for N days |
+| Close date is in the past | Close date passed (date) |
+| No stage change for `STALLED_AFTER_DAYS` (default 21) | In this stage since (date) |
 | No unfinished task linked to the deal | No open task |
 | No close date set | No close date |
 
