@@ -43,6 +43,13 @@ export const CONFIG_VARIABLES_GROUP_METADATA: Record<
     isHiddenOnLoad: false,
     isHiddenInAdminPanel: false,
   },
+  [ConfigVariablesGroup.OPENAI_AUTH]: {
+    position: 550,
+    description:
+      'Configure Sign in with ChatGPT. Requires a client ID issued by OpenAI.',
+    isHiddenOnLoad: false,
+    isHiddenInAdminPanel: false,
+  },
   [ConfigVariablesGroup.EMAIL_SETTINGS]: {
     position: 600,
     description:

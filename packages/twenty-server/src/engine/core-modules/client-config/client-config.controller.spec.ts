@@ -63,6 +63,7 @@ describe('ClientConfigController', () => {
           magicLink: false,
           password: true,
           microsoft: false,
+          openai: false,
           sso: [],
         },
         signInPrefilled: false,

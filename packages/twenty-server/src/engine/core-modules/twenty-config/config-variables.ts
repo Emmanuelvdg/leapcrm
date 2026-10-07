@@ -291,6 +291,52 @@ export class ConfigVariables {
   @ValidateIf((env) => env.AUTH_MICROSOFT_ENABLED)
   AUTH_MICROSOFT_APIS_CALLBACK_URL: string;
 
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.OPENAI_AUTH,
+    description: 'Enable or disable Sign in with ChatGPT',
+    type: ConfigVariableType.BOOLEAN,
+  })
+  @IsOptional()
+  AUTH_OPENAI_ENABLED = false;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.OPENAI_AUTH,
+    isSensitive: false,
+    description: 'Client ID issued by OpenAI for Sign in with ChatGPT',
+    type: ConfigVariableType.STRING,
+  })
+  @ValidateIf((env) => env.AUTH_OPENAI_ENABLED)
+  AUTH_OPENAI_CLIENT_ID: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.OPENAI_AUTH,
+    isSensitive: true,
+    description: 'Client secret issued by OpenAI for Sign in with ChatGPT',
+    type: ConfigVariableType.STRING,
+  })
+  @ValidateIf((env) => env.AUTH_OPENAI_ENABLED)
+  AUTH_OPENAI_CLIENT_SECRET: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.OPENAI_AUTH,
+    isSensitive: false,
+    description:
+      'Callback URL for Sign in with ChatGPT, e.g. https://example.com/auth/openai/redirect',
+    type: ConfigVariableType.STRING,
+  })
+  @IsUrl({ require_tld: false, require_protocol: true })
+  @ValidateIf((env) => env.AUTH_OPENAI_ENABLED)
+  AUTH_OPENAI_CALLBACK_URL: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.OPENAI_AUTH,
+    isSensitive: false,
+    description: 'OpenID Connect issuer for Sign in with ChatGPT',
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  AUTH_OPENAI_ISSUER = 'https://auth.openai.com';
+
   /**
    * @deprecated Use is now GA - record page layouts are always seeded
    */

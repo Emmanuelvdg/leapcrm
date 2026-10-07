@@ -13,6 +13,7 @@ import { PermissionFlagType } from 'twenty-shared/constants';
 import { FeatureFlagKey, FileFolder } from 'twenty-shared/types';
 import { assertIsDefinedOrThrow, isDefined } from 'twenty-shared/utils';
 
+import { isOpenAISignInAvailable } from 'src/engine/core-modules/auth/utils/is-openai-sign-in-available.util';
 import { MetadataResolver } from 'src/engine/api/graphql/graphql-config/decorators/metadata-resolver.decorator';
 import { UUIDScalarType } from 'src/engine/api/graphql/workspace-schema-builder/graphql-types/scalars';
 import { ApiKeyEntity } from 'src/engine/core-modules/api-key/api-key.entity';
@@ -389,6 +390,7 @@ export class WorkspaceResolver {
         magicLink: false,
         password: this.twentyConfigService.get('AUTH_PASSWORD_ENABLED'),
         microsoft: this.twentyConfigService.get('AUTH_MICROSOFT_ENABLED'),
+        openai: isOpenAISignInAvailable(this.twentyConfigService),
         sso: [],
       };
 

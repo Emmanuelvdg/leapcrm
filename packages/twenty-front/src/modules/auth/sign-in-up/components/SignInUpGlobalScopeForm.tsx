@@ -12,6 +12,7 @@ import { OnboardingStepAnimatedItem } from '@/onboarding/components/OnboardingSt
 import { SignInUpWithCredentials } from '@/auth/sign-in-up/components/internal/SignInUpWithCredentials';
 import { SignInUpWithGoogle } from '@/auth/sign-in-up/components/internal/SignInUpWithGoogle';
 import { SignInUpWithMicrosoft } from '@/auth/sign-in-up/components/internal/SignInUpWithMicrosoft';
+import { SignInUpWithOpenai } from '@/auth/sign-in-up/components/internal/SignInUpWithOpenai';
 import { useHandleResetPassword } from '@/auth/sign-in-up/hooks/useHandleResetPassword';
 import { useSignInUpForm } from '@/auth/sign-in-up/hooks/useSignInUpForm';
 import {
@@ -245,7 +246,15 @@ export const SignInUpGlobalScopeForm = () => {
               isGlobalScope
             />
           )}
-          {(authProviders.google || authProviders.microsoft) && (
+          {authProviders.openai && (
+            <SignInUpWithOpenai
+              action="list-available-workspaces"
+              isGlobalScope
+            />
+          )}
+          {(authProviders.google ||
+            authProviders.microsoft ||
+            authProviders.openai) && (
             <HorizontalSeparator
               color={themeCssVariables.background.transparent.light}
             />

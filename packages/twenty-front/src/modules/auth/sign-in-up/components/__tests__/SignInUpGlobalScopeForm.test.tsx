@@ -74,6 +74,23 @@ jest.mock(
   }),
 );
 
+jest.mock('@/auth/sign-in-up/components/internal/SignInUpWithOpenai', () => ({
+  SignInUpWithOpenai: () => <div>chatgpt-sign-in</div>,
+}));
+
+const renderForm = () =>
+  render(
+    <MockedProvider mocks={[]}>
+      <JotaiProvider store={jotaiStore}>
+        <ThemeProvider colorScheme="light">
+          <I18nProvider i18n={i18n}>
+            <SignInUpGlobalScopeForm />
+          </I18nProvider>
+        </ThemeProvider>
+      </JotaiProvider>
+    </MockedProvider>,
+  );
+
 dynamicActivate(SOURCE_LOCALE);
 
 describe('SignInUpGlobalScopeForm', () => {
@@ -89,6 +106,7 @@ describe('SignInUpGlobalScopeForm', () => {
       google: false,
       magicLink: false,
       microsoft: false,
+      openai: false,
       password: true,
       sso: [],
     });
@@ -113,5 +131,39 @@ describe('SignInUpGlobalScopeForm', () => {
     fireEvent.click(forgotPasswordLink);
 
     expect(resetPasswordClickMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('offers ChatGPT sign-up next to the LeapCRM account form when enabled', () => {
+    jotaiStore.set(signInUpStepState.atom, SignInUpStep.Init);
+    jotaiStore.set(authProvidersState.atom, {
+      google: false,
+      magicLink: false,
+      microsoft: false,
+      openai: true,
+      password: true,
+      sso: [],
+    });
+
+    renderForm();
+
+    expect(screen.getByText('chatgpt-sign-in')).toBeInTheDocument();
+    expect(screen.getByText('credentials-form')).toBeInTheDocument();
+  });
+
+  it('only offers the LeapCRM account form while ChatGPT sign-in is off', () => {
+    jotaiStore.set(signInUpStepState.atom, SignInUpStep.Init);
+    jotaiStore.set(authProvidersState.atom, {
+      google: false,
+      magicLink: false,
+      microsoft: false,
+      openai: false,
+      password: true,
+      sso: [],
+    });
+
+    renderForm();
+
+    expect(screen.queryByText('chatgpt-sign-in')).not.toBeInTheDocument();
+    expect(screen.getByText('credentials-form')).toBeInTheDocument();
   });
 });

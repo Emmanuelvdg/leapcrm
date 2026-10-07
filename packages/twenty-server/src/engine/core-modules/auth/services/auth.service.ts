@@ -42,6 +42,7 @@ import { CreateSSOConnectedAccountService } from 'src/engine/core-modules/auth/s
 import { SignInUpService } from 'src/engine/core-modules/auth/services/sign-in-up.service';
 import { type GoogleRequest } from 'src/engine/core-modules/auth/strategies/google.auth.strategy';
 import { type MicrosoftRequest } from 'src/engine/core-modules/auth/strategies/microsoft.auth.strategy';
+import { type OpenAIRequest } from 'src/engine/core-modules/auth/strategies/openai.auth.strategy';
 import { AccessTokenService } from 'src/engine/core-modules/auth/token/services/access-token.service';
 import { LoginTokenService } from 'src/engine/core-modules/auth/token/services/login-token.service';
 import { RefreshTokenService } from 'src/engine/core-modules/auth/token/services/refresh-token.service';
@@ -1013,8 +1014,11 @@ export class AuthService {
       billingCheckoutSessionState,
       locale,
       returnToPath,
-    }: MicrosoftRequest['user'] | GoogleRequest['user'],
-    authProvider: AuthProviderEnum.Google | AuthProviderEnum.Microsoft,
+    }: MicrosoftRequest['user'] | GoogleRequest['user'] | OpenAIRequest['user'],
+    authProvider:
+      | AuthProviderEnum.Google
+      | AuthProviderEnum.Microsoft
+      | AuthProviderEnum.OpenAI,
   ): Promise<string> {
     const email = rawEmail.toLowerCase();
 
@@ -1106,12 +1110,15 @@ export class AuthService {
         billingCheckoutSessionState,
       });
 
-      await this.createSSOConnectedAccountIfFeatureFlagIsOn({
-        workspaceId: workspace.id,
-        userId: user.id,
-        handle: email,
-        authProvider,
-      });
+      // A ChatGPT login grants no mailbox or calendar to sync.
+      if (authProvider !== AuthProviderEnum.OpenAI) {
+        await this.createSSOConnectedAccountIfFeatureFlagIsOn({
+          workspaceId: workspace.id,
+          userId: user.id,
+          handle: email,
+          authProvider,
+        });
+      }
 
       const loginToken = await this.loginTokenService.generateLoginToken(
         user.email,

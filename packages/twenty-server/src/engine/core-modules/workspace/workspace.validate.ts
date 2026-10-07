@@ -23,6 +23,8 @@ const isAuthEnabledOrThrow = (
   if (provider === AuthProviderEnum.Password && workspace.isPasswordAuthEnabled)
     return true;
   if (provider === AuthProviderEnum.SSO) return true;
+  // Gated server-wide by AUTH_OPENAI_ENABLED; there is no per-workspace toggle.
+  if (provider === AuthProviderEnum.OpenAI) return true;
 
   throw exceptionToThrowCustom;
 };
@@ -40,6 +42,7 @@ const isAuthEnabled = (
     return true;
   if (provider === AuthProviderEnum.Password && workspace.isPasswordAuthEnabled)
     return true;
+  if (provider === AuthProviderEnum.OpenAI) return true;
 
   return false;
 };

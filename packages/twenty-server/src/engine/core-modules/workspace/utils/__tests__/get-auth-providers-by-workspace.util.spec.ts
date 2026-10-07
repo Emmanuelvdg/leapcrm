@@ -31,6 +31,7 @@ describe('getAuthProvidersByWorkspace', () => {
         magicLink: false,
         password: true,
         microsoft: true,
+        openai: false,
         sso: [],
       },
     });
@@ -40,6 +41,7 @@ describe('getAuthProvidersByWorkspace', () => {
       magicLink: false,
       password: true,
       microsoft: false,
+      openai: false,
       sso: [
         {
           id: 'sso1',
@@ -61,6 +63,7 @@ describe('getAuthProvidersByWorkspace', () => {
         magicLink: false,
         password: true,
         microsoft: true,
+        openai: false,
         sso: [],
       },
     });
@@ -70,6 +73,7 @@ describe('getAuthProvidersByWorkspace', () => {
       magicLink: false,
       password: true,
       microsoft: false,
+      openai: false,
       sso: [],
     });
   });
@@ -92,6 +96,7 @@ describe('getAuthProvidersByWorkspace', () => {
         magicLink: false,
         password: true,
         microsoft: true,
+        openai: false,
         sso: [],
       },
     });
@@ -101,6 +106,7 @@ describe('getAuthProvidersByWorkspace', () => {
       magicLink: false,
       password: true,
       microsoft: false,
+      openai: false,
       sso: [],
     });
   });
@@ -113,6 +119,7 @@ describe('getAuthProvidersByWorkspace', () => {
         magicLink: false,
         password: true,
         microsoft: true,
+        openai: false,
         sso: [],
       },
     });
@@ -122,6 +129,7 @@ describe('getAuthProvidersByWorkspace', () => {
       magicLink: false,
       password: true,
       microsoft: false,
+      openai: false,
       sso: [
         {
           id: 'sso1',
@@ -133,5 +141,21 @@ describe('getAuthProvidersByWorkspace', () => {
         },
       ],
     });
+  });
+
+  it('should offer ChatGPT sign-in whenever it is enabled server-wide', () => {
+    const result = getAuthProvidersByWorkspace({
+      workspace: mockWorkspace,
+      systemEnabledProviders: {
+        google: true,
+        magicLink: false,
+        password: true,
+        microsoft: true,
+        openai: true,
+        sso: [],
+      },
+    });
+
+    expect(result.openai).toBe(true);
   });
 });

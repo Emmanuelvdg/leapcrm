@@ -14,6 +14,7 @@ import { GoogleAPIsAuthController } from 'src/engine/core-modules/auth/controlle
 import { GoogleAuthController } from 'src/engine/core-modules/auth/controllers/google-auth.controller';
 import { MicrosoftAPIsAuthController } from 'src/engine/core-modules/auth/controllers/microsoft-apis-auth.controller';
 import { MicrosoftAuthController } from 'src/engine/core-modules/auth/controllers/microsoft-auth.controller';
+import { OpenAIAuthController } from 'src/engine/core-modules/auth/controllers/openai-auth.controller';
 import { OAuthPropagatorController } from 'src/engine/core-modules/auth/controllers/oauth-propagator.controller';
 import { SSOAuthController } from 'src/engine/core-modules/auth/controllers/sso-auth.controller';
 import { AuthSsoService } from 'src/engine/core-modules/auth/services/auth-sso.service';
@@ -143,6 +144,7 @@ import { JwtAuthStrategy } from './strategies/jwt.auth.strategy';
   controllers: [
     GoogleAuthController,
     MicrosoftAuthController,
+    OpenAIAuthController,
     GoogleAPIsAuthController,
     MicrosoftAPIsAuthController,
     OAuthPropagatorController,

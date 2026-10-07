@@ -15,6 +15,16 @@ export class AuthSsoService {
     private readonly twentyConfigService: TwentyConfigService,
   ) {}
 
+  // Sign in with ChatGPT is switched on server-wide, not per workspace, so it
+  // has no workspace column to filter on.
+  private getAuthProviderWorkspaceFilter(authProvider: AuthProviderEnum) {
+    if (authProvider === AuthProviderEnum.OpenAI) {
+      return {};
+    }
+
+    return { [this.getAuthProviderColumnNameByProvider(authProvider)]: true };
+  }
+
   private getAuthProviderColumnNameByProvider(authProvider: AuthProviderEnum) {
     if (authProvider === AuthProviderEnum.Google) {
       return 'isGoogleAuthEnabled';
@@ -43,7 +53,7 @@ export class AuthSsoService {
       // so get the first workspace with the current auth method enable
       const workspace = await this.workspaceRepository.findOne({
         where: {
-          [this.getAuthProviderColumnNameByProvider(authProvider)]: true,
+          ...this.getAuthProviderWorkspaceFilter(authProvider),
           workspaceUsers: {
             user: {
               email,

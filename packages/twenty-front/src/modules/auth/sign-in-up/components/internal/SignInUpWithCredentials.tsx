@@ -153,7 +153,9 @@ export const SignInUpWithCredentials = ({
     return (
       <StyledInitButtonGroup>
         <MainButton
-          title={isGlobalScope ? t`Create account` : t`Join workspace`}
+          title={
+            isGlobalScope ? t`Create a LeapCRM account` : t`Join workspace`
+          }
           type="button"
           variant="primary"
           onClick={() => handleSelectMode(SignInUpMode.SignUp)}

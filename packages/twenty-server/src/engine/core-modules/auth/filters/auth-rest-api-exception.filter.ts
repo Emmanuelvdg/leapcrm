@@ -54,6 +54,7 @@ export class AuthRestApiExceptionFilter implements ExceptionFilter {
         );
       case AuthExceptionCode.GOOGLE_API_AUTH_DISABLED:
       case AuthExceptionCode.MICROSOFT_API_AUTH_DISABLED:
+      case AuthExceptionCode.OPENAI_AUTH_DISABLED:
       case AuthExceptionCode.SIGNUP_DISABLED:
       case AuthExceptionCode.WORKSPACE_NOT_FOUND:
         return this.httpExceptionHandlerService.handleError(
