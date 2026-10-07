@@ -26,7 +26,9 @@ import { ThrottlerService } from 'src/engine/core-modules/throttler/throttler.se
 import { NoPermissionGuard } from 'src/engine/guards/no-permission.guard';
 import { PublicEndpointGuard } from 'src/engine/guards/public-endpoint.guard';
 
-const OAUTH_RATE_LIMIT_MAX = 60;
+// Every ChatGPT user's token and refresh calls arrive from OpenAI's egress
+// IPs, so a per-IP limit sized for one client would throttle all of them.
+const OAUTH_RATE_LIMIT_MAX = 300;
 const OAUTH_RATE_LIMIT_WINDOW_MS = 60_000;
 
 @Controller(ApiPath.OAuth)

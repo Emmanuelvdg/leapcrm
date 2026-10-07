@@ -505,13 +505,13 @@ export class AuthService {
     return { isValid: !!workspace };
   }
 
-  async generateAuthorizationCode(
-    authorizeAppInput: AuthorizeAppInput,
-    user: AuthContextUser,
-    workspace: WorkspaceEntity,
-  ): Promise<AuthorizeAppDTO> {
-    const { clientId, codeChallenge } = authorizeAppInput;
-
+  private async findRegistrationWithValidRedirectUrlOrThrow({
+    clientId,
+    redirectUrl: rawRedirectUrl,
+  }: {
+    clientId: string;
+    redirectUrl: string;
+  }) {
     const applicationRegistration =
       await this.applicationRegistrationService.findOneByClientId(clientId);
 
@@ -522,22 +522,9 @@ export class AuthService {
       );
     }
 
-    if (!authorizeAppInput.redirectUrl) {
+    if (!rawRedirectUrl) {
       throw new AuthException(
         `redirectUrl not provided for '${clientId}'`,
-        AuthExceptionCode.FORBIDDEN_EXCEPTION,
-      );
-    }
-
-    // OAuth 2.1 / MCP auth spec: PKCE is mandatory for public clients
-    // (clients registered with token_endpoint_auth_method=none, i.e. no
-    // client secret hash). Confidential clients are authenticated at the
-    // token endpoint instead.
-    const isPublicClient = !applicationRegistration.oAuthClientSecretHash;
-
-    if (isPublicClient && !codeChallenge) {
-      throw new AuthException(
-        `code_challenge is required for public clients (PKCE S256, per OAuth 2.1)`,
         AuthExceptionCode.FORBIDDEN_EXCEPTION,
       );
     }
@@ -549,11 +536,7 @@ export class AuthService {
       applicationRegistration.oAuthRedirectUris.length > 0;
 
     if (hasRegisteredRedirectUris) {
-      if (
-        !applicationRegistration.oAuthRedirectUris.includes(
-          authorizeAppInput.redirectUrl,
-        )
-      ) {
+      if (!applicationRegistration.oAuthRedirectUris.includes(rawRedirectUrl)) {
         throw new AuthException(
           `redirectUrl mismatch for '${clientId}'`,
           AuthExceptionCode.FORBIDDEN_EXCEPTION,
@@ -563,7 +546,7 @@ export class AuthService {
       let redirectUrl: URL;
 
       try {
-        redirectUrl = new URL(authorizeAppInput.redirectUrl);
+        redirectUrl = new URL(rawRedirectUrl);
       } catch {
         throw new AuthException(
           `Invalid redirectUrl for '${clientId}'`,
@@ -583,6 +566,47 @@ export class AuthService {
       }
     }
 
+    const redirectUriValidation = validateRedirectUri(rawRedirectUrl);
+
+    if (!redirectUriValidation.valid) {
+      throw new AuthException(
+        redirectUriValidation.reason,
+        AuthExceptionCode.FORBIDDEN_EXCEPTION,
+      );
+    }
+
+    return {
+      applicationRegistration,
+      parsedRedirectUrl: redirectUriValidation.parsed,
+    };
+  }
+
+  async generateAuthorizationCode(
+    authorizeAppInput: AuthorizeAppInput,
+    user: AuthContextUser,
+    workspace: WorkspaceEntity,
+  ): Promise<AuthorizeAppDTO> {
+    const { clientId, codeChallenge } = authorizeAppInput;
+
+    const { applicationRegistration, parsedRedirectUrl } =
+      await this.findRegistrationWithValidRedirectUrlOrThrow({
+        clientId,
+        redirectUrl: authorizeAppInput.redirectUrl,
+      });
+
+    // OAuth 2.1 / MCP auth spec: PKCE is mandatory for public clients
+    // (clients registered with token_endpoint_auth_method=none, i.e. no
+    // client secret hash). Confidential clients are authenticated at the
+    // token endpoint instead.
+    const isPublicClient = !applicationRegistration.oAuthClientSecretHash;
+
+    if (isPublicClient && !codeChallenge) {
+      throw new AuthException(
+        `code_challenge is required for public clients (PKCE S256, per OAuth 2.1)`,
+        AuthExceptionCode.FORBIDDEN_EXCEPTION,
+      );
+    }
+
     const parsedScopes = authorizeAppInput.scope
       ? authorizeAppInput.scope.split(' ').filter(Boolean)
       : [];
@@ -599,17 +623,6 @@ export class AuthService {
     if (invalidScopes.length > 0) {
       throw new AuthException(
         `Invalid scopes: ${invalidScopes.join(', ')}`,
-        AuthExceptionCode.FORBIDDEN_EXCEPTION,
-      );
-    }
-
-    const redirectUriValidation = validateRedirectUri(
-      authorizeAppInput.redirectUrl,
-    );
-
-    if (!redirectUriValidation.valid) {
-      throw new AuthException(
-        redirectUriValidation.reason,
         AuthExceptionCode.FORBIDDEN_EXCEPTION,
       );
     }
@@ -640,16 +653,37 @@ export class AuthService {
 
     await this.appTokenRepository.save(token);
 
-    redirectUriValidation.parsed.searchParams.set('code', authorizationCode);
+    parsedRedirectUrl.searchParams.set('code', authorizationCode);
 
     if (authorizeAppInput.state) {
-      redirectUriValidation.parsed.searchParams.set(
-        'state',
-        authorizeAppInput.state,
-      );
+      parsedRedirectUrl.searchParams.set('state', authorizeAppInput.state);
     }
 
-    return { redirectUrl: redirectUriValidation.parsed.toString() };
+    return { redirectUrl: parsedRedirectUrl.toString() };
+  }
+
+  // RFC 6749 §4.1.2.1: a declined consent must be reported back to the
+  // client, otherwise connectors such as ChatGPT wait on the flow forever.
+  async generateAuthorizationDenial(
+    authorizeAppInput: AuthorizeAppInput,
+  ): Promise<AuthorizeAppDTO> {
+    const { parsedRedirectUrl } =
+      await this.findRegistrationWithValidRedirectUrlOrThrow({
+        clientId: authorizeAppInput.clientId,
+        redirectUrl: authorizeAppInput.redirectUrl,
+      });
+
+    parsedRedirectUrl.searchParams.set('error', 'access_denied');
+    parsedRedirectUrl.searchParams.set(
+      'error_description',
+      'The user denied the authorization request',
+    );
+
+    if (authorizeAppInput.state) {
+      parsedRedirectUrl.searchParams.set('state', authorizeAppInput.state);
+    }
+
+    return { redirectUrl: parsedRedirectUrl.toString() };
   }
 
   async updatePassword(

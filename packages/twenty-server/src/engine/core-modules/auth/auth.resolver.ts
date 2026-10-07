@@ -948,6 +948,16 @@ export class AuthResolver {
     );
   }
 
+  @Mutation(() => AuthorizeAppDTO)
+  @UseGuards(UserAuthGuard, NoPermissionGuard)
+  async denyAppAuthorization(
+    @Args() authorizeAppInput: AuthorizeAppInput,
+  ): Promise<AuthorizeAppDTO> {
+    return await this.authService.generateAuthorizationDenial(
+      authorizeAppInput,
+    );
+  }
+
   @Mutation(() => AuthTokens)
   @UseGuards(PublicEndpointGuard, NoPermissionGuard)
   async renewToken(

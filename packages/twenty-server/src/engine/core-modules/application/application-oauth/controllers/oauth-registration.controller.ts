@@ -34,9 +34,10 @@ import { NoPermissionGuard } from 'src/engine/guards/no-permission.guard';
 import { PublicEndpointGuard } from 'src/engine/guards/public-endpoint.guard';
 import { Repository } from 'typeorm';
 
-// RFC 7591: 10 registrations per hour per IP
+// Hosted connectors such as ChatGPT register one client per user connection
+// from a small pool of egress IPs, so the per-IP budget has to cover many users.
 const REGISTRATION_RATE_LIMIT_MAX =
-  process.env.NODE_ENV === NodeEnvironment.DEVELOPMENT ? 100 : 10;
+  process.env.NODE_ENV === NodeEnvironment.DEVELOPMENT ? 500 : 100;
 const REGISTRATION_RATE_LIMIT_WINDOW_MS = 3_600_000;
 
 const ALLOWED_GRANT_TYPES = ['authorization_code', 'refresh_token'];

@@ -21,6 +21,7 @@ import { ModalContent } from 'twenty-ui/surfaces';
 import { ThemeContext, themeCssVariables } from 'twenty-ui/theme-constants';
 import {
   AuthorizeAppDocument,
+  DenyAppAuthorizationDocument,
   FindApplicationRegistrationByClientIdDocument,
 } from '~/generated-metadata/graphql';
 import { useNavigateApp } from '~/hooks/useNavigateApp';
@@ -164,6 +165,7 @@ export const Authorize = () => {
 
   const applicationRegistration = data?.findApplicationRegistrationByClientId;
   const [authorizeApp] = useMutation(AuthorizeAppDocument);
+  const [denyAppAuthorization] = useMutation(DenyAppAuthorizationDocument);
   const [authorizeError, setAuthorizeError] = useState<string | null>(null);
   const [isAuthorizing, setIsAuthorizing] = useState(false);
 
@@ -211,6 +213,30 @@ export const Authorize = () => {
         },
       });
     }
+  };
+
+  // The client (e.g. ChatGPT) is waiting on its redirect URI, so a cancel has
+  // to be reported there as access_denied rather than just leaving the page.
+  const handleCancel = async () => {
+    if (!isDefined(clientId) || !isDefined(redirectUrl)) {
+      navigate(AppPath.Index);
+
+      return;
+    }
+
+    await denyAppAuthorization({
+      variables: {
+        clientId,
+        redirectUrl,
+        state: state ?? undefined,
+      },
+      onCompleted: (responseData) => {
+        redirect(responseData.denyAppAuthorization.redirectUrl);
+      },
+      onError: () => {
+        navigate(AppPath.Index);
+      },
+    });
   };
 
   useGlobalHotkeys({
@@ -305,7 +331,7 @@ export const Authorize = () => {
             <StyledErrorText>{authorizeError}</StyledErrorText>
           )}
           <AuthorizeActionButtons
-            onCancel={() => navigate(AppPath.Index)}
+            onCancel={handleCancel}
             onAuthorize={handleAuthorize}
             isLoading={isAuthorizing}
           />

@@ -45,10 +45,10 @@ export const buildMcpSetupCategories = ({
     cards: [
       {
         title: t`ChatGPT`,
-        badge: t`Official app`,
-        description: t`Open LeapCRM's official ChatGPT integration for your workspace.`,
-        ctaLabel: t`Open`,
-        href: MCP_SETUP.chatGptTwentyAppUrl,
+        badge: t`Custom connector`,
+        description: t`In ChatGPT, turn on Developer mode, then create a connector with the URL ${mcpServerUrl} and OAuth sign-in. Your ChatGPT plan covers the AI usage.`,
+        ctaLabel: t`Open ChatGPT`,
+        href: MCP_SETUP.chatGptConnectorSettingsUrl,
         logo: <McpClientLogo src={OpenAiLogo} invertInDarkMode />,
       },
       {
