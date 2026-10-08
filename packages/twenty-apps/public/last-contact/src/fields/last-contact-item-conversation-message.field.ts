@@ -7,30 +7,33 @@ import {
 } from 'twenty-sdk/define';
 
 import {
-  LAST_CONTACT_FOR_PEOPLE_ON_MESSAGE_FIELD_UNIVERSAL_IDENTIFIER,
-  LAST_CONTACT_ITEM_MESSAGE_FIELD_UNIVERSAL_IDENTIFIER,
+  CONVERSATION_MESSAGE_OBJECT_UNIVERSAL_IDENTIFIER,
+  LAST_CONTACT_FOR_PEOPLE_ON_CONVERSATION_MESSAGE_FIELD_UNIVERSAL_IDENTIFIER,
+  LAST_CONTACT_ITEM_CONVERSATION_MESSAGE_FIELD_UNIVERSAL_IDENTIFIER,
   LAST_CONTACT_ITEM_MORPH_ID,
 } from 'src/constants/universal-identifiers';
 
 export default defineField({
-  universalIdentifier: LAST_CONTACT_ITEM_MESSAGE_FIELD_UNIVERSAL_IDENTIFIER,
+  universalIdentifier:
+    LAST_CONTACT_ITEM_CONVERSATION_MESSAGE_FIELD_UNIVERSAL_IDENTIFIER,
   objectUniversalIdentifier:
     STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.person.universalIdentifier,
   type: FieldType.MORPH_RELATION,
-  name: 'lastContactItemMessage',
+  name: 'lastContactItemConversationMessage',
   label: 'Last contact item',
-  description: 'The email, meeting or WhatsApp message that was the most recent contact.',
-  icon: 'IconMessage',
+  description:
+    'The email, meeting or WhatsApp message that was the most recent contact.',
+  icon: 'IconBrandWhatsapp',
   isNullable: true,
   morphId: LAST_CONTACT_ITEM_MORPH_ID,
   relationTargetObjectMetadataUniversalIdentifier:
-    STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.message.universalIdentifier,
+    CONVERSATION_MESSAGE_OBJECT_UNIVERSAL_IDENTIFIER,
   relationTargetFieldMetadataUniversalIdentifier:
-    LAST_CONTACT_FOR_PEOPLE_ON_MESSAGE_FIELD_UNIVERSAL_IDENTIFIER,
+    LAST_CONTACT_FOR_PEOPLE_ON_CONVERSATION_MESSAGE_FIELD_UNIVERSAL_IDENTIFIER,
   universalSettings: {
     relationType: RelationType.MANY_TO_ONE,
     onDelete: OnDeleteAction.SET_NULL,
-    joinColumnName: 'lastContactItemMessageId',
+    joinColumnName: 'lastContactItemConversationMessageId',
   },
   isUIEditable: false,
 });

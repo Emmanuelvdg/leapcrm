@@ -1,9 +1,13 @@
 import { type CoreApiClient } from 'twenty-client-sdk/core';
 
-type PersonNode = {
+import {
+  CONTACT_ITEM_RELATIONS_SELECTION,
+  type ContactItemRelations,
+  readContactItemColumns,
+} from 'src/utils/contact-item-columns';
+
+type PersonNode = ContactItemRelations & {
   lastContactAt?: string | null;
-  lastContactItemMessage?: { id: string } | null;
-  lastContactItemCalendarEvent?: { id: string } | null;
 };
 
 // A company's last contact mirrors the most recent contact of any of its people,
@@ -26,8 +30,7 @@ export const recomputeCompanyLastContact = async (
       edges: {
         node: {
           lastContactAt: true,
-          lastContactItemMessage: { id: true },
-          lastContactItemCalendarEvent: { id: true },
+          ...CONTACT_ITEM_RELATIONS_SELECTION,
         },
       },
     },
@@ -41,9 +44,7 @@ export const recomputeCompanyLastContact = async (
         id: companyId,
         data: {
           lastContactAt: topPerson.lastContactAt ?? null,
-          lastContactItemMessageId: topPerson.lastContactItemMessage?.id ?? null,
-          lastContactItemCalendarEventId:
-            topPerson.lastContactItemCalendarEvent?.id ?? null,
+          ...readContactItemColumns(topPerson),
         },
       },
       id: true,

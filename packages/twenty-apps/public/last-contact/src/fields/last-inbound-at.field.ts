@@ -14,7 +14,7 @@ export default defineField({
   type: FieldType.DATE_TIME,
   label: 'Last inbound',
   description:
-    'When this person last reached out to you (an inbound email, or a meeting they organized).',
+    'When this person last reached out to you (an inbound email or WhatsApp message, or a meeting they organized).',
   icon: 'IconMessageDown',
   isNullable: true,
   isUIEditable: false,

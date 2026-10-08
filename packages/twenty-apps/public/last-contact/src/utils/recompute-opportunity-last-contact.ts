@@ -1,17 +1,21 @@
 import { type CoreApiClient } from 'twenty-client-sdk/core';
 
+import {
+  buildContactItemColumns,
+  CONTACT_ITEM_RELATIONS_SELECTION,
+  type ContactItemRelations,
+  readContactItemColumns,
+} from 'src/utils/contact-item-columns';
+
 type LastContactData = Record<string, string | null>;
 
 const EMPTY_LAST_CONTACT: LastContactData = {
   lastContactAt: null,
-  lastContactItemMessageId: null,
-  lastContactItemCalendarEventId: null,
+  ...buildContactItemColumns(undefined, null),
 };
 
-type PersonLastContact = {
+type PersonLastContact = ContactItemRelations & {
   lastContactAt?: string | null;
-  lastContactItemMessage?: { id: string } | null;
-  lastContactItemCalendarEvent?: { id: string } | null;
 };
 
 // An opportunity's last contact mirrors its point of contact, so it must be
@@ -41,8 +45,7 @@ export const recomputeOpportunityLastContact = async (
         __args: { filter: { id: { eq: pointOfContactId } } },
         id: true,
         lastContactAt: true,
-        lastContactItemMessage: { id: true },
-        lastContactItemCalendarEvent: { id: true },
+        ...CONTACT_ITEM_RELATIONS_SELECTION,
       },
     });
 
@@ -50,9 +53,7 @@ export const recomputeOpportunityLastContact = async (
 
     data = {
       lastContactAt: current.lastContactAt ?? null,
-      lastContactItemMessageId: current.lastContactItemMessage?.id ?? null,
-      lastContactItemCalendarEventId:
-        current.lastContactItemCalendarEvent?.id ?? null,
+      ...readContactItemColumns(current),
     };
   }
 

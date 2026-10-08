@@ -1,5 +1,6 @@
 import { type CoreApiClient } from 'twenty-client-sdk/core';
 
+import { buildContactItemColumns } from 'src/utils/contact-item-columns';
 import { type InteractionKind } from 'src/utils/update-person-last-contact';
 
 export type RelatedInteraction = {
@@ -22,13 +23,12 @@ const buildData = ({
   kind,
 }: Omit<RelatedInteraction, 'personId'>): Record<string, string | null> => ({
   lastContactAt: occurredAt,
-  lastContactItemMessageId: kind === 'email' ? itemId : null,
-  lastContactItemCalendarEventId: kind === 'meeting' ? itemId : null,
+  ...buildContactItemColumns(kind, itemId),
 });
 
-// Companies and opportunities surface emails and meetings from their related
-// people, so their last contact mirrors the most recent contact of any person
-// connected to them.
+// Companies and opportunities surface emails, meetings and WhatsApp messages
+// from their related people, so their last contact mirrors the most recent
+// contact of any person connected to them.
 export const updateRelatedLastContact = async (
   client: CoreApiClient,
   { personId, occurredAt, itemId, kind }: RelatedInteraction,

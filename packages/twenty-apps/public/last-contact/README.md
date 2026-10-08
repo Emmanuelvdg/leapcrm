@@ -1,11 +1,11 @@
 # Last Contact
 
-**Always know where every relationship stands — live on your People list, straight from your synced email and calendar.**
+**Always know where every relationship stands — live on your People list, straight from your synced email, calendar and WhatsApp.**
 
 ## ✨ What you get
 
-- **Live columns on People, Companies and Opportunities** — last contact, who reached out (you or them), the owning teammate, and the exact email or meeting behind it
-- **Zero upkeep** — updates in real time from every synced email and meeting, with your full history backfilled the moment you install
+- **Live columns on People, Companies and Opportunities** — last contact, who reached out (you or them), the owning teammate, and the exact email, meeting or WhatsApp message behind it
+- **Zero upkeep** — updates in real time from every synced email, meeting and WhatsApp message, with your full history backfilled the moment you install
 - **Follow-ups made obvious** — sort by recency to catch cold relationships and see who owes whom a reply
 
 ## 📊 The columns
@@ -24,4 +24,4 @@ On **Companies** and **Opportunities** you also get **Last contact** and **Last 
 
 ## 📌 Heads up
 
-Needs a synced inbox or calendar (Google, Outlook, or CalDAV). Direction is inferred from the email's sender and the meeting's organizer; a meeting counts as both.
+Needs a synced inbox or calendar (Google, Outlook, or CalDAV), or a connected WhatsApp number. Direction is inferred from the email's sender and the meeting's organizer; a meeting counts as both. WhatsApp messages count once their conversation is linked to a person, and inbound ones are credited to the conversation's assignee.

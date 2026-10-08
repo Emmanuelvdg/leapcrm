@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.0
+
+- Count WhatsApp messages as contact. A sent or received WhatsApp message updates the person's last contact, last outbound or inbound, and last contact by (the sender, or the conversation's assignee for inbound messages), and rolls up to their company and opportunities. "Last contact item" can now point at the WhatsApp message.
+- Linking a WhatsApp conversation to a person counts its latest inbound and outbound messages.
+- The install backfill includes existing WhatsApp messages.
+- Requires the LeapCRM conversation objects.
+
 ## 1.2.3
 
 - Rework the last-contact backfill into a single fan-out instead of a logic function that called its own HTTP route in a loop with blocking sleeps. On install it counts people, opportunities and companies and enqueues one job per record batch via `enqueueJob`. Each job receives its batch id and processes the matching record window (offset pagination). Jobs are staggered with `delayMs` to stay under the hosted API rate limiting.

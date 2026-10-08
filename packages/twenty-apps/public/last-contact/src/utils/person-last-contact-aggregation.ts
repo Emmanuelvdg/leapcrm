@@ -1,6 +1,18 @@
 import { type CoreApiClient } from 'twenty-client-sdk/core';
 
+import {
+  buildContactItemColumns,
+  type ContactItemKind,
+} from 'src/utils/contact-item-columns';
 import { executeWithRetry } from 'src/utils/execute-with-retry';
+import { type InteractionDirection } from 'src/utils/update-person-last-contact';
+import {
+  getWhatsappMessageDirection,
+  getWhatsappMessageOccurredAt,
+  getWhatsappMessageOwnerId,
+  WHATSAPP_MESSAGE_SELECTION,
+  type WhatsappMessageNode,
+} from 'src/utils/update-person-last-contact-from-whatsapp';
 
 const PAGE_SIZE = 200;
 
@@ -14,8 +26,15 @@ type MeetingInteraction = {
   calendarEventId: string;
   startsAt: string;
 };
+type WhatsappInteraction = {
+  personId: string;
+  conversationMessageId: string;
+  occurredAt: string;
+  direction: InteractionDirection;
+  ownerId: string | null;
+};
 type MessageMemberInfo = { ownerId: string; fromIsMember: boolean };
-type ContactItem = { kind: 'email' | 'meeting'; id: string };
+type ContactItem = { kind: ContactItemKind; id: string };
 
 export type LastContact = { at: string; item: ContactItem };
 export type PersonUpdateData = Record<string, string | null>;
@@ -138,6 +157,72 @@ const collectMeetingInteractions = async (
 
       after = calendarEventParticipants?.pageInfo.hasNextPage
         ? (calendarEventParticipants.pageInfo.endCursor ?? undefined)
+        : undefined;
+    } while (after);
+  }
+
+  return interactions;
+};
+
+const collectWhatsappInteractions = async (
+  client: CoreApiClient,
+  personIds: string[],
+): Promise<WhatsappInteraction[]> => {
+  const interactions: WhatsappInteraction[] = [];
+
+  for (const ids of chunk(personIds, PAGE_SIZE)) {
+    let after: string | undefined;
+
+    do {
+      const { conversationMessages } = await executeWithRetry(() =>
+        client.query({
+          conversationMessages: {
+            __args: {
+              filter: {
+                channelType: { eq: 'WHATSAPP' },
+                isDraft: { eq: false },
+                isInternalNote: { eq: false },
+                conversation: { personId: { in: ids } },
+              },
+              first: PAGE_SIZE,
+              after,
+            },
+            edges: {
+              node: {
+                ...WHATSAPP_MESSAGE_SELECTION,
+                conversation: { personId: true, assignedToId: true },
+              },
+            },
+            pageInfo: { hasNextPage: true, endCursor: true },
+          },
+        }),
+      );
+
+      for (const edge of conversationMessages?.edges ?? []) {
+        const message = edge.node as WhatsappMessageNode & {
+          conversation?: {
+            personId: string | null;
+            assignedToId: string | null;
+          } | null;
+        };
+        const personId = message.conversation?.personId;
+        const occurredAt = getWhatsappMessageOccurredAt(message);
+        if (personId && message.id && occurredAt) {
+          interactions.push({
+            personId,
+            conversationMessageId: message.id,
+            occurredAt,
+            direction: getWhatsappMessageDirection(message),
+            ownerId: getWhatsappMessageOwnerId(
+              message,
+              message.conversation?.assignedToId,
+            ),
+          });
+        }
+      }
+
+      after = conversationMessages?.pageInfo.hasNextPage
+        ? (conversationMessages.pageInfo.endCursor ?? undefined)
         : undefined;
     } while (after);
   }
@@ -297,9 +382,27 @@ const foldMeeting = (
   }
 };
 
-// Aggregates every email and meeting interaction of the given people into one
-// last-contact snapshot per person, resolving the owning team member and the
-// inbound/outbound direction from the message and calendar participants.
+const foldWhatsapp = (
+  agg: PersonAgg,
+  { occurredAt, conversationMessageId, direction, ownerId }: WhatsappInteraction,
+): void => {
+  if (direction === 'outbound') {
+    if (!agg.lastOutboundAt || occurredAt > agg.lastOutboundAt) {
+      agg.lastOutboundAt = occurredAt;
+    }
+  } else if (!agg.lastInboundAt || occurredAt > agg.lastInboundAt) {
+    agg.lastInboundAt = occurredAt;
+  }
+  if (!agg.lastContactAt || occurredAt > agg.lastContactAt) {
+    agg.lastContactAt = occurredAt;
+    agg.lastContactById = ownerId;
+    agg.item = { kind: 'whatsapp', id: conversationMessageId };
+  }
+};
+
+// Aggregates every email, meeting and WhatsApp interaction of the given people
+// into one last-contact snapshot per person, resolving the owning team member
+// and the inbound/outbound direction from the message and calendar participants.
 export const buildPersonAggregates = async (
   client: CoreApiClient,
   personIds: string[],
@@ -310,9 +413,10 @@ export const buildPersonAggregates = async (
     return aggByPersonId;
   }
 
-  const [emails, meetings] = await Promise.all([
+  const [emails, meetings, whatsappMessages] = await Promise.all([
     collectEmailInteractions(client, personIds),
     collectMeetingInteractions(client, personIds),
+    collectWhatsappInteractions(client, personIds),
   ]);
 
   const messageIds = [...new Set(emails.map((email) => email.messageId))];
@@ -351,6 +455,9 @@ export const buildPersonAggregates = async (
       calendarOwners.get(meeting.calendarEventId) ?? null,
     );
   }
+  for (const whatsappMessage of whatsappMessages) {
+    foldWhatsapp(aggFor(whatsappMessage.personId), whatsappMessage);
+  }
 
   return aggByPersonId;
 };
@@ -382,17 +489,7 @@ export const buildPersonUpdateData = (agg: PersonAgg): PersonUpdateData => ({
   ...(agg.lastInboundAt ? { lastInboundAt: agg.lastInboundAt } : {}),
   ...(agg.lastEmail ? { lastEmailId: agg.lastEmail.id } : {}),
   ...(agg.lastMeeting ? { lastMeetingId: agg.lastMeeting.id } : {}),
-  ...(agg.item?.kind === 'email'
-    ? {
-        lastContactItemMessageId: agg.item.id,
-        lastContactItemCalendarEventId: null,
-      }
-    : agg.item?.kind === 'meeting'
-      ? {
-          lastContactItemCalendarEventId: agg.item.id,
-          lastContactItemMessageId: null,
-        }
-      : {}),
+  ...(agg.item ? buildContactItemColumns(agg.item.kind, agg.item.id) : {}),
 });
 
 export const buildRelatedUpdateData = ({
@@ -400,6 +497,5 @@ export const buildRelatedUpdateData = ({
   item,
 }: LastContact): PersonUpdateData => ({
   lastContactAt: at,
-  lastContactItemMessageId: item.kind === 'email' ? item.id : null,
-  lastContactItemCalendarEventId: item.kind === 'meeting' ? item.id : null,
+  ...buildContactItemColumns(item.kind, item.id),
 });

@@ -1,6 +1,6 @@
 export const APP_DISPLAY_NAME = 'Last contact';
 export const APP_DESCRIPTION =
-  'Know where every relationship stands. Adds Last contact, Last outbound, Last inbound, Last contact by, and the last email and meeting to People, plus Last contact on Companies and Opportunities, kept up to date automatically from your synced emails and meetings.';
+  'Know where every relationship stands. Adds Last contact, Last outbound, Last inbound, Last contact by, and the last email and meeting to People, plus Last contact on Companies and Opportunities, kept up to date automatically from your synced emails, meetings and WhatsApp messages.';
 export const APPLICATION_UNIVERSAL_IDENTIFIER = '66a504cc-0a75-410e-a43f-cdeae1db1522';
 export const DEFAULT_ROLE_UNIVERSAL_IDENTIFIER = '34187abe-1b98-4153-85cd-4808e0aebf30';
 export const LAST_CONTACT_AT_FIELD_UNIVERSAL_IDENTIFIER =
@@ -29,6 +29,10 @@ export const PERSON_CREATED_LOGIC_FUNCTION_UNIVERSAL_IDENTIFIER =
   'cf7460cc-4c48-4412-9a1a-0c30e4960fce';
 export const PERSON_UPDATED_LOGIC_FUNCTION_UNIVERSAL_IDENTIFIER =
   'a967064f-f440-43cd-bfbe-907c95d4563f';
+export const WHATSAPP_MESSAGE_LOGIC_FUNCTION_UNIVERSAL_IDENTIFIER =
+  '41572fc0-39e4-401e-8c6b-ecfaede6bd47';
+export const WHATSAPP_CONVERSATION_LINKED_LOGIC_FUNCTION_UNIVERSAL_IDENTIFIER =
+  '4d36ae5f-ce69-4f34-874b-905260724ed0';
 
 export const LAST_CONTACT_BY_FIELD_UNIVERSAL_IDENTIFIER =
   'cfdee7bd-8d41-41e6-a888-512705e75d7b';
@@ -84,3 +88,19 @@ export const LAST_CONTACT_FOR_OPPORTUNITIES_ON_MESSAGE_FIELD_UNIVERSAL_IDENTIFIE
   '1ccff5c2-44c3-4a7d-847f-c74440fe56a9';
 export const LAST_CONTACT_FOR_OPPORTUNITIES_ON_CALENDAR_EVENT_FIELD_UNIVERSAL_IDENTIFIER =
   'db36a44e-a6dc-4bec-a23e-3b27f63d1629';
+
+// Fork-only standard object, so it is missing from the SDK's STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.
+export const CONVERSATION_MESSAGE_OBJECT_UNIVERSAL_IDENTIFIER =
+  '3b8d25b9-aef1-4330-acb3-26806e05f228';
+export const LAST_CONTACT_ITEM_CONVERSATION_MESSAGE_FIELD_UNIVERSAL_IDENTIFIER =
+  'fb1e062e-05bb-450c-adb4-f72678eb82fe';
+export const LAST_CONTACT_FOR_PEOPLE_ON_CONVERSATION_MESSAGE_FIELD_UNIVERSAL_IDENTIFIER =
+  '11deaa8e-9071-472c-a02e-879caaf3bbbb';
+export const COMPANY_LAST_CONTACT_ITEM_CONVERSATION_MESSAGE_FIELD_UNIVERSAL_IDENTIFIER =
+  'd9928190-dc69-4910-bd47-b24144a17141';
+export const LAST_CONTACT_FOR_COMPANIES_ON_CONVERSATION_MESSAGE_FIELD_UNIVERSAL_IDENTIFIER =
+  'fdc6b49b-570f-48a2-b9dc-7f1295781221';
+export const OPPORTUNITY_LAST_CONTACT_ITEM_CONVERSATION_MESSAGE_FIELD_UNIVERSAL_IDENTIFIER =
+  '64db56dc-08a4-4687-8046-dc9de960e887';
+export const LAST_CONTACT_FOR_OPPORTUNITIES_ON_CONVERSATION_MESSAGE_FIELD_UNIVERSAL_IDENTIFIER =
+  '2618073b-bd9a-4013-af99-18ee615f5556';

@@ -1,6 +1,12 @@
 import { type CoreApiClient } from 'twenty-client-sdk/core';
 
-export type InteractionKind = 'email' | 'meeting';
+import {
+  buildContactItemColumns,
+  CONTACT_ITEM_COLUMN_NAMES,
+  type ContactItemKind,
+} from 'src/utils/contact-item-columns';
+
+export type InteractionKind = ContactItemKind;
 export type InteractionDirection = 'outbound' | 'inbound';
 
 export type Interaction = {
@@ -8,7 +14,10 @@ export type Interaction = {
   occurredAt: string;
   itemId: string;
   workspaceMemberId: string | null;
-} & ({ kind: 'email'; direction: InteractionDirection } | { kind: 'meeting' });
+} & (
+  | { kind: 'email' | 'whatsapp'; direction: InteractionDirection }
+  | { kind: 'meeting' }
+);
 
 const isNewer = (
   candidate: string,
@@ -46,13 +55,7 @@ export const updatePersonForInteraction = async (
   if (isNewer(occurredAt, current.lastContactAt)) {
     data.lastContactAt = occurredAt;
     data.lastContactById = workspaceMemberId ?? null;
-    if (kind === 'email') {
-      data.lastContactItemMessageId = itemId;
-      data.lastContactItemCalendarEventId = null;
-    } else {
-      data.lastContactItemCalendarEventId = itemId;
-      data.lastContactItemMessageId = null;
-    }
+    Object.assign(data, buildContactItemColumns(kind, itemId));
   }
 
   const touchesOutbound =
@@ -105,8 +108,9 @@ export const updatePersonForInteraction = async (
     const directionalData: Record<string, string | null> = { ...data };
     delete directionalData.lastContactAt;
     delete directionalData.lastContactById;
-    delete directionalData.lastContactItemMessageId;
-    delete directionalData.lastContactItemCalendarEventId;
+    for (const columnName of CONTACT_ITEM_COLUMN_NAMES) {
+      delete directionalData[columnName];
+    }
 
     if (Object.keys(directionalData).length === 0) {
       return;

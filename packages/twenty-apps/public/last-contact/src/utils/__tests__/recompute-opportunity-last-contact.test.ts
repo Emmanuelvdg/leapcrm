@@ -44,6 +44,7 @@ describe('recomputeOpportunityLastContact', () => {
         lastContactAt: OCCURRED_AT,
         lastContactItemMessageId: MESSAGE_ID,
         lastContactItemCalendarEventId: null,
+        lastContactItemConversationMessageId: null,
       },
     });
   });
@@ -61,6 +62,7 @@ describe('recomputeOpportunityLastContact', () => {
         lastContactAt: null,
         lastContactItemMessageId: null,
         lastContactItemCalendarEventId: null,
+        lastContactItemConversationMessageId: null,
       },
     );
   });
