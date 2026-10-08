@@ -1,9 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 
+import { randomInt } from 'crypto';
+
 import { isNonEmptyString } from '@sniptt/guards';
+import { isDefined } from 'twenty-shared/utils';
 
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { WHATSAPP_GRAPH_API_VERSION } from 'src/modules/whatsapp/constants/whatsapp-graph-api-version.constant';
+
+const GRAPH_API_BASE_URL = `https://graph.facebook.com/${WHATSAPP_GRAPH_API_VERSION}`;
 
 type WhatsappAccessTokenExchangeResponse = {
   access_token?: string;
@@ -13,17 +18,19 @@ type WhatsappAccessTokenExchangeResponse = {
 
 type WhatsappPhoneNumberResponse = {
   display_phone_number?: string;
+  platform_type?: string;
 };
 
-export type ExchangeWhatsappEmbeddedSignupCodeResult = {
+export type CompleteWhatsappEmbeddedSignupResult = {
   accessToken: string;
   displayPhoneNumber: string | null;
 };
 
-// Wraps the two Meta Graph API calls needed right after WhatsApp Embedded
-// Signup resolves in the browser (see useConnectWhatsapp.ts on the front end):
-// exchanging the short-lived `code` for a long-lived access token, then a
-// best-effort read of the phone number's display value for a nicer UI label.
+// Wraps the Meta Graph API calls a tech provider must make right after
+// WhatsApp Embedded Signup resolves in the browser (see useConnectWhatsapp.ts
+// on the front end): exchange the short-lived `code` for a business token,
+// subscribe our app to the customer's WABA so Meta sends us its webhooks, and
+// register the phone number on Cloud API so it can send and receive.
 // Mirrors WhatsappOutboundMessageService's plain-fetch usage of the Graph API.
 @Injectable()
 export class WhatsappEmbeddedSignupService {
@@ -31,13 +38,51 @@ export class WhatsappEmbeddedSignupService {
 
   constructor(private readonly twentyConfigService: TwentyConfigService) {}
 
-  async exchangeCodeForAccessToken({
+  async completeEmbeddedSignup({
     code,
     phoneNumberId,
+    wabaId,
   }: {
     code: string;
     phoneNumberId: string;
-  }): Promise<ExchangeWhatsappEmbeddedSignupCodeResult> {
+    wabaId: string;
+  }): Promise<CompleteWhatsappEmbeddedSignupResult> {
+    const accessToken = await this.exchangeCodeForAccessToken(code);
+
+    await this.postToGraphApi({
+      path: `${wabaId}/subscribed_apps`,
+      accessToken,
+      action: 'webhook subscription',
+    });
+
+    const phoneNumber = await this.fetchPhoneNumber({
+      phoneNumberId,
+      accessToken,
+    });
+
+    // Reconnecting an already registered number must not re-register it: the
+    // PIN below would no longer match the one set on the first connect.
+    if (phoneNumber?.platform_type !== 'CLOUD_API') {
+      await this.postToGraphApi({
+        path: `${phoneNumberId}/register`,
+        accessToken,
+        body: {
+          messaging_product: 'whatsapp',
+          // Meta turns this into the number's two-step verification PIN. Not
+          // kept: the business can reset it in WhatsApp Manager.
+          pin: randomInt(0, 1_000_000).toString().padStart(6, '0'),
+        },
+        action: 'phone number registration',
+      });
+    }
+
+    return {
+      accessToken,
+      displayPhoneNumber: phoneNumber?.display_phone_number ?? null,
+    };
+  }
+
+  private async exchangeCodeForAccessToken(code: string): Promise<string> {
     const appId = this.twentyConfigService.get('WHATSAPP_APP_ID');
     const appSecret = this.twentyConfigService.get('WHATSAPP_APP_SECRET');
 
@@ -48,7 +93,7 @@ export class WhatsappEmbeddedSignupService {
     }
 
     const tokenExchangeUrl = new URL(
-      `https://graph.facebook.com/${WHATSAPP_GRAPH_API_VERSION}/oauth/access_token`,
+      `${GRAPH_API_BASE_URL}/oauth/access_token`,
     );
 
     tokenExchangeUrl.searchParams.set('client_id', appId);
@@ -74,29 +119,48 @@ export class WhatsappEmbeddedSignupService {
       );
     }
 
-    const displayPhoneNumber = await this.fetchDisplayPhoneNumber({
-      phoneNumberId,
-      accessToken: parsedTokenResponse.access_token,
-    });
-
-    return {
-      accessToken: parsedTokenResponse.access_token,
-      displayPhoneNumber,
-    };
+    return parsedTokenResponse.access_token;
   }
 
-  // Best-effort only - a nicer displayPhoneNumber is a UI nicety, not worth
-  // failing the whole connection flow over.
-  private async fetchDisplayPhoneNumber({
+  private async postToGraphApi({
+    path,
+    accessToken,
+    body,
+    action,
+  }: {
+    path: string;
+    accessToken: string;
+    body?: Record<string, string>;
+    action: string;
+  }): Promise<void> {
+    const response = await fetch(`${GRAPH_API_BASE_URL}/${path}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: isDefined(body) ? JSON.stringify(body) : undefined,
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `WhatsApp Embedded Signup ${action} failed with status ${response.status}: ${await response.text()}`,
+      );
+    }
+  }
+
+  // Best-effort: on failure registration is still attempted and the UI falls
+  // back to the phone number id as its label.
+  private async fetchPhoneNumber({
     phoneNumberId,
     accessToken,
   }: {
     phoneNumberId: string;
     accessToken: string;
-  }): Promise<string | null> {
+  }): Promise<WhatsappPhoneNumberResponse | null> {
     try {
       const response = await fetch(
-        `https://graph.facebook.com/${WHATSAPP_GRAPH_API_VERSION}/${phoneNumberId}?fields=display_phone_number`,
+        `${GRAPH_API_BASE_URL}/${phoneNumberId}?fields=display_phone_number,platform_type`,
         {
           headers: { Authorization: `Bearer ${accessToken}` },
         },
@@ -106,13 +170,10 @@ export class WhatsappEmbeddedSignupService {
         return null;
       }
 
-      const parsedResponse =
-        (await response.json()) as WhatsappPhoneNumberResponse;
-
-      return parsedResponse.display_phone_number ?? null;
+      return (await response.json()) as WhatsappPhoneNumberResponse;
     } catch (error) {
       this.logger.warn(
-        `Failed to fetch WhatsApp display phone number for ${phoneNumberId}: ${error}`,
+        `Failed to fetch WhatsApp phone number ${phoneNumberId}: ${error}`,
       );
 
       return null;

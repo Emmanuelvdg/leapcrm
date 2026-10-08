@@ -46,9 +46,10 @@ export class WhatsappChannelResolver {
     @AuthWorkspace() { id: workspaceId }: WorkspaceEntity,
   ): Promise<WhatsappChannelDTO> {
     const { accessToken, displayPhoneNumber } =
-      await this.whatsappEmbeddedSignupService.exchangeCodeForAccessToken({
+      await this.whatsappEmbeddedSignupService.completeEmbeddedSignup({
         code: input.code,
         phoneNumberId: input.phoneNumberId,
+        wabaId: input.wabaId,
       });
 
     const whatsappChannel =
