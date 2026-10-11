@@ -1,5 +1,7 @@
+import { lazy } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
+import { LazyRoute } from '@/app/components/LazyRoute';
 import { RootApp } from '@/app/components/RootApp';
 import { SharedAppProviders } from '@/app/components/SharedAppProviders';
 import { WorkspaceApp } from '@/app/components/WorkspaceApp';
@@ -10,6 +12,12 @@ import { useIsCurrentLocationOnDefaultDomain } from '@/domain-manager/hooks/useI
 import { OnboardingPageLoader } from '@/onboarding/components/OnboardingPageLoader';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { UserOrMetadataLoader } from '~/loading/components/UserOrMetadataLoader';
+
+const WhatsappEmbeddedSignup = lazy(() =>
+  import('~/pages/whatsapp/WhatsappEmbeddedSignup').then((module) => ({
+    default: module.WhatsappEmbeddedSignup,
+  })),
+);
 
 export const DomainShell = () => {
   const { isLoadedOnce } = useAtomStateValue(clientConfigApiStatusState);
@@ -27,6 +35,19 @@ export const DomainShell = () => {
           ) : (
             <UserOrMetadataLoader />
           )}
+        </SharedAppProviders>
+      </BrowserRouter>
+    );
+  }
+
+  // Signup runs on the shared origin without a workspace session.
+  if (window.location.pathname === '/whatsapp/embedded-signup') {
+    return (
+      <BrowserRouter>
+        <SharedAppProviders>
+          <LazyRoute fallback={null}>
+            <WhatsappEmbeddedSignup />
+          </LazyRoute>
         </SharedAppProviders>
       </BrowserRouter>
     );

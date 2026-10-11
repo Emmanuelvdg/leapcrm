@@ -33,6 +33,14 @@ jest.mock('@/client-config/components/ClientConfigProvider', () => ({
   ),
 }));
 
+jest.mock('~/loading/components/PageContentSkeletonLoader', () => ({
+  PageContentSkeletonLoader: () => null,
+}));
+
+jest.mock('~/pages/whatsapp/WhatsappEmbeddedSignup', () => ({
+  WhatsappEmbeddedSignup: () => <h1>Connect WhatsApp to LeapCRM</h1>,
+}));
+
 jest.mock('@/app/components/RootApp', () => ({
   RootApp: () => <div>ROOT_APP</div>,
 }));
@@ -95,6 +103,49 @@ describe('DomainShell', () => {
     renderShell();
 
     expect(screen.getByText('ONBOARDING_LOADER')).toBeInTheDocument();
+  });
+
+  it.each([
+    { isMultiWorkspaceEnabled: true, isDefaultDomain: false },
+    { isMultiWorkspaceEnabled: true, isDefaultDomain: true },
+    { isMultiWorkspaceEnabled: false, isDefaultDomain: true },
+  ])(
+    'opens WhatsApp signup without mounting a workspace or login shell: %o',
+    async ({ isMultiWorkspaceEnabled, isDefaultDomain }) => {
+      setClientConfigLoaded(true);
+      jotaiStore.set(
+        isMultiWorkspaceEnabledState.atom,
+        isMultiWorkspaceEnabled,
+      );
+      isDefaultDomainValue = isDefaultDomain;
+      const signupPath =
+        '/whatsapp/embedded-signup?workspaceOrigin=https%3A%2F%2Ftest-account.leapcrm.tech';
+      window.history.pushState({}, '', signupPath);
+
+      renderShell();
+
+      expect(
+        await screen.findByRole('heading', {
+          name: 'Connect WhatsApp to LeapCRM',
+        }),
+      ).toBeInTheDocument();
+      expect(screen.queryByText('ROOT_APP')).not.toBeInTheDocument();
+      expect(screen.queryByText('WORKSPACE_APP')).not.toBeInTheDocument();
+      expect(window.location.pathname + window.location.search).toBe(
+        signupPath,
+      );
+    },
+  );
+
+  it('does not bypass workspace routing for other WhatsApp paths', () => {
+    setClientConfigLoaded(true);
+    jotaiStore.set(isMultiWorkspaceEnabledState.atom, true);
+    isDefaultDomainValue = false;
+    window.history.pushState({}, '', '/whatsapp/embedded-signup/other');
+
+    renderShell();
+
+    expect(screen.getByText('WORKSPACE_APP')).toBeInTheDocument();
   });
 
   it('mounts the workspace app directly in single-workspace mode', () => {

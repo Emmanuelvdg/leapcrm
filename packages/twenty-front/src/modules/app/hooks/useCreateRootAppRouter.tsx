@@ -28,24 +28,10 @@ const PasswordReset = lazy(() =>
   })),
 );
 
-const WhatsappEmbeddedSignup = lazy(() =>
-  import('~/pages/whatsapp/WhatsappEmbeddedSignup').then((module) => ({
-    default: module.WhatsappEmbeddedSignup,
-  })),
-);
-
 const createRootAppRouter = () =>
   createBrowserRouter(
     createRoutesFromElements(
       <Route element={<RootAppProviders />} loader={async () => null}>
-        <Route
-          path="/whatsapp/embedded-signup"
-          element={
-            <LazyRoute fallback={null}>
-              <WhatsappEmbeddedSignup />
-            </LazyRoute>
-          }
-        />
         <Route element={<BlankLayout />}>
           <Route element={<OnboardingTransitionOutlet />}>
             <Route
