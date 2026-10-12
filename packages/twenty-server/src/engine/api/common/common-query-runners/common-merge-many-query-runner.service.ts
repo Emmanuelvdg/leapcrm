@@ -32,6 +32,7 @@ import {
 } from 'src/engine/api/common/types/common-query-args.type';
 import { buildColumnsToReturn } from 'src/engine/api/graphql/graphql-query-runner/utils/build-columns-to-return';
 import { buildColumnsToSelect } from 'src/engine/api/graphql/graphql-query-runner/utils/build-columns-to-select';
+import { clearSelfRelationsToMergedRecords } from 'src/engine/api/graphql/graphql-query-runner/utils/clear-self-relations-to-merged-records.util';
 import { hasRecordFieldValue } from 'src/engine/api/graphql/graphql-query-runner/utils/has-record-field-value.util';
 import { mergeFieldValues } from 'src/engine/api/graphql/graphql-query-runner/utils/merge-field-values.util';
 import { WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
@@ -71,13 +72,22 @@ export class CommonMergeManyQueryRunnerService extends CommonBaseQueryRunnerServ
       args.conflictPriorityIndex,
     );
 
-    const mergedData = this.performDeepMerge(
-      recordsToMerge,
-      priorityRecord.id,
-      flatObjectMetadata,
-      flatFieldMetadataMaps,
-      args.dryRun ?? false,
-    );
+    const mergedData = clearSelfRelationsToMergedRecords({
+      mergedData: this.performDeepMerge(
+        recordsToMerge,
+        priorityRecord.id,
+        flatObjectMetadata,
+        flatFieldMetadataMaps,
+        args.dryRun ?? false,
+      ),
+      mergedRecordIds: args.ids,
+      selfRelationJoinColumnNames:
+        this.getRelationFieldsPointingToCurrentObject(queryRunnerContext)
+          .filter(
+            ({ objectMetadata }) => objectMetadata.id === flatObjectMetadata.id,
+          )
+          .map(({ joinColumnName }) => joinColumnName),
+    });
 
     if (args.dryRun) {
       return this.createDryRunResponse(priorityRecord, mergedData);
