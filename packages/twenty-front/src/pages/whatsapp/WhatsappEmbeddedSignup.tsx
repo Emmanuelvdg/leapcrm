@@ -186,7 +186,7 @@ export const WhatsappEmbeddedSignup = () => {
         config_id: whatsappEmbeddedSignupConfigId,
         response_type: 'code',
         override_default_response_type: true,
-        extras: { setup: {} },
+        extras: { version: 'v4' },
       },
     );
   };
