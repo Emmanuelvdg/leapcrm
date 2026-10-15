@@ -3,7 +3,7 @@
   "name": "Leap CRM",
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#29a383",
+  "theme_color": "#0037f6",
   "background_color": "#ffffff",
   "icons": [
     {

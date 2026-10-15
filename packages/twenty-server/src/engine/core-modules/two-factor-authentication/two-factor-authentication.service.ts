@@ -115,7 +115,7 @@ export class TwoFactorAuthenticationService {
         workspaceId,
       });
 
-      const issuer = `LeapCRM${workspaceDisplayName ? ` - ${workspaceDisplayName}` : ''}`;
+      const issuer = `Leap CRM${workspaceDisplayName ? ` - ${workspaceDisplayName}` : ''}`;
       const reuseUri = authenticator.keyuri(userEmail, issuer, existingSecret);
 
       return reuseUri;
@@ -125,7 +125,7 @@ export class TwoFactorAuthenticationService {
       TOTP_DEFAULT_CONFIGURATION,
     ).initiate(
       userEmail,
-      `LeapCRM${workspaceDisplayName ? ` - ${workspaceDisplayName}` : ''}`,
+      `Leap CRM${workspaceDisplayName ? ` - ${workspaceDisplayName}` : ''}`,
     );
 
     const encryptedSecret = this.secretEncryptionService.encryptVersioned(

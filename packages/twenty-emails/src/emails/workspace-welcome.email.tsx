@@ -31,7 +31,7 @@ export const WorkspaceWelcomeEmail = ({
 
   return (
     <BaseEmail width={333} locale={locale}>
-      <Title value={i18n._('Welcome to LeapCRM')} />
+      <Title value={i18n._('Welcome to Leap CRM')} />
       <MainText>
         {userFirstName?.length > 1 ? (
           <Trans id="Hi {userFirstName}," values={{ userFirstName }} />
@@ -41,7 +41,7 @@ export const WorkspaceWelcomeEmail = ({
         <br />
         <br />
         <Trans
-          id="Welcome to LeapCRM! Your workspace, <0>{workspaceDisplayName}</0>, is ready to go."
+          id="Welcome to Leap CRM! Your workspace, <0>{workspaceDisplayName}</0>, is ready to go."
           values={{ workspaceDisplayName }}
           components={{ 0: <b /> }}
         />

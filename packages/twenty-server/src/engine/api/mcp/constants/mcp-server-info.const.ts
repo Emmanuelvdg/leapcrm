@@ -1,4 +1,4 @@
 export const MCP_SERVER_INFO = {
-  name: 'LeapCRM MCP Server',
+  name: 'Leap CRM MCP server',
   version: '0.1.0',
 };

@@ -41,14 +41,14 @@ export const useHandleCheckoutSession = ({
       });
       if (!data?.checkoutSession.url) {
         enqueueErrorSnackBar({
-          message: t`Checkout session error. Please retry or contact LeapCRM team`,
+          message: t`Checkout session error. Please retry or contact the Leap team`,
         });
         return;
       }
       redirect(data.checkoutSession.url);
     } catch {
       enqueueErrorSnackBar({
-        message: t`Checkout session error. Please retry or contact LeapCRM team`,
+        message: t`Checkout session error. Please retry or contact the Leap team`,
       });
     } finally {
       setIsSubmitting(false);

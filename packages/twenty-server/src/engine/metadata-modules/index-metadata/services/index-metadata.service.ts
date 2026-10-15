@@ -348,7 +348,7 @@ export class IndexMetadataService {
         `Index ${id} is a system index and cannot be deleted`,
         IndexMetadataExceptionCode.CANNOT_DELETE_SYSTEM_INDEX,
         {
-          userFriendlyMessage: msg`System indexes are required for LeapCRM to work and cannot be deleted.`,
+          userFriendlyMessage: msg`System indexes are required for Leap to work and cannot be deleted.`,
         },
       );
     }

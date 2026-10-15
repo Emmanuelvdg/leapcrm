@@ -13,9 +13,9 @@ export const buildMcpServerCard = ({
     'https://static.modelcontextprotocol.io/schemas/v1/server-card.schema.json',
   name: 'com.theleapcrm/leapcrm',
   version,
-  title: 'LeapCRM',
+  title: 'Leap CRM',
   description:
-    'Read and write your LeapCRM data - companies, people, opportunities, tasks, notes and any custom objects - from AI assistants. Tools are discovered at runtime and scoped to the authenticated workspace.',
+    'Read and write your Leap data - companies, people, opportunities, tasks, notes and any custom objects - from AI assistants. Tools are discovered at runtime and scoped to the authenticated workspace.',
   websiteUrl: 'https://theleapcrm.com',
   remotes: [
     {

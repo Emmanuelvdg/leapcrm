@@ -12,7 +12,7 @@ export const WhatIsLeap = ({ i18n }: WhatIsLeapProps) => {
       <SubTitle value={i18n._('What is Leap CRM?')} />
       <MainText>
         {i18n._(
-          "It's a CRM, a software to help businesses manage their customer data and relationships efficiently.",
+          'Leap keeps every customer conversation in one place and tells you the next move.',
         )}
       </MainText>
     </>

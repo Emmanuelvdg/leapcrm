@@ -47,7 +47,7 @@ describe('getTimelineActivityAuthorFullName', () => {
     expect(result).toBe('Jane Smith');
   });
 
-  it('should return "LeapCRM" if the workspace member is not defined', () => {
+  it('should return "Leap" if the workspace member is not defined', () => {
     const event = {};
     const currentWorkspaceMember = {
       id: '123',
@@ -58,6 +58,6 @@ describe('getTimelineActivityAuthorFullName', () => {
       currentWorkspaceMember as CurrentWorkspaceMember,
     );
 
-    expect(result).toBe('LeapCRM');
+    expect(result).toBe('Leap');
   });
 });

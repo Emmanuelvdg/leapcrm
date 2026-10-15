@@ -405,7 +405,7 @@ export class WorkspaceInvitationService {
           plainText: true,
         });
 
-        const joinTeamMsg = msg`Join your team on LeapCRM`;
+        const joinTeamMsg = msg`Join your team on Leap CRM`;
         const i18n = this.i18nService.getI18nInstance(sender.locale);
         const subject = i18n._(joinTeamMsg);
 

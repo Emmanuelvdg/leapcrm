@@ -6436,10 +6436,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/poppins@npm:^5.2.5":
+"@fontsource/sora@npm:^5.2.5":
   version: 5.3.0
-  resolution: "@fontsource/poppins@npm:5.3.0"
-  checksum: 10c0/869fe85c618645a84f4ff331fd61b3fd856a6df15a42fff21c311b599a81104541f7402feccb3446ad50ddd73cfea20bd9191e9cfa533a382ec68d9ba1093038
+  resolution: "@fontsource/sora@npm:5.3.0"
+  checksum: 10c0/001b30c96ba3db20000a22e966b0f590e1886e1e6aa1fd3c36a4f3b89c039abed47c2da7d37340234b51dced45da8ad2671b353afff30f160939f4fea83bc6f4
   languageName: node
   linkType: hard
 
@@ -50239,7 +50239,7 @@ __metadata:
     "@fontsource/dm-mono": "npm:^5.2.7"
     "@fontsource/fraunces": "npm:^5.3.0"
     "@fontsource/inter": "npm:^5.2.8"
-    "@fontsource/poppins": "npm:^5.2.5"
+    "@fontsource/sora": "npm:^5.2.5"
     "@graphiql/plugin-explorer": "npm:^5.1.2"
     "@graphiql/react": "npm:^0.37.6"
     "@graphql-codegen/cli": "npm:^6.3.1"

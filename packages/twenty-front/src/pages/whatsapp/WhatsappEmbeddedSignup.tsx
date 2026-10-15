@@ -82,7 +82,9 @@ const getWorkspaceOrigin = () => {
 
 export const WhatsappEmbeddedSignup = () => {
   const whatsappAppId = useAtomStateValue(whatsappAppIdState);
-  const configId = useAtomStateValue(whatsappEmbeddedSignupConfigIdState);
+  const whatsappEmbeddedSignupConfigId = useAtomStateValue(
+    whatsappEmbeddedSignupConfigIdState,
+  );
   const [status, setStatus] = useState<string | null>(null);
   const [isSdkReady, setIsSdkReady] = useState(false);
   const workspaceOrigin = getWorkspaceOrigin();
@@ -116,7 +118,7 @@ export const WhatsappEmbeddedSignup = () => {
     if (
       !workspaceOrigin ||
       !isNonEmptyString(whatsappAppId) ||
-      !isNonEmptyString(configId)
+      !isNonEmptyString(whatsappEmbeddedSignupConfigId)
     ) {
       setStatus(t`This WhatsApp connection link is invalid or not configured.`);
 
@@ -181,7 +183,7 @@ export const WhatsappEmbeddedSignup = () => {
         completeSignup();
       },
       {
-        config_id: configId,
+        config_id: whatsappEmbeddedSignupConfigId,
         response_type: 'code',
         override_default_response_type: true,
         extras: { setup: {} },
@@ -191,7 +193,7 @@ export const WhatsappEmbeddedSignup = () => {
 
   return (
     <main style={{ maxWidth: 480, margin: '15vh auto', padding: 24 }}>
-      <h1>{t`Connect WhatsApp to LeapCRM`}</h1>
+      <h1>{t`Connect WhatsApp to Leap CRM`}</h1>
       <p>{t`Continue to Meta to choose the WhatsApp Business number for your workspace.`}</p>
       <button onClick={startSignup} type="button">
         {isSdkReady ? t`Continue with Meta` : t`Loading Meta...`}

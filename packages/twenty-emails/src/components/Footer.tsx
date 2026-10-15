@@ -43,13 +43,7 @@ export const Footer = ({ i18n }: FooterProps) => {
           </ShadowText>
         </Column>
       </Row>
-      <ShadowText>
-        <>
-          {i18n._('The Leap CRM')}
-          <br />
-          {i18n._('San Francisco / Paris')}
-        </>
-      </ShadowText>
+      <ShadowText>{i18n._('The Leap CRM')}</ShadowText>
     </Container>
   );
 };

@@ -25,7 +25,7 @@ export const useBillingPortalSession = (returnUrlPath: string) => {
 
   const showBillingPortalSessionError = () => {
     enqueueErrorSnackBar({
-      message: t`Billing portal session error. Please retry or contact LeapCRM team`,
+      message: t`Billing portal session error. Please retry or contact the Leap team`,
     });
   };
 

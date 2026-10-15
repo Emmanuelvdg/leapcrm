@@ -133,7 +133,7 @@ describe('SignInUpGlobalScopeForm', () => {
     expect(resetPasswordClickMock).toHaveBeenCalledTimes(1);
   });
 
-  it('offers ChatGPT sign-up next to the LeapCRM account form when enabled', () => {
+  it('offers ChatGPT sign-up next to the Leap CRM account form when enabled', () => {
     jotaiStore.set(signInUpStepState.atom, SignInUpStep.Init);
     jotaiStore.set(authProvidersState.atom, {
       google: false,
@@ -150,7 +150,7 @@ describe('SignInUpGlobalScopeForm', () => {
     expect(screen.getByText('credentials-form')).toBeInTheDocument();
   });
 
-  it('only offers the LeapCRM account form while ChatGPT sign-in is off', () => {
+  it('only offers the Leap CRM account form while ChatGPT sign-in is off', () => {
     jotaiStore.set(signInUpStepState.atom, SignInUpStep.Init);
     jotaiStore.set(authProvidersState.atom, {
       google: false,

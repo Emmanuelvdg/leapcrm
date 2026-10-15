@@ -1,11 +1,11 @@
 import { t } from '@lingui/core/macro';
 
 export const getStandardApplicationDescription =
-  (): string => t`The base data model every LeapCRM workspace runs on.
+  (): string => t`The base data model every Leap workspace runs on.
 
 #### What "foundation" means
 
-Every LeapCRM workspace starts with this set of objects. They define the shape of your CRM, including relationships, activity, and reporting. Everything else, including marketplace apps, AI agents, and custom objects, plugs into them.
+Every Leap workspace starts with this set of objects. They define the shape of your CRM, including relationships, activity, and reporting. Everything else, including marketplace apps, AI agents, and custom objects, plugs into them.
 
 #### Included objects
 - **People & Companies**: contact and account records
@@ -13,11 +13,11 @@ Every LeapCRM workspace starts with this set of objects. They define the shape o
 - **Notes & Tasks**: activity and follow-ups
 - **Workflows & Dashboards**: automation and reporting
 
-Remove this app and the rest of LeapCRM has nothing to hang off.
+Remove this app and the rest of Leap has nothing to hang off.
 
 #### Build your own app
 
-Extend LeapCRM with your own objects, fields, logic functions, or AI skills. Scaffold a new app in one command:
+Extend Leap with your own objects, fields, logic functions, or AI skills. Scaffold a new app in one command:
 
 \`\`\`bash
 npx create-twenty-app@latest my-twenty-app

@@ -6,8 +6,8 @@ import { migrateTokenPairCookieToLocalStorage } from '@/auth/utils/migrateTokenP
 import { hydrateMetadataStore } from '@/metadata-store/storage/metadataStoreStorage';
 import '@fontsource/dm-mono/400.css';
 import '@fontsource/dm-mono/500.css';
-import '@fontsource/poppins/600.css';
-import '@fontsource/poppins/700.css';
+import '@fontsource/sora/600.css';
+import '@fontsource/sora/700.css';
 import '@fontsource/inter/400.css';
 import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';

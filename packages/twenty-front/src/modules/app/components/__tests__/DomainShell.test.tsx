@@ -38,7 +38,7 @@ jest.mock('~/loading/components/PageContentSkeletonLoader', () => ({
 }));
 
 jest.mock('~/pages/whatsapp/WhatsappEmbeddedSignup', () => ({
-  WhatsappEmbeddedSignup: () => <h1>Connect WhatsApp to LeapCRM</h1>,
+  WhatsappEmbeddedSignup: () => <h1>Connect WhatsApp to Leap CRM</h1>,
 }));
 
 jest.mock('@/app/components/RootApp', () => ({
@@ -126,7 +126,7 @@ describe('DomainShell', () => {
 
       expect(
         await screen.findByRole('heading', {
-          name: 'Connect WhatsApp to LeapCRM',
+          name: 'Connect WhatsApp to Leap CRM',
         }),
       ).toBeInTheDocument();
       expect(screen.queryByText('ROOT_APP')).not.toBeInTheDocument();

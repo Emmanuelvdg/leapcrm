@@ -499,7 +499,7 @@ export class WorkspaceService {
     const text = await renderEmail(emailTemplate, { plainText: true });
 
     const i18n = this.i18nService.getI18nInstance(user.locale);
-    const subject = i18n._(msg`Welcome to LeapCRM`);
+    const subject = i18n._(msg`Welcome to Leap CRM`);
 
     await this.emailService.send({
       from: `${this.twentyConfigService.get('EMAIL_FROM_NAME')} <${this.twentyConfigService.get('EMAIL_FROM_ADDRESS')}>`,
@@ -532,32 +532,29 @@ export class WorkspaceService {
 
     const authContext = buildSystemAuthContext(platformOpsWorkspaceId);
 
-    await this.globalWorkspaceOrmManager.executeInWorkspaceContext(
-      async () => {
-        const companyRepository =
-          await this.globalWorkspaceOrmManager.getRepository(
-            platformOpsWorkspaceId,
-            CompanyWorkspaceEntity,
-            { shouldBypassPermissionChecks: true },
-          );
+    await this.globalWorkspaceOrmManager.executeInWorkspaceContext(async () => {
+      const companyRepository =
+        await this.globalWorkspaceOrmManager.getRepository(
+          platformOpsWorkspaceId,
+          CompanyWorkspaceEntity,
+          { shouldBypassPermissionChecks: true },
+        );
 
-        const lastPosition =
-          (await companyRepository.maximum('position', undefined)) ?? 0;
+      const lastPosition =
+        (await companyRepository.maximum('position', undefined)) ?? 0;
 
-        await companyRepository.save({
-          name: workspace.displayName,
-          domainName: { primaryLinkUrl: link.toString() },
-          position: lastPosition + 1,
-          createdBy: {
-            source: FieldActorSource.SYSTEM,
-            workspaceMemberId: null,
-            name: 'LeapCRM',
-            context: {},
-          },
-        });
-      },
-      authContext,
-    );
+      await companyRepository.save({
+        name: workspace.displayName,
+        domainName: { primaryLinkUrl: link.toString() },
+        position: lastPosition + 1,
+        createdBy: {
+          source: FieldActorSource.SYSTEM,
+          workspaceMemberId: null,
+          name: 'Leap',
+          context: {},
+        },
+      });
+    }, authContext);
   }
 
   private async activateAndInitializeUpgradeState({

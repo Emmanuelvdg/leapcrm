@@ -102,7 +102,7 @@ export class EmailVerificationService {
     const emailVerificationMsg =
       verificationTrigger === EmailVerificationTrigger.EMAIL_UPDATE
         ? msg`Please confirm your updated email`
-        : msg`Welcome to LeapCRM: Please Confirm Your Email`;
+        : msg`Welcome to Leap CRM: please confirm your email`;
     const i18n = this.i18nService.getI18nInstance(locale);
     const subject = i18n._(emailVerificationMsg);
 
