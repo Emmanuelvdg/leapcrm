@@ -38,16 +38,13 @@
 .button[data-variant='primary'] {
   --main-button-bg: var(--t-accent-accent9);
   --main-button-border-color: var(--t-background-transparent-strong);
-  --main-button-color: var(--t-font-color-inverted);
+  --main-button-color: var(--t-brand-on-blue);
   --main-button-hover-bg: var(--t-accent-accent10);
-  // MainButton only ever renders full-width on auth/onboarding screens, never
-  // in a dense toolbar, so pill-shaping the primary CTA is safe here.
-  border-radius: var(--t-border-radius-pill);
 }
 
 .button[data-variant='secondary'] {
   --main-button-bg: var(--t-background-primary);
-  --main-button-border-color: var(--t-border-color-medium);
+  --main-button-border-color: var(--t-border-color-control);
   --main-button-color: var(--t-font-color-primary);
   --main-button-hover-bg: var(--t-background-tertiary);
 }

@@ -13,6 +13,8 @@ export const BORDER_DARK = {
     danger: COLOR_DARK.red5,
     blue: COLOR_DARK.blue7,
     transparentStrong: TRANSPARENT_COLORS_DARK.gray4,
+    control: 'color(display-p3 0.373 0.407 0.567)',
+    focus: 'color(display-p3 0.575 0.648 0.974)',
   },
   ...BORDER_COMMON,
 };

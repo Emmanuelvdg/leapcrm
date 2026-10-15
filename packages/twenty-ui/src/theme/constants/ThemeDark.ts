@@ -1,4 +1,5 @@
 import { BLUR_DARK } from '@ui/theme/constants/BlurDark';
+import { BRAND_DARK } from '@ui/theme/constants/BrandDark';
 import { ILLUSTRATION_ICON_DARK } from '@ui/theme/constants/IllustrationIconDark';
 import { COLOR_DARK } from './ColorsDark';
 import { GRAY_SCALE_DARK } from './GrayScaleDark';
@@ -20,6 +21,7 @@ export const THEME_DARK: typeof THEME_LIGHT = {
     background: BACKGROUND_DARK,
     blur: BLUR_DARK,
     border: BORDER_DARK,
+    brand: BRAND_DARK,
     boxShadow: BOX_SHADOW_DARK,
     font: FONT_DARK,
     name: 'dark',

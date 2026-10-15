@@ -1,18 +1,17 @@
-// Same neutrals as stock Twenty, with a faint navy bias nudged into the green
-// and blue channels (proportional to distance from white) so text, borders,
-// and backgrounds read as "one navy-and-blue system" like theleapcrm.com,
-// rather than plain gray plus an unrelated blue accent.
+// Navy-tinted neutrals from the Leap brand kit: gray12 is ink (#000e47),
+// gray11 is ink-muted (#4a5373), gray3 is surface-sunk (#f4f6fb). The text
+// steps (gray8-gray12) stay at 4.5:1 or better on white and surface-sunk.
 export const GRAY_SCALE_LIGHT = {
   gray1: 'color(display-p3 1.000 1.000 1.000)',
-  gray2: 'color(display-p3 0.988 0.988 0.989)',
-  gray3: 'color(display-p3 0.976 0.977 0.978)',
-  gray4: 'color(display-p3 0.945 0.947 0.949)',
-  gray5: 'color(display-p3 0.922 0.924 0.928)',
-  gray6: 'color(display-p3 0.839 0.844 0.852)',
-  gray7: 'color(display-p3 0.800 0.806 0.816)',
-  gray8: 'color(display-p3 0.702 0.711 0.726)',
-  gray9: 'color(display-p3 0.600 0.612 0.632)',
-  gray10: 'color(display-p3 0.514 0.529 0.553)',
-  gray11: 'color(display-p3 0.400 0.418 0.448)',
-  gray12: 'color(display-p3 0.200 0.224 0.264)',
+  gray2: 'color(display-p3 0.973 0.976 0.987)',
+  gray3: 'color(display-p3 0.958 0.964 0.982)',
+  gray4: 'color(display-p3 0.935 0.945 0.966)',
+  gray5: 'color(display-p3 0.901 0.913 0.946)',
+  gray6: 'color(display-p3 0.839 0.854 0.905)',
+  gray7: 'color(display-p3 0.726 0.744 0.809)',
+  gray8: 'color(display-p3 0.414 0.438 0.555)',
+  gray9: 'color(display-p3 0.379 0.407 0.516)',
+  gray10: 'color(display-p3 0.336 0.364 0.477)',
+  gray11: 'color(display-p3 0.297 0.324 0.441)',
+  gray12: 'color(display-p3 0.010 0.053 0.266)',
 };

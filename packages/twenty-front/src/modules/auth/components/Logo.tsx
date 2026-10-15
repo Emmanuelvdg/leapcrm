@@ -31,17 +31,23 @@ const StyledSecondaryLogo = styled.img`
   width: ${themeCssVariables.spacing[6]};
 `;
 
-const StyledSecondaryLogoContainer = styled.div`
+const StyledSecondaryLogoContainer = styled.div<{ isOnLogoPlate: boolean }>`
   align-items: center;
   background-color: ${themeCssVariables.background.primary};
   border-radius: ${themeCssVariables.border.radius.sm};
-  bottom: calc(-1 * ${themeCssVariables.spacing[3]});
+  bottom: ${({ isOnLogoPlate }) =>
+    isOnLogoPlate
+      ? `calc(-1 * (${themeCssVariables.spacing[4]} + ${themeCssVariables.spacing[3]}))`
+      : `calc(-1 * ${themeCssVariables.spacing[3]})`};
   display: flex;
   height: ${themeCssVariables.spacing[7]};
   justify-content: center;
 
   position: absolute;
-  right: calc(-1 * ${themeCssVariables.spacing[3]});
+  right: ${({ isOnLogoPlate }) =>
+    isOnLogoPlate
+      ? `calc(-1 * (${themeCssVariables.spacing[4]} + ${themeCssVariables.spacing[3]}))`
+      : `calc(-1 * ${themeCssVariables.spacing[3]})`};
   width: ${themeCssVariables.spacing[7]};
 `;
 
@@ -50,6 +56,18 @@ const StyledPrimaryLogo = styled.div`
   background-repeat: no-repeat;
   background-size: contain;
   height: 100%;
+  width: 100%;
+`;
+
+// The default wordmark is a PNG on a white ground, so it gets a white plate
+// with clear space rather than a visible white box on tinted or dark pages.
+const StyledLogoPlate = styled.div`
+  background-color: ${themeCssVariables.brand.logoPlate};
+  border-radius: ${themeCssVariables.border.radius.md};
+  box-sizing: content-box;
+  height: 100%;
+  margin: calc(-1 * ${themeCssVariables.spacing[4]});
+  padding: ${themeCssVariables.spacing[4]};
   width: 100%;
 `;
 
@@ -81,9 +99,11 @@ export const Logo = ({
     <StyledContainer onClick={() => onClick?.()}>
       {isUsingDefaultLogo ? (
         <UndecoratedLink to={to} onClick={() => redirectToDefaultDomain()}>
-          <StyledPrimaryLogo
-            style={{ backgroundImage: `url(${primaryLogoUrl})` }}
-          />
+          <StyledLogoPlate>
+            <StyledPrimaryLogo
+              style={{ backgroundImage: `url(${primaryLogoUrl})` }}
+            />
+          </StyledLogoPlate>
         </UndecoratedLink>
       ) : (
         <StyledPrimaryLogo
@@ -91,12 +111,12 @@ export const Logo = ({
         />
       )}
       {isDefined(secondaryLogoUrl) ? (
-        <StyledSecondaryLogoContainer>
+        <StyledSecondaryLogoContainer isOnLogoPlate={isUsingDefaultLogo}>
           <StyledSecondaryLogo src={secondaryLogoUrl} />
         </StyledSecondaryLogoContainer>
       ) : (
         isDefined(placeholder) && (
-          <StyledSecondaryLogoContainer>
+          <StyledSecondaryLogoContainer isOnLogoPlate={isUsingDefaultLogo}>
             <Avatar
               size="lg"
               placeholder={placeholder}

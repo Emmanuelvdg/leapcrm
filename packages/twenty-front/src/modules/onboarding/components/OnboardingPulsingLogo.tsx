@@ -3,9 +3,13 @@ import { themeCssVariables } from 'twenty-ui/theme-constants';
 
 const StyledLogo = styled.img`
   animation: onboardingPulsingLogo 0.8s ease-in-out infinite alternate;
+  background-color: ${themeCssVariables.brand.logoPlate};
+  border-radius: ${themeCssVariables.border.radius.md};
+  box-sizing: content-box;
   height: 40px;
   margin-bottom: ${themeCssVariables.spacing[8]};
   object-fit: contain;
+  padding: ${themeCssVariables.spacing[4]};
   width: 181px;
 
   @keyframes onboardingPulsingLogo {

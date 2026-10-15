@@ -20,6 +20,8 @@ export { BORDER_DARK } from './constants/BorderDark';
 export { BORDER_LIGHT } from './constants/BorderLight';
 export { BOX_SHADOW_DARK } from './constants/BoxShadowDark';
 export { BOX_SHADOW_LIGHT } from './constants/BoxShadowLight';
+export { BRAND_DARK } from './constants/BrandDark';
+export { BRAND_LIGHT } from './constants/BrandLight';
 export { CODE_DARK } from './constants/CodeDark';
 export { CODE_LIGHT } from './constants/CodeLight';
 export { COLOR_DARK } from './constants/ColorsDark';

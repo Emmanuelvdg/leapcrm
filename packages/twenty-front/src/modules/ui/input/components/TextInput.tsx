@@ -50,7 +50,7 @@ type StyledAdornmentContainerProps = {
 const StyledAdornmentContainer = styled.div<StyledAdornmentContainerProps>`
   align-items: center;
   background-color: ${themeCssVariables.background.transparent.light};
-  border: 1px solid ${themeCssVariables.border.color.medium};
+  border: 1px solid ${themeCssVariables.border.color.control};
   border-left-style: ${({ position }) =>
     position === 'right' ? 'none' : 'solid'};
   border-radius: ${({ position }) =>
@@ -106,7 +106,7 @@ const StyledInput = styled.input<
     ${({ error }) =>
       error
         ? themeCssVariables.border.color.danger
-        : themeCssVariables.border.color.medium};
+        : themeCssVariables.border.color.control};
 
   border-radius: ${({ leftAdornment, rightAdornment }) =>
     leftAdornment

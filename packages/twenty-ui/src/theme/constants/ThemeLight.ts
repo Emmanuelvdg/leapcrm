@@ -1,4 +1,5 @@
 import { BLUR_LIGHT } from '@ui/theme/constants/BlurLight';
+import { BRAND_LIGHT } from '@ui/theme/constants/BrandLight';
 import { COLOR_LIGHT } from '@ui/theme/constants/ColorsLight';
 import { GRAY_SCALE_LIGHT } from '@ui/theme/constants/GrayScaleLight';
 import { ILLUSTRATION_ICON_LIGHT } from '@ui/theme/constants/IllustrationIconLight';
@@ -19,6 +20,7 @@ export const THEME_LIGHT = {
     background: BACKGROUND_LIGHT,
     blur: BLUR_LIGHT,
     border: BORDER_LIGHT,
+    brand: BRAND_LIGHT,
     boxShadow: BOX_SHADOW_LIGHT,
     font: FONT_LIGHT,
     name: 'light',
