@@ -31,10 +31,10 @@
   // active wins over disabled, matching the legacy Linaria ternary
   // (active ? primary : disabled ? light : secondary)
   &[data-active] {
-    color: var(--t-font-color-primary);
+    color: var(--t-brand-leap-blue-text);
 
     &::after {
-      background-color: var(--t-border-color-inverted);
+      background-color: var(--t-brand-leap-blue-text);
     }
   }
 }
@@ -66,10 +66,10 @@
   }
 
   &[data-active] {
-    color: var(--t-font-color-primary);
+    color: var(--t-brand-leap-blue-text);
 
     &::after {
-      background-color: var(--t-border-color-inverted);
+      background-color: var(--t-brand-leap-blue-text);
     }
   }
 }

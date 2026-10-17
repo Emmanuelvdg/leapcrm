@@ -18,7 +18,7 @@ export const ACCENT_DARK = {
   primary: LEAP_BLUE_DARK.blue5,
   secondary: LEAP_BLUE_DARK.blue5,
   tertiary: LEAP_BLUE_DARK.blue3,
-  quaternary: LEAP_BLUE_DARK.blue2,
+  quaternary: 'color(display-p3 0.111 0.144 0.303)',
   accent3570: LEAP_BLUE_DARK.blue8,
   accent4060: LEAP_BLUE_DARK.blue8,
   accent1: LEAP_BLUE_DARK.blue1,

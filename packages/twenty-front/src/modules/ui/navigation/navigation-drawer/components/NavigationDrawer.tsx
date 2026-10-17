@@ -9,6 +9,7 @@ import { NAVIGATION_DRAWER_COLLAPSED_WIDTH } from '@/ui/layout/resizable-panel/c
 import { NAVIGATION_DRAWER_CONSTRAINTS } from '@/ui/layout/resizable-panel/constants/NavigationDrawerConstraints';
 import { NavigationDrawerWidthEffect } from '@/ui/navigation/components/NavigationDrawerWidthEffect';
 import { NAVIGATION_DRAWER_CLICK_OUTSIDE_ID } from '@/ui/navigation/navigation-drawer/constants/NavigationDrawerClickOutsideId';
+import { NAVIGATION_DRAWER_THEME_OVERRIDES } from '@/ui/navigation/navigation-drawer/constants/NavigationDrawerThemeOverrides';
 import { isNavigationDrawerExpandedState } from '@/ui/navigation/states/isNavigationDrawerExpanded';
 import { navigationDrawerActiveTabState } from '@/ui/navigation/states/navigationDrawerActiveTabState';
 import { NAVIGATION_DRAWER_TABS } from '@/ui/navigation/states/navigationDrawerTabs';
@@ -19,7 +20,11 @@ import {
 import { useIsMobile } from '@/ui/utilities/responsive/hooks/useIsMobile';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
-import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme-constants';
+import {
+  MOBILE_VIEWPORT,
+  ThemeProvider,
+  themeCssVariables,
+} from 'twenty-ui/theme-constants';
 import { NavigationDrawerBackButton } from './NavigationDrawerBackButton';
 import { NavigationDrawerHeader } from './NavigationDrawerHeader';
 
@@ -33,6 +38,7 @@ const StyledAnimatedContainer = styled.div<{
   isExpanded: boolean;
   isResizing: boolean;
 }>`
+  background: ${themeCssVariables.background.secondary};
   height: 100%;
   max-height: 100%;
   overflow: hidden;
@@ -115,34 +121,40 @@ export const NavigationDrawer = ({
   return (
     <>
       <NavigationDrawerWidthEffect />
-      <StyledAnimatedContainer
-        className={className}
-        data-click-outside-id={NAVIGATION_DRAWER_CLICK_OUTSIDE_ID}
-        isExpanded={isExpanded}
-        isResizing={isResizing}
+      <ThemeProvider
+        colorScheme="dark"
+        applyToRoot={false}
+        overrides={NAVIGATION_DRAWER_THEME_OVERRIDES}
       >
-        <StyledContainer isExpanded={isExpanded}>
-          {!isMobile && isSettingsDrawer && title ? (
-            <NavigationDrawerBackButton title={title} />
-          ) : (
-            <NavigationDrawerHeader showCollapseButton />
-          )}
-          {children}
-        </StyledContainer>
+        <StyledAnimatedContainer
+          className={className}
+          data-click-outside-id={NAVIGATION_DRAWER_CLICK_OUTSIDE_ID}
+          isExpanded={isExpanded}
+          isResizing={isResizing}
+        >
+          <StyledContainer isExpanded={isExpanded}>
+            {!isMobile && isSettingsDrawer && title ? (
+              <NavigationDrawerBackButton title={title} />
+            ) : (
+              <NavigationDrawerHeader showCollapseButton />
+            )}
+            {children}
+          </StyledContainer>
 
-        {isNavigationDrawerExpanded && !isMobile && !isSettingsDrawer && (
-          <ResizablePanelEdge
-            side="right"
-            constraints={NAVIGATION_DRAWER_CONSTRAINTS}
-            currentWidth={navigationDrawerWidth}
-            onWidthChange={handleWidthChange}
-            onCollapse={handleCollapse}
-            showHandle={false}
-            cssVariableName={NAVIGATION_DRAWER_WIDTH_VAR}
-            onResizeStart={handleResizeStart}
-          />
-        )}
-      </StyledAnimatedContainer>
+          {isNavigationDrawerExpanded && !isMobile && !isSettingsDrawer && (
+            <ResizablePanelEdge
+              side="right"
+              constraints={NAVIGATION_DRAWER_CONSTRAINTS}
+              currentWidth={navigationDrawerWidth}
+              onWidthChange={handleWidthChange}
+              onCollapse={handleCollapse}
+              showHandle={false}
+              cssVariableName={NAVIGATION_DRAWER_WIDTH_VAR}
+              onResizeStart={handleResizeStart}
+            />
+          )}
+        </StyledAnimatedContainer>
+      </ThemeProvider>
     </>
   );
 };

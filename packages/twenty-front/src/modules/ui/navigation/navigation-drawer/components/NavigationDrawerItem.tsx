@@ -83,7 +83,7 @@ type StyledItemProps = Pick<
 const StyledItem = styled.button<StyledItemProps>`
   align-items: center;
   background: ${({ active }) =>
-    active ? themeCssVariables.background.transparent.light : 'transparent'};
+    active ? themeCssVariables.brand.leapBlue : 'transparent'};
   border: ${({ isSelectedInEditMode }) =>
     isSelectedInEditMode
       ? `1px solid ${themeCssVariables.color.blue}`
@@ -95,7 +95,7 @@ const StyledItem = styled.button<StyledItemProps>`
       return themeCssVariables.font.color.tertiary;
     }
     if (active === true) {
-      return themeCssVariables.font.color.primary;
+      return themeCssVariables.brand.onBlue;
     }
     if (isSoon) {
       return themeCssVariables.font.color.light;
@@ -127,11 +127,16 @@ const StyledItem = styled.button<StyledItemProps>`
       : `calc(100% - ${themeCssVariables.spacing['1.5']} + ${themeCssVariables.spacing[1]} + ${hasRightOptions ? themeCssVariables.spacing['0.5'] : themeCssVariables.spacing[1]})`};
 
   &:hover {
-    background: ${themeCssVariables.background.transparent.light};
-    color: ${({ variant }) =>
-      variant === 'tertiary'
-        ? themeCssVariables.font.color.tertiary
-        : themeCssVariables.font.color.primary};
+    background: ${({ active }) =>
+      active
+        ? themeCssVariables.brand.leapBlue
+        : themeCssVariables.background.transparent.light};
+    color: ${({ active, variant }) =>
+      active
+        ? themeCssVariables.brand.onBlue
+        : variant === 'tertiary'
+          ? themeCssVariables.font.color.tertiary
+          : themeCssVariables.font.color.primary};
   }
 
   &:hover .keyboard-shortcuts {

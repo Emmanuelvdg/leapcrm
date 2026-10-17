@@ -21,7 +21,8 @@ export const ACCENT_LIGHT = {
   primary: LEAP_BLUE_LIGHT.blue5,
   secondary: LEAP_BLUE_LIGHT.blue5,
   tertiary: LEAP_BLUE_LIGHT.blue3,
-  quaternary: LEAP_BLUE_LIGHT.blue2,
+  // Brand blue-tint (#e8edff): selected rows stay readable as selected.
+  quaternary: 'color(display-p3 0.913 0.929 0.994)',
   accent3570: LEAP_BLUE_LIGHT.blue8,
   accent4060: LEAP_BLUE_LIGHT.blue8,
   accent1: LEAP_BLUE_LIGHT.blue1,

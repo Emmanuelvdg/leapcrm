@@ -22,6 +22,7 @@ import {
   type UseFloatingReturn,
 } from '@floating-ui/react';
 import { useContext, useEffect } from 'react';
+import { useThemeContainer } from 'twenty-ui/theme-constants';
 import { type Keys } from 'react-hotkeys-hook';
 import { Key } from 'ts-key-enum';
 
@@ -143,6 +144,9 @@ export const DropdownInternalContainer = ({
 
   const { excludedClickOutsideId } = useContext(ClickOutsideListenerContext);
   const parentClickOutsideId = useContext(ParentClickOutsideIdContext);
+  // Inside a scoped theme (the navy navigation drawer) the menu has to render
+  // within that scope, or it picks up the page theme instead.
+  const themeContainer = useThemeContainer();
 
   return (
     <>
@@ -154,7 +158,7 @@ export const DropdownInternalContainer = ({
         />
       )}
 
-      <FloatingPortal>
+      <FloatingPortal root={themeContainer}>
         <StyledDropdownContentContainer
           ref={floatingUiRefs.setFloating}
           style={dropdownMenuStyles}

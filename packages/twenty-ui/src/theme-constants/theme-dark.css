@@ -74,7 +74,7 @@
   --t-accent-primary: color(display-p3 0.084 0.203 0.538);
   --t-accent-secondary: color(display-p3 0.084 0.203 0.538);
   --t-accent-tertiary: color(display-p3 0.082 0.133 0.324);
-  --t-accent-quaternary: color(display-p3 0.074 0.091 0.169);
+  --t-accent-quaternary: color(display-p3 0.111 0.144 0.303);
   --t-accent-accent3570: color(display-p3 0.250 0.379 0.855);
   --t-accent-accent4060: color(display-p3 0.250 0.379 0.855);
   --t-accent-accent1: color(display-p3 0.058 0.076 0.141);
@@ -195,7 +195,7 @@
   --t-snack-bar-error-background-color: #ff173f2d;
   --t-snack-bar-warning-color: color(display-p3 0.9 0.45 0.2);
   --t-snack-bar-warning-background-color: #ff590039;
-  --t-snack-bar-info-color: color(display-p3 0.276 0.384 0.837);
+  --t-snack-bar-info-color: color(display-p3 0.226 0.353 0.963);
   --t-snack-bar-info-background-color: #3566ff57;
   --t-snack-bar-default-color: color(display-p3 0.935 0.945 0.977);
   --t-snack-bar-default-background-color: color(display-p3 1 1 1 / 0.059);
@@ -296,7 +296,7 @@
   --t-color-turquoise: color(display-p3 0.297 0.637 0.581);
   --t-color-cyan: color(display-p3 0.282 0.627 0.765);
   --t-color-sky: color(display-p3 0.585 0.877 0.983);
-  --t-color-blue: color(display-p3 0.276 0.384 0.837);
+  --t-color-blue: color(display-p3 0.226 0.353 0.963);
   --t-color-iris: color(display-p3 0.357 0.357 0.81);
   --t-color-violet: color(display-p3 0.417 0.341 0.784);
   --t-color-purple: color(display-p3 0.523 0.318 0.751);
