@@ -13,6 +13,7 @@ import {
   IconMail,
   IconSparkles,
   IconTable,
+  IconTargetArrow,
   IconUser,
 } from 'twenty-ui/icon';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
@@ -155,6 +156,16 @@ export const useActionRolePermissionFlagConfig = ({
         Icon: IconTable,
         isToolPermission: true,
         isRelevantForAgents: true,
+        isRelevantForApiKeys: true,
+        isRelevantForUsers: true,
+      },
+      {
+        key: PermissionFlagType.PROSPECTING,
+        name: t`Prospecting`,
+        description: t`Run prospecting campaigns to discover new companies`,
+        Icon: IconTargetArrow,
+        isToolPermission: true,
+        isRelevantForAgents: false,
         isRelevantForApiKeys: true,
         isRelevantForUsers: true,
       },

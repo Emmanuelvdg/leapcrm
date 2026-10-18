@@ -141,6 +141,7 @@ export class PermissionsService {
         [PermissionFlagType.PROFILE_INFORMATION]: false,
         [PermissionFlagType.MARKETPLACE_APPS]: false,
         [PermissionFlagType.MCP_SERVERS]: false,
+        [PermissionFlagType.PROSPECTING]: false,
       },
       objectsPermissions: {},
     }) as const satisfies UserWorkspacePermissions;

@@ -159,6 +159,11 @@ const STANDARD_PERMISSION_FLAG_METADATA: Record<
     description: 'Connect and manage external MCP servers',
     icon: 'IconPlug',
   },
+  [PermissionFlagType.PROSPECTING]: {
+    label: 'Prospecting',
+    description: 'Run prospecting campaigns to discover new companies',
+    icon: 'IconTargetArrow',
+  },
 };
 
 export const STANDARD_PERMISSION_FLAG_DEFINITIONS: StandardPermissionFlagDefinition[] =
