@@ -76,8 +76,8 @@ Each milestone ends with lint (`npx oxlint` on changed files, since `nx lint:dif
 
 ### 1.6b Hidden shared company directory
 
-- Core tables `globalCompany` and `globalCompanySource` (no `workspaceId`), generated instance command, and `GlobalCompanyDirectoryService` as the only reader and writer.
-- Discovery writes public provider records through the service and links candidates via `globalCompanyId`; the planner queries the directory first for the campaign's criteria and only calls providers for the gap.
+- Core tables `globalCompany` and `globalCompanySource` (no `workspaceId`) and `globalCompanyCandidateLink`, generated instance command, and `GlobalCompanyDirectoryService` as the only reader and writer.
+- Discovery writes public provider records through the service and links candidates through `globalCompanyCandidateLink`, never through a field on the tenant object; the planner queries the directory first for the campaign's criteria and only calls providers for the gap.
 - No tenant-facing surface: no GraphQL, REST, MCP or UI exposure. Operator view, re-verify and quarantine in the admin panel.
 - Acceptance: a company discovered by workspace A from a public source is found for workspace B without a new provider call and is credited to the original source; customer-imported rows, scores and campaigns never appear in the directory; nothing in the tenant API reveals the directory or which workspaces hold a company.
 - Tests: unit tests for upsert precedence and source merging; integration tests across the Apple and YCombinator workspaces for reuse, for exclusion of imported rows, and for the absence of any tenant-facing endpoint.

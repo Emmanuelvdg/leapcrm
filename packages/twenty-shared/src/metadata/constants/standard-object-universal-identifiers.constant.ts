@@ -37,6 +37,8 @@ export const STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS = {
   messageCampaign: '238acb94-dd4c-4036-bc55-19b99d821efd',
   messageParticipant: '20202020-a433-4456-aa2d-fd9cb26b774a',
   messageThread: '20202020-849a-4c3e-84f5-a25a7d802271',
+  prospectingCampaign: '9a90a08a-ce08-421b-8a15-3cd34ff3bba5',
+  prospectCandidate: '295b0988-a0cb-43f5-b978-7e358a9e22c3',
 } as const;
 
 export type StandardObjectWithUniversalIdentifierName =

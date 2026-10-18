@@ -33,6 +33,10 @@ const NAVIGATION_FEATURE_FLAG_GATE_BY_OBJECT_UNIVERSAL_IDENTIFIER: Partial<
     FeatureFlagKey.IS_EMAIL_GROUP_ENABLED,
   [STANDARD_OBJECTS.messageList.universalIdentifier]:
     FeatureFlagKey.IS_EMAIL_GROUP_ENABLED,
+  [STANDARD_OBJECTS.prospectingCampaign.universalIdentifier]:
+    FeatureFlagKey.IS_PROSPECTING_ENABLED,
+  [STANDARD_OBJECTS.prospectCandidate.universalIdentifier]:
+    FeatureFlagKey.IS_PROSPECTING_ENABLED,
 };
 
 export const buildNavigationConditionalAvailabilityExpression = ({

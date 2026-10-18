@@ -7,6 +7,7 @@ import { MigrateCommandMenuItemLabelsToPlaceholdersCommand } from 'src/database/
 import { SyncConversationStandardObjectsCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1789100000000-sync-conversation-standard-objects.command';
 import { AddPersonConversationsTabCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1789782287414-add-person-conversations-tab.command';
 import { BackfillStandardPermissionFlagsCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1792286576249-backfill-standard-permission-flags.command';
+import { SyncProspectingStandardObjectsCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1792290000000-sync-prospecting-standard-objects.command';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
 import { FieldMetadataEntity } from 'src/engine/metadata-modules/field-metadata/field-metadata.entity';
 import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache.module';
@@ -28,6 +29,7 @@ import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace
     SyncConversationStandardObjectsCommand,
     AddPersonConversationsTabCommand,
     BackfillStandardPermissionFlagsCommand,
+    SyncProspectingStandardObjectsCommand,
   ],
 })
 export class V2_33_UpgradeVersionCommandModule {}

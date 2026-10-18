@@ -778,6 +778,9 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
       "position": {
         "universalIdentifier": "a6c6ffb5-1a46-5f3d-b0e3-14c071e3a972",
       },
+      "prospectCandidates": {
+        "universalIdentifier": "73171e21-90a5-4f48-86ca-4718e92629ed",
+      },
       "searchVector": {
         "universalIdentifier": "d043190d-3335-5463-b98d-eecbf7b41c65",
       },
@@ -2537,6 +2540,232 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
           },
           "updatedBy": {
             "universalIdentifier": "8783172f-3146-5a14-9939-81bef3bf4cca",
+          },
+        },
+      },
+    },
+  },
+  "prospectCandidate": {
+    "fields": {
+      "attributes": {
+        "universalIdentifier": "daf20604-967b-4028-9f4d-fc19ae0820a4",
+      },
+      "campaign": {
+        "universalIdentifier": "152b8585-60e4-47e8-96b3-2e13c94493c0",
+      },
+      "country": {
+        "universalIdentifier": "26c915ba-22f2-45d6-a6cb-30eb073bb6b7",
+      },
+      "createdAt": {
+        "universalIdentifier": "ed2bffdf-7e4e-56e3-8907-08facc83d962",
+      },
+      "createdBy": {
+        "universalIdentifier": "5fc55410-255a-5ddc-98c1-89120363a7d6",
+      },
+      "deletedAt": {
+        "universalIdentifier": "19cd23a4-299c-521a-80be-2ad6577fbcdc",
+      },
+      "description": {
+        "universalIdentifier": "43710da5-c862-442e-b600-ff774e03b3d5",
+      },
+      "domain": {
+        "universalIdentifier": "47aa0444-53f8-4146-8ca5-519cd0757a07",
+      },
+      "employeeCount": {
+        "universalIdentifier": "4671c7aa-e849-456c-bf7f-6c713aed2296",
+      },
+      "id": {
+        "universalIdentifier": "60a0e75c-5dd8-5b2b-9405-44e52516de66",
+      },
+      "identityKey": {
+        "universalIdentifier": "d84a134f-d69a-42ad-a65b-f3e5f72d33bb",
+      },
+      "industry": {
+        "universalIdentifier": "8e608d68-9e97-43ab-880f-d05515f1a530",
+      },
+      "industryCode": {
+        "universalIdentifier": "c4eefe4f-ecde-4577-92b0-da53a478f1d5",
+      },
+      "lei": {
+        "universalIdentifier": "3ae70a46-e772-4cf8-968e-b1e25bbae9c1",
+      },
+      "lifecycleStage": {
+        "universalIdentifier": "1171f011-f094-4253-bdf5-b8fe06bfaf9d",
+      },
+      "matchStatus": {
+        "universalIdentifier": "7077aeed-66bf-45b7-8259-f27430a82b62",
+      },
+      "matchedCompany": {
+        "universalIdentifier": "c2b0614d-2c1d-45ac-9096-32c12435ef86",
+      },
+      "name": {
+        "universalIdentifier": "8a1b05db-0f01-4a71-abc8-85db4afa2b57",
+      },
+      "position": {
+        "universalIdentifier": "5309eb04-3f98-5156-927c-cd6d5722d16a",
+      },
+      "region": {
+        "universalIdentifier": "358ceb0f-ec51-4cb3-8d89-8e271ab4e1a5",
+      },
+      "registrationAuthority": {
+        "universalIdentifier": "e97cd9dc-ffa2-4ab9-9d99-b4b458cf9f69",
+      },
+      "registrationNumber": {
+        "universalIdentifier": "c8c7e294-dd54-4a38-9580-0d45bbabd863",
+      },
+      "searchVector": {
+        "universalIdentifier": "f412cf77-d1c3-5183-ba6e-8a59e8eb9acc",
+      },
+      "sources": {
+        "universalIdentifier": "6e670777-89a6-4fe6-b843-c2172f94f765",
+      },
+      "updatedAt": {
+        "universalIdentifier": "2f0bac8a-30dc-533f-85c1-f13494317c89",
+      },
+      "updatedBy": {
+        "universalIdentifier": "a68af648-3557-5dd7-a862-5d856e1edd71",
+      },
+    },
+    "indexes": {
+      "campaignIdIndex": {
+        "universalIdentifier": "84b675c3-63ca-4cdb-a29a-7a4617d2572d",
+      },
+      "campaignIdentityKeyUniqueIndex": {
+        "universalIdentifier": "db680e8c-6dff-4be4-a40c-e180bda8a146",
+      },
+      "matchedCompanyIdIndex": {
+        "universalIdentifier": "173b4965-6c4c-46ae-9a88-0c034cba1578",
+      },
+      "searchVectorGinIndex": {
+        "universalIdentifier": "f5f873ac-cde4-437c-8175-601ea09d716d",
+      },
+    },
+    "universalIdentifier": "295b0988-a0cb-43f5-b978-7e358a9e22c3",
+    "views": {
+      "allProspectCandidates": {
+        "universalIdentifier": "1a535b13-f527-57e9-9e5b-bc7e45389472",
+        "viewFields": {
+          "campaign": {
+            "universalIdentifier": "5b4f6103-d858-560c-bba4-8fe5a29aa4c2",
+          },
+          "country": {
+            "universalIdentifier": "4d2e272c-4a1b-5d93-8055-2e47bef18697",
+          },
+          "domain": {
+            "universalIdentifier": "b0cd1f69-14e4-5f85-be8d-f661a4333d04",
+          },
+          "employeeCount": {
+            "universalIdentifier": "f6fa65b9-bbf8-5eb4-8c29-859c3ea6a936",
+          },
+          "industry": {
+            "universalIdentifier": "c3d11f4e-78ae-5e58-a11d-b6fd0386297f",
+          },
+          "lifecycleStage": {
+            "universalIdentifier": "794e902e-33d4-55b8-865e-9e247a8a0c15",
+          },
+          "matchStatus": {
+            "universalIdentifier": "08720654-3c93-5355-ac02-b1a83be2fc7b",
+          },
+          "matchedCompany": {
+            "universalIdentifier": "15846451-f902-5086-953b-826f64a7f1cc",
+          },
+          "name": {
+            "universalIdentifier": "a1960f34-42a2-5d34-b133-fb7d07d83cc4",
+          },
+          "updatedAt": {
+            "universalIdentifier": "fcb8cc98-0e9d-5f25-92dc-52386ad9e354",
+          },
+        },
+      },
+    },
+  },
+  "prospectingCampaign": {
+    "fields": {
+      "candidates": {
+        "universalIdentifier": "02162a81-dba1-410e-a3ab-6224ec5a854b",
+      },
+      "candidatesFound": {
+        "universalIdentifier": "231db6f4-ce67-4e62-91a1-78a843eca271",
+      },
+      "createdAt": {
+        "universalIdentifier": "7f02b997-e4af-511a-9273-e721ad25aa04",
+      },
+      "createdBy": {
+        "universalIdentifier": "7ba548c4-c9a2-55ef-8b42-2d03ae981910",
+      },
+      "deletedAt": {
+        "universalIdentifier": "1edcea0b-3363-51f2-b249-23c8e84aca29",
+      },
+      "discoverySources": {
+        "universalIdentifier": "fe4c71a5-59b0-4154-9fee-a2a898da5cdc",
+      },
+      "icp": {
+        "universalIdentifier": "a705eb48-add0-4fed-8b0a-1e3d66b660c6",
+      },
+      "icpVersion": {
+        "universalIdentifier": "25a2b957-9ad0-4ef4-9230-899cbafb7953",
+      },
+      "id": {
+        "universalIdentifier": "b48d0a06-4d5d-5b0d-a2ae-7bb964eb3625",
+      },
+      "lastRunAt": {
+        "universalIdentifier": "38f73a75-e98e-42e1-9bb1-c881eefedde0",
+      },
+      "name": {
+        "universalIdentifier": "4f028a7a-8585-4b1e-b4da-33fa8f832f06",
+      },
+      "objective": {
+        "universalIdentifier": "4902f49b-b937-446f-b6c5-c1f230e9fba6",
+      },
+      "position": {
+        "universalIdentifier": "6d4e0c71-cb91-56e5-b408-4137d2593f70",
+      },
+      "searchVector": {
+        "universalIdentifier": "0669f101-949e-54e1-a5b9-cf42942a7514",
+      },
+      "status": {
+        "universalIdentifier": "da800243-49f3-4f43-85a7-3e0752d5431a",
+      },
+      "targetCandidateCount": {
+        "universalIdentifier": "7073b6bd-1993-4078-8219-7620f80a9154",
+      },
+      "updatedAt": {
+        "universalIdentifier": "1cc0b2e8-f7b4-5cda-b868-c81c8917fd0e",
+      },
+      "updatedBy": {
+        "universalIdentifier": "3b3902cc-11bb-569d-87b7-fd2e7755883f",
+      },
+    },
+    "indexes": {
+      "searchVectorGinIndex": {
+        "universalIdentifier": "77fcbb2d-520a-465f-96e1-d906f696cedc",
+      },
+    },
+    "universalIdentifier": "9a90a08a-ce08-421b-8a15-3cd34ff3bba5",
+    "views": {
+      "allProspectingCampaigns": {
+        "universalIdentifier": "1988fea6-56f4-5968-a4f1-dfed7dcb0222",
+        "viewFields": {
+          "candidatesFound": {
+            "universalIdentifier": "e9518346-b5de-50bc-b7f9-f873b51b814f",
+          },
+          "createdAt": {
+            "universalIdentifier": "574a9c66-c2dc-5398-b4a5-e98896c9735f",
+          },
+          "createdBy": {
+            "universalIdentifier": "549fed55-afee-55a3-975b-b472e68f9a51",
+          },
+          "lastRunAt": {
+            "universalIdentifier": "08dae1d9-88da-514d-9546-1e65d6ce6bf0",
+          },
+          "name": {
+            "universalIdentifier": "da64ae21-ea2b-5e32-aee8-faea3890443e",
+          },
+          "status": {
+            "universalIdentifier": "6ed882ad-62f5-5b43-ac7e-a84b45f3bfbe",
+          },
+          "targetCandidateCount": {
+            "universalIdentifier": "a2237fc4-fc3f-5328-82a6-b34624fdc2df",
           },
         },
       },

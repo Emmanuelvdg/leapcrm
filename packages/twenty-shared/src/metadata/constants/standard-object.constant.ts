@@ -870,6 +870,70 @@ export const STANDARD_OBJECTS = {
       }),
     },
   },
+  prospectingCampaign: {
+    universalIdentifier:
+      STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.prospectingCampaign,
+    fields: STANDARD_OBJECT_FIELDS.prospectingCampaign,
+    indexes: {
+      searchVectorGinIndex: {
+        universalIdentifier: '77fcbb2d-520a-465f-96e1-d906f696cedc',
+      },
+    },
+    views: {
+      allProspectingCampaigns: buildStandardObjectIndexView({
+        objectUniversalIdentifier:
+          STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.prospectingCampaign,
+        fields: STANDARD_OBJECT_FIELDS.prospectingCampaign,
+        viewFieldNames: [
+          'name',
+          'status',
+          'candidatesFound',
+          'targetCandidateCount',
+          'lastRunAt',
+          'createdBy',
+          'createdAt',
+        ],
+      }),
+    },
+  },
+  prospectCandidate: {
+    universalIdentifier:
+      STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.prospectCandidate,
+    fields: STANDARD_OBJECT_FIELDS.prospectCandidate,
+    indexes: {
+      campaignIdIndex: {
+        universalIdentifier: '84b675c3-63ca-4cdb-a29a-7a4617d2572d',
+      },
+      matchedCompanyIdIndex: {
+        universalIdentifier: '173b4965-6c4c-46ae-9a88-0c034cba1578',
+      },
+      campaignIdentityKeyUniqueIndex: {
+        universalIdentifier: 'db680e8c-6dff-4be4-a40c-e180bda8a146',
+      },
+      searchVectorGinIndex: {
+        universalIdentifier: 'f5f873ac-cde4-437c-8175-601ea09d716d',
+      },
+    },
+    views: {
+      allProspectCandidates: buildStandardObjectIndexView({
+        objectUniversalIdentifier:
+          STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.prospectCandidate,
+        fields: STANDARD_OBJECT_FIELDS.prospectCandidate,
+        viewFieldNames: [
+          'name',
+          'industry',
+          'country',
+          'employeeCount',
+          'domain',
+          'matchStatus',
+          'lifecycleStage',
+          'matchedCompany',
+          'campaign',
+          'updatedAt',
+        ],
+      }),
+    },
+  },
   person: {
     universalIdentifier: STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.person,
     fields: STANDARD_OBJECT_FIELDS.person,

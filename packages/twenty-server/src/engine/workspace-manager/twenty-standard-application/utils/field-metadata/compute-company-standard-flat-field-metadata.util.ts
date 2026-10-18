@@ -605,4 +605,34 @@ export const buildCompanyStandardFlatFieldMetadatas = ({
     twentyStandardApplicationId,
     now,
   }),
+  prospectCandidates: createStandardRelationFieldFlatMetadata({
+    objectName,
+    workspaceId,
+    context: {
+      type: FieldMetadataType.RELATION,
+      morphId: null,
+      fieldName: 'prospectCandidates',
+      label: i18nLabel(
+        msg({ message: `Prospect candidates`, context: 'fieldMetadata.label' }),
+      ),
+      description: i18nLabel(
+        msg({
+          message: `Prospecting candidates matched to the company.`,
+          context: 'fieldMetadata.description',
+        }),
+      ),
+      icon: 'IconTargetArrow',
+      isNullable: true,
+      isUIEditable: false,
+      targetObjectName: 'prospectCandidate',
+      targetFieldName: 'matchedCompany',
+      settings: {
+        relationType: RelationType.ONE_TO_MANY,
+      },
+    },
+    standardObjectMetadataRelatedEntityIds,
+    dependencyFlatEntityMaps,
+    twentyStandardApplicationId,
+    now,
+  }),
 });

@@ -447,6 +447,71 @@ export const STANDARD_OBJECT_FIELDS = {
     conversations: {
       universalIdentifier: 'ea8cb83e-5098-495c-90c1-7084141fddf4',
     },
+    prospectCandidates: {
+      universalIdentifier: '73171e21-90a5-4f48-86ca-4718e92629ed',
+    },
+  },
+  prospectingCampaign: {
+    ...buildStandardObjectSystemFields(
+      STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.prospectingCampaign,
+    ),
+    name: { universalIdentifier: '4f028a7a-8585-4b1e-b4da-33fa8f832f06' },
+    objective: { universalIdentifier: '4902f49b-b937-446f-b6c5-c1f230e9fba6' },
+    status: { universalIdentifier: 'da800243-49f3-4f43-85a7-3e0752d5431a' },
+    icp: { universalIdentifier: 'a705eb48-add0-4fed-8b0a-1e3d66b660c6' },
+    icpVersion: { universalIdentifier: '25a2b957-9ad0-4ef4-9230-899cbafb7953' },
+    discoverySources: {
+      universalIdentifier: 'fe4c71a5-59b0-4154-9fee-a2a898da5cdc',
+    },
+    targetCandidateCount: {
+      universalIdentifier: '7073b6bd-1993-4078-8219-7620f80a9154',
+    },
+    candidatesFound: {
+      universalIdentifier: '231db6f4-ce67-4e62-91a1-78a843eca271',
+    },
+    lastRunAt: { universalIdentifier: '38f73a75-e98e-42e1-9bb1-c881eefedde0' },
+    candidates: { universalIdentifier: '02162a81-dba1-410e-a3ab-6224ec5a854b' },
+  },
+  prospectCandidate: {
+    ...buildStandardObjectSystemFields(
+      STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.prospectCandidate,
+    ),
+    name: { universalIdentifier: '8a1b05db-0f01-4a71-abc8-85db4afa2b57' },
+    domain: { universalIdentifier: '47aa0444-53f8-4146-8ca5-519cd0757a07' },
+    registrationNumber: {
+      universalIdentifier: 'c8c7e294-dd54-4a38-9580-0d45bbabd863',
+    },
+    registrationAuthority: {
+      universalIdentifier: 'e97cd9dc-ffa2-4ab9-9d99-b4b458cf9f69',
+    },
+    lei: { universalIdentifier: '3ae70a46-e772-4cf8-968e-b1e25bbae9c1' },
+    country: { universalIdentifier: '26c915ba-22f2-45d6-a6cb-30eb073bb6b7' },
+    region: { universalIdentifier: '358ceb0f-ec51-4cb3-8d89-8e271ab4e1a5' },
+    industry: { universalIdentifier: '8e608d68-9e97-43ab-880f-d05515f1a530' },
+    industryCode: {
+      universalIdentifier: 'c4eefe4f-ecde-4577-92b0-da53a478f1d5',
+    },
+    employeeCount: {
+      universalIdentifier: '4671c7aa-e849-456c-bf7f-6c713aed2296',
+    },
+    description: {
+      universalIdentifier: '43710da5-c862-442e-b600-ff774e03b3d5',
+    },
+    lifecycleStage: {
+      universalIdentifier: '1171f011-f094-4253-bdf5-b8fe06bfaf9d',
+    },
+    matchStatus: {
+      universalIdentifier: '7077aeed-66bf-45b7-8259-f27430a82b62',
+    },
+    identityKey: {
+      universalIdentifier: 'd84a134f-d69a-42ad-a65b-f3e5f72d33bb',
+    },
+    sources: { universalIdentifier: '6e670777-89a6-4fe6-b843-c2172f94f765' },
+    attributes: { universalIdentifier: 'daf20604-967b-4028-9f4d-fc19ae0820a4' },
+    campaign: { universalIdentifier: '152b8585-60e4-47e8-96b3-2e13c94493c0' },
+    matchedCompany: {
+      universalIdentifier: 'c2b0614d-2c1d-45ac-9096-32c12435ef86',
+    },
   },
   dashboard: {
     ...buildStandardObjectSystemFields(

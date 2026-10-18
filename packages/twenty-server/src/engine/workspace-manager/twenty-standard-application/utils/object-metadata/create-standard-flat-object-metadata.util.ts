@@ -989,6 +989,96 @@ export const STANDARD_FLAT_OBJECT_METADATA_BUILDERS_BY_OBJECT_NAME = {
       twentyStandardApplicationId,
       now,
     }),
+  prospectingCampaign: ({
+    now,
+    workspaceId,
+    standardObjectMetadataRelatedEntityIds,
+    twentyStandardApplicationId,
+    dependencyFlatEntityMaps,
+  }: Omit<
+    CreateStandardObjectArgs<'prospectingCampaign'>,
+    'context' | 'objectName'
+  >) =>
+    createStandardObjectFlatMetadata({
+      objectName: 'prospectingCampaign',
+      dependencyFlatEntityMaps,
+      context: {
+        universalIdentifier:
+          STANDARD_OBJECTS.prospectingCampaign.universalIdentifier,
+        nameSingular: 'prospectingCampaign',
+        namePlural: 'prospectingCampaigns',
+        labelSingular: i18nLabel(
+          msg({
+            message: `Prospecting Campaign`,
+            context: 'objectMetadata.labelSingular',
+          }),
+        ),
+        labelPlural: i18nLabel(
+          msg({
+            message: `Prospecting Campaigns`,
+            context: 'objectMetadata.labelPlural',
+          }),
+        ),
+        description: i18nLabel(
+          msg({
+            message: `A campaign that discovers companies matching an ideal customer profile`,
+            context: 'objectMetadata.description',
+          }),
+        ),
+        icon: 'IconTargetArrow',
+        isSearchable: true,
+        labelIdentifierFieldMetadataName: 'name',
+      },
+      workspaceId,
+      standardObjectMetadataRelatedEntityIds,
+      twentyStandardApplicationId,
+      now,
+    }),
+  prospectCandidate: ({
+    now,
+    workspaceId,
+    standardObjectMetadataRelatedEntityIds,
+    twentyStandardApplicationId,
+    dependencyFlatEntityMaps,
+  }: Omit<
+    CreateStandardObjectArgs<'prospectCandidate'>,
+    'context' | 'objectName'
+  >) =>
+    createStandardObjectFlatMetadata({
+      objectName: 'prospectCandidate',
+      dependencyFlatEntityMaps,
+      context: {
+        universalIdentifier:
+          STANDARD_OBJECTS.prospectCandidate.universalIdentifier,
+        nameSingular: 'prospectCandidate',
+        namePlural: 'prospectCandidates',
+        labelSingular: i18nLabel(
+          msg({
+            message: `Prospect Candidate`,
+            context: 'objectMetadata.labelSingular',
+          }),
+        ),
+        labelPlural: i18nLabel(
+          msg({
+            message: `Prospect Candidates`,
+            context: 'objectMetadata.labelPlural',
+          }),
+        ),
+        description: i18nLabel(
+          msg({
+            message: `A company discovered by a prospecting campaign, before it becomes a CRM company`,
+            context: 'objectMetadata.description',
+          }),
+        ),
+        icon: 'IconBuildingStore',
+        isSearchable: true,
+        labelIdentifierFieldMetadataName: 'name',
+      },
+      workspaceId,
+      standardObjectMetadataRelatedEntityIds,
+      twentyStandardApplicationId,
+      now,
+    }),
   task: ({
     now,
     workspaceId,

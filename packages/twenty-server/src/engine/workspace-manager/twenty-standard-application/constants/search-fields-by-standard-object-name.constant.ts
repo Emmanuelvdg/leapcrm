@@ -47,6 +47,12 @@ export const SEARCH_FIELDS_BY_STANDARD_OBJECT_NAME = {
     { name: 'phones', type: FieldMetadataType.PHONES },
     { name: 'jobTitle', type: FieldMetadataType.TEXT },
   ],
+  prospectCandidate: [
+    { name: 'name', type: FieldMetadataType.TEXT },
+    { name: 'domain', type: FieldMetadataType.LINKS },
+    { name: 'registrationNumber', type: FieldMetadataType.TEXT },
+  ],
+  prospectingCampaign: [{ name: 'name', type: FieldMetadataType.TEXT }],
   task: [
     { name: 'title', type: FieldMetadataType.TEXT },
     { name: 'bodyV2', type: FieldMetadataType.RICH_TEXT },

@@ -104,7 +104,6 @@ Phase 1 keeps the ICP inside the campaign. A separate reusable ICP object is def
 | attributes | raw JSON | Normalised provider attributes; raw payloads are not stored |
 | campaign | relation | Many-to-one to `prospectingCampaign` |
 | matchedCompany | relation | Many-to-one to `company`, set when an existing CRM company matches; never created automatically |
-| globalCompanyId | uuid (text) | Reference to the shared directory entry (section 7.5); not a foreign key because it crosses schemas |
 
 Composite uniqueness on `(campaign, identityKey)` is the target. Whether standard index metadata supports a composite unique index on a relation column must be confirmed in milestone 1.2; if not, uniqueness is enforced by the job ledger plus a lookup inside the discovery transaction.
 
@@ -135,6 +134,8 @@ These are instance-wide and have **no** `workspaceId`. Rules for what may be wri
 **`core.globalCompany`**: id, name, normalisedName, country, region, canonicalDomain, lei, registrationAuthority, registrationNumber, industry, industryCode, industryCodeScheme, employeeCount, status (active, dissolved, unknown), firstSeenAt, lastVerifiedAt, createdAt, updatedAt. Unique indexes on `lei`, on `(registrationAuthority, registrationNumber)` and on `(canonicalDomain, country)`, each where not null.
 
 **`core.globalCompanySource`**: id, globalCompanyId, providerId, externalId, sourceUrl, licence, retrievedAt, fieldsProvided (which fields this source supplied). Unique on `(providerId, externalId)`. This keeps per-field provenance so a value can always be traced to a public source and removed if that source's terms change.
+
+**`core.globalCompanyCandidateLink`**: workspaceId, candidateId, globalCompanyId, createdAt. Unique on `(workspaceId, candidateId)`. The link from a tenant candidate to its directory entry lives here rather than as a field on `prospectCandidate`, because workspace objects are readable through the tenant metadata and record APIs and a field there would reveal that the directory exists.
 
 From Phase 2, **`core.globalCompanyEvidence`** holds ICP-independent research facts (what the company does, products, markets served, size evidence, public announcements), each with a public source URL, retrieval date, confidence and verification status, and **`core.globalCompanyQualification`** holds the anonymised network contributions described in section 7.5.
 
@@ -241,7 +242,7 @@ Deterministic, in `modules/prospecting/identity-resolution/`:
   - `DISTINCT`: no match.
   - `INSUFFICIENT_INFORMATION`: name only, with nothing to compare.
 - Names alone never cause an automatic merge.
-- Scope: the shared directory (link `globalCompanyId`), other candidates in the same campaign (merge sources into one candidate), and existing CRM companies in the workspace (link `matchedCompany`, never create a company).
+- Scope: the shared directory (link through `core.globalCompanyCandidateLink`), other candidates in the same campaign (merge sources into one candidate), and existing CRM companies in the workspace (link `matchedCompany`, never create a company).
 
 ### 7.5 Shared company directory
 
