@@ -177,4 +177,15 @@ export const MESSAGE_QUEUE_WORKER_CONFIG: Record<
       boundedShutdownDrain: true,
     },
   },
+  [MessageQueue.prospectingQueue]: {
+    priority: 5,
+    workerOptions: {
+      concurrency: 2,
+      // Provider calls can be slow; the ledger lease, not BullMQ, decides
+      // when a run is considered lost.
+      lockDuration: 300_000,
+      maxStalledCount: 1,
+      boundedShutdownDrain: false,
+    },
+  },
 };

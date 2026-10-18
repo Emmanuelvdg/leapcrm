@@ -43,6 +43,7 @@ Each milestone ends with lint (`npx oxlint` on changed files, since `nx lint:dif
 - Core entity `prospectingJob` under `engine/core-modules/prospecting-job/`, generated instance command (`npx nx run twenty-server:database:migrate:generate --name add-prospecting-job --type fast`), ledger service with create (idempotent insert), claim, complete, fail with backoff, and cancel.
 - Add `prospectingQueue` to the message queue enum and worker config.
 - Reconciler cron registered through `cron:register:all`.
+- The queue processor that claims a row and dispatches by operation lands with the first operation handler in 1.7; until then nothing creates jobs.
 - Acceptance: duplicate creates produce one row; concurrent claims produce one runner; a crashed run is retried after its lease expires; a job past `maxAttempts` is `DEAD`.
 - Tests: unit tests for backoff and key building; integration tests for idempotent insert, single claim under concurrency, lease expiry and cancellation.
 

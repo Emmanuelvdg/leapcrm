@@ -1,0 +1,1 @@
+export const PROSPECTING_JOB_RECONCILE_CRON_PATTERN = '* * * * *';
