@@ -310,4 +310,53 @@ describe('ProspectingJobLedgerService (integration)', () => {
       expect.any(Object),
     );
   });
+
+  it('keeps held jobs out of claims and reconciliation until released', async () => {
+    const job = await createSingleJob();
+
+    const heldCount = await ledgerService.holdCampaignJobs({
+      workspaceId,
+      campaignId,
+    });
+
+    await dataSource.query(
+      `UPDATE "core"."prospectingJob"
+          SET "lastEnqueuedAt" = now() - ($1 * interval '1 millisecond')
+        WHERE "id" = $2`,
+      [PROSPECTING_JOB_REENQUEUE_AFTER_MS + 60_000, job.id],
+    );
+    enqueue.mockClear();
+
+    const claimWhileHeld = await ledgerService.claimJob({
+      workspaceId,
+      prospectingJobId: job.id,
+    });
+
+    await ledgerService.reconcile();
+
+    expect(heldCount).toBe(1);
+    expect(claimWhileHeld).toBeNull();
+    expect(enqueue).not.toHaveBeenCalledWith(
+      expect.any(String),
+      { workspaceId, prospectingJobId: job.id },
+      expect.any(Object),
+    );
+
+    const releasedCount = await ledgerService.releaseCampaignJobs({
+      workspaceId,
+      campaignId,
+    });
+    const claimAfterRelease = await ledgerService.claimJob({
+      workspaceId,
+      prospectingJobId: job.id,
+    });
+
+    expect(releasedCount).toBe(1);
+    expect(enqueue).toHaveBeenCalledWith(
+      expect.any(String),
+      { workspaceId, prospectingJobId: job.id },
+      expect.any(Object),
+    );
+    expect(claimAfterRelease).not.toBeNull();
+  });
 });

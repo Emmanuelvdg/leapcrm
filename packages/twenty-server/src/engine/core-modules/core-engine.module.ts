@@ -34,6 +34,7 @@ import { DpaModule } from 'src/engine/core-modules/dpa/dpa.module';
 import { EmailModule } from 'src/engine/core-modules/email/email.module';
 import { EmailingDomainModule } from 'src/engine/core-modules/emailing-domain/emailing-domain.module';
 import { EmailingModule } from 'src/modules/emailing/emailing.module';
+import { ProspectingModule } from 'src/modules/prospecting/prospecting.module';
 import { EnvironmentModule } from 'src/engine/core-modules/environment/environment.module';
 import { ExceptionHandlerModule } from 'src/engine/core-modules/exception-handler/exception-handler.module';
 import { exceptionHandlerModuleFactory } from 'src/engine/core-modules/exception-handler/exception-handler.module-factory';
@@ -125,6 +126,7 @@ import { FileModule } from './file/file.module';
     ApprovedAccessDomainModule,
     EmailingDomainModule,
     EmailingModule,
+    ProspectingModule,
     PublicDomainModule,
     CloudflareModule,
     DnsManagerModule,

@@ -237,6 +237,52 @@ export class ProspectingJobLedgerService {
     return updateResult.affected ?? 0;
   }
 
+  // A held job is never due, so neither a claim nor the reconciler picks it up
+  // until it is released.
+  async holdCampaignJobs({
+    workspaceId,
+    campaignId,
+  }: {
+    workspaceId: string;
+    campaignId: string;
+  }): Promise<number> {
+    const updateResult = await this.prospectingJobRepository
+      .createQueryBuilder()
+      .update(ProspectingJobEntity)
+      .set({ nextRunAt: () => `'infinity'` })
+      .where('"workspaceId" = :workspaceId', { workspaceId })
+      .andWhere('"campaignId" = :campaignId', { campaignId })
+      .andWhere(`"status" = 'PENDING'`)
+      .execute();
+
+    return updateResult.affected ?? 0;
+  }
+
+  async releaseCampaignJobs({
+    workspaceId,
+    campaignId,
+  }: {
+    workspaceId: string;
+    campaignId: string;
+  }): Promise<number> {
+    const updateResult = await this.prospectingJobRepository
+      .createQueryBuilder()
+      .update(ProspectingJobEntity)
+      .set({ nextRunAt: () => 'now()', lastEnqueuedAt: () => 'now()' })
+      .where('"workspaceId" = :workspaceId', { workspaceId })
+      .andWhere('"campaignId" = :campaignId', { campaignId })
+      .andWhere(`"status" = 'PENDING'`)
+      .andWhere(`"nextRunAt" = 'infinity'`)
+      .returning(['id', 'workspaceId', 'nextRunAt'])
+      .execute();
+
+    const releasedJobs = updateResult.raw as EnqueueableProspectingJob[];
+
+    await this.enqueueJobs(releasedJobs);
+
+    return releasedJobs.length;
+  }
+
   async reconcile(): Promise<ProspectingJobReconcileResult> {
     const expiredLeaseUpdateResult = await this.prospectingJobRepository
       .createQueryBuilder()

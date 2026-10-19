@@ -50,7 +50,7 @@ Each milestone ends with lint (`npx oxlint` on changed files, since `nx lint:dif
 ### 1.4 Campaign service and state machines
 
 - Campaign and candidate transition tables and services; campaign start, pause, resume and cancel; ICP zod schema and validation.
-- Custom mutations `startProspectingCampaign`, `pauseProspectingCampaign`, `cancelProspectingCampaign`, guarded by workspace auth, the permission flag and the feature flag.
+- Custom mutations `startProspectingCampaign`, `pauseProspectingCampaign`, `resumeProspectingCampaign`, `cancelProspectingCampaign`, guarded by workspace auth (a signed-in user, not an API key), the permission flag and the feature flag. Status changes use the caller's role-scoped repository and a conditional update on the previous status. Pause holds the campaign's pending jobs in the ledger, resume releases them, cancel cancels pending and running jobs.
 - Acceptance: invalid transitions are rejected with a clear error; starting a campaign with an invalid ICP fails; cancelling stops pending jobs.
 - Tests: unit tests covering every allowed and a sample of disallowed transitions; resolver integration tests including the permission and flag guards.
 
@@ -86,6 +86,7 @@ Each milestone ends with lint (`npx oxlint` on changed files, since `nx lint:dif
 ### 1.7 Discovery pipeline
 
 - Discovery job: claim, fetch one page, resolve each record, upsert candidates and their sources, enqueue the next page, stop at `targetCandidateCount` or when the source is exhausted, then mark the campaign `COMPLETED`.
+- Starting a campaign plans its first discovery jobs. Before doing any work the processor re-reads the campaign: if it is paused, the job is put back on hold without using an attempt; if it is cancelled, completed or failed, the job is cancelled. This also covers a pause or cancel whose ledger update failed after the status change.
 - `importProspectCandidates(campaignId, rows)` mutation for the customer import provider.
 - Optional in this phase: ICP drafting from the campaign objective with structured output; can slip to Phase 2 without blocking the exit criterion.
 - Acceptance: re-running the same discovery creates no duplicates; a worker restart mid-campaign resumes from the last completed page; no `company` records are created.
