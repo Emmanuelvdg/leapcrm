@@ -1,0 +1,1 @@
+export const DISCOVERY_SEARCH_TERM_MAX_COUNT = 10;

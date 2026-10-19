@@ -1,6 +1,12 @@
 import { type ProspectingJobLedgerService } from 'src/engine/core-modules/prospecting-job/services/prospecting-job-ledger.service';
+import { type SecureHttpClientService } from 'src/engine/core-modules/secure-http-client/secure-http-client.service';
+import { type TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { type UserRoleService } from 'src/engine/metadata-modules/user-role/user-role.service';
 import { type GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
+import { FixtureDiscoveryProvider } from 'src/modules/prospecting/discovery/providers/fixture/fixture-discovery-provider.service';
+import { GleifDiscoveryProvider } from 'src/modules/prospecting/discovery/providers/gleif/gleif-discovery-provider.service';
+import { WikidataDiscoveryProvider } from 'src/modules/prospecting/discovery/providers/wikidata/wikidata-discovery-provider.service';
+import { DiscoveryProviderRegistryService } from 'src/modules/prospecting/discovery/services/discovery-provider-registry.service';
 import { type ProspectingExceptionCode } from 'src/modules/prospecting/exceptions/prospecting-exception-code.type';
 import { ProspectingException } from 'src/modules/prospecting/exceptions/prospecting.exception';
 import { ProspectingCampaignService } from 'src/modules/prospecting/services/prospecting-campaign.service';
@@ -73,6 +79,12 @@ describe('ProspectingCampaignService', () => {
         getRoleIdForUserWorkspace: jest.fn().mockResolvedValue(ROLE_ID),
       } as unknown as UserRoleService,
       ledgerService as unknown as ProspectingJobLedgerService,
+      new DiscoveryProviderRegistryService(
+        { get: () => 'test' } as unknown as TwentyConfigService,
+        new GleifDiscoveryProvider({} as SecureHttpClientService),
+        new WikidataDiscoveryProvider({} as SecureHttpClientService),
+        new FixtureDiscoveryProvider(),
+      ),
     );
   });
 
@@ -91,7 +103,43 @@ describe('ProspectingCampaignService', () => {
     );
     expect(campaignRepository.update).toHaveBeenCalledWith(
       { id: CAMPAIGN_ID, status: 'DRAFT' },
-      { status: 'RUNNING', lastRunAt: expect.any(Date) },
+      {
+        status: 'RUNNING',
+        lastRunAt: expect.any(Date),
+        discoverySources: ['gleif'],
+      },
+    );
+  });
+
+  it('keeps the discovery sources the user chose', async () => {
+    givenCampaign(buildCampaign({ discoverySources: ['wikidata', 'fixture'] }));
+
+    await service.start(actionArgs);
+
+    expect(campaignRepository.update).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ discoverySources: ['wikidata', 'fixture'] }),
+    );
+  });
+
+  it('refuses to start with a discovery source that does not exist', async () => {
+    givenCampaign(buildCampaign({ discoverySources: ['made-up-source'] }));
+
+    await expectProspectingError(
+      service.start(actionArgs),
+      'CAMPAIGN_NOT_STARTABLE',
+    );
+  });
+
+  it('refuses to start when no discovery source covers the ICP', async () => {
+    givenCampaign(
+      buildCampaign({
+        icp: { industryCodes: [{ scheme: 'NAICS', code: '5112' }] },
+      }),
+    );
+
+    await expect(service.start(actionArgs)).rejects.toThrow(
+      'no discovery source covers this ICP',
     );
   });
 

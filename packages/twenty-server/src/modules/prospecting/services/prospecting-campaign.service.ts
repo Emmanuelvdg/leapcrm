@@ -5,6 +5,7 @@ import { isDefined } from 'twenty-shared/utils';
 import { ProspectingJobLedgerService } from 'src/engine/core-modules/prospecting-job/services/prospecting-job-ledger.service';
 import { UserRoleService } from 'src/engine/metadata-modules/user-role/user-role.service';
 import { GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
+import { DiscoveryProviderRegistryService } from 'src/modules/prospecting/discovery/services/discovery-provider-registry.service';
 import { ProspectingException } from 'src/modules/prospecting/exceptions/prospecting.exception';
 import { ProspectingCampaignWorkspaceEntity } from 'src/modules/prospecting/standard-objects/prospecting-campaign.workspace-entity';
 import { type ProspectingCampaignStatus } from 'src/modules/prospecting/types/prospecting-campaign-status.type';
@@ -28,6 +29,7 @@ export class ProspectingCampaignService {
     private readonly globalWorkspaceOrmManager: GlobalWorkspaceOrmManager,
     private readonly userRoleService: UserRoleService,
     private readonly prospectingJobLedgerService: ProspectingJobLedgerService,
+    private readonly discoveryProviderRegistryService: DiscoveryProviderRegistryService,
   ) {}
 
   async start(
@@ -37,11 +39,7 @@ export class ProspectingCampaignService {
       ...args,
       allowedFromStatuses: ['DRAFT'],
       toStatus: 'RUNNING',
-      buildUpdate: (campaign) => {
-        this.assertStartableOrThrow(campaign);
-
-        return { lastRunAt: new Date() };
-      },
+      buildUpdate: (campaign) => this.buildRunUpdateOrThrow(campaign),
     });
   }
 
@@ -70,11 +68,7 @@ export class ProspectingCampaignService {
       ...args,
       allowedFromStatuses: ['PAUSED'],
       toStatus: 'RUNNING',
-      buildUpdate: (campaign) => {
-        this.assertStartableOrThrow(campaign);
-
-        return { lastRunAt: new Date() };
-      },
+      buildUpdate: (campaign) => this.buildRunUpdateOrThrow(campaign),
     });
 
     await this.prospectingJobLedgerService.releaseCampaignJobs({
@@ -114,7 +108,9 @@ export class ProspectingCampaignService {
     toStatus: ProspectingCampaignStatus;
     buildUpdate?: (
       campaign: ProspectingCampaignWorkspaceEntity,
-    ) => Partial<Pick<ProspectingCampaignWorkspaceEntity, 'lastRunAt'>>;
+    ) => Partial<
+      Pick<ProspectingCampaignWorkspaceEntity, 'lastRunAt' | 'discoverySources'>
+    >;
   }): Promise<ProspectingCampaignStatusChange> {
     const roleId = await this.userRoleService.getRoleIdForUserWorkspace({
       workspaceId,
@@ -175,21 +171,66 @@ export class ProspectingCampaignService {
     );
   }
 
-  private assertStartableOrThrow(
+  // An empty source list means automatic selection; the resolved list is saved
+  // so the campaign shows which sources ran.
+  private buildRunUpdateOrThrow(
     campaign: ProspectingCampaignWorkspaceEntity,
-  ): void {
+  ): Pick<
+    ProspectingCampaignWorkspaceEntity,
+    'lastRunAt' | 'discoverySources'
+  > {
     const startableCampaign =
       startableProspectingCampaignSchema.safeParse(campaign);
 
     if (!startableCampaign.success) {
-      throw new ProspectingException(
-        `Prospecting campaign ${campaign.id} cannot start: ${startableCampaign.error.issues
+      throw this.buildNotStartableException(
+        campaign.id,
+        startableCampaign.error.issues
           .map((issue) =>
             [issue.path.join('.'), issue.message].filter(Boolean).join(' '),
           )
-          .join(', ')}`,
-        'CAMPAIGN_NOT_STARTABLE',
+          .join(', '),
       );
     }
+
+    const { icp, discoverySources } = startableCampaign.data;
+    const unknownProviderIds =
+      this.discoveryProviderRegistryService.findUnknownProviderIds(
+        discoverySources,
+      );
+
+    if (unknownProviderIds.length > 0) {
+      throw this.buildNotStartableException(
+        campaign.id,
+        `unknown discovery sources ${unknownProviderIds.join(', ')}`,
+      );
+    }
+
+    const resolvedDiscoverySources =
+      discoverySources.length > 0
+        ? discoverySources
+        : this.discoveryProviderRegistryService.selectProviderIds(icp);
+
+    if (resolvedDiscoverySources.length === 0) {
+      throw this.buildNotStartableException(
+        campaign.id,
+        'no discovery source covers this ICP, add a target country or keyword',
+      );
+    }
+
+    return {
+      lastRunAt: new Date(),
+      discoverySources: resolvedDiscoverySources,
+    };
+  }
+
+  private buildNotStartableException(
+    campaignId: string,
+    reason: string,
+  ): ProspectingException {
+    return new ProspectingException(
+      `Prospecting campaign ${campaignId} cannot start: ${reason}`,
+      'CAMPAIGN_NOT_STARTABLE',
+    );
   }
 }

@@ -1,0 +1,1 @@
+export const FIXTURE_DISCOVERY_RECORD_COUNT = 25;

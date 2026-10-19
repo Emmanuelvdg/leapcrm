@@ -1,0 +1,1 @@
+export const WIKIDATA_MAX_PAGE_SIZE = 100;
