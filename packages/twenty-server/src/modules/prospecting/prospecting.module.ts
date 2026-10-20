@@ -5,6 +5,7 @@ import { ProspectingJobModule } from 'src/engine/core-modules/prospecting-job/pr
 import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permissions.module';
 import { UserRoleModule } from 'src/engine/metadata-modules/user-role/user-role.module';
 import { ProspectingDiscoveryModule } from 'src/modules/prospecting/discovery/prospecting-discovery.module';
+import { ProspectingIdentityResolutionModule } from 'src/modules/prospecting/identity-resolution/prospecting-identity-resolution.module';
 import { ProspectingCampaignResolver } from 'src/modules/prospecting/resolvers/prospecting-campaign.resolver';
 import { ProspectingCampaignService } from 'src/modules/prospecting/services/prospecting-campaign.service';
 
@@ -15,6 +16,7 @@ import { ProspectingCampaignService } from 'src/modules/prospecting/services/pro
     UserRoleModule,
     ProspectingJobModule,
     ProspectingDiscoveryModule,
+    ProspectingIdentityResolutionModule,
   ],
   providers: [ProspectingCampaignService, ProspectingCampaignResolver],
   exports: [ProspectingCampaignService],

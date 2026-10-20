@@ -1,7 +1,6 @@
 import { AxiosError, type AxiosInstance, type AxiosResponse } from 'axios';
 
 import { type DiscoveryProviderExceptionCode } from 'src/modules/prospecting/discovery/exceptions/discovery-provider.exception';
-import { extractDiscoveryDomain } from 'src/modules/prospecting/discovery/utils/extract-discovery-domain.util';
 import { isRetryableDiscoveryProviderExceptionCode } from 'src/modules/prospecting/discovery/utils/is-retryable-discovery-provider-exception-code.util';
 import { requestDiscoveryProviderOrThrow } from 'src/modules/prospecting/discovery/utils/request-discovery-provider-or-throw.util';
 
@@ -52,16 +51,5 @@ describe('requestDiscoveryProviderOrThrow', () => {
     });
 
     expect(body).toEqual({ ok: true });
-  });
-});
-
-describe('extractDiscoveryDomain', () => {
-  it.each([
-    ['https://www.ocbc.com/', 'ocbc.com'],
-    ['https://Shop.Example.COM/path', 'shop.example.com'],
-    ['not a url', null],
-    [null, null],
-  ])('extracts the domain of %s', (website, domain) => {
-    expect(extractDiscoveryDomain(website)).toBe(domain);
   });
 });

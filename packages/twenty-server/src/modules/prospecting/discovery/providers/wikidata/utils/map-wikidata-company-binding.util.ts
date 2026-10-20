@@ -4,7 +4,7 @@ import { WIKIDATA_DISCOVERY_CAPABILITIES } from 'src/modules/prospecting/discove
 import { WIKIDATA_DISCOVERY_PROVIDER_ID } from 'src/modules/prospecting/discovery/providers/wikidata/constants/wikidata-discovery-provider-id.constant';
 import { type WikidataCompanyBinding } from 'src/modules/prospecting/discovery/providers/wikidata/zod-schemas/wikidata-company-search-response.zod-schema';
 import { type CompanyDiscoveryRecord } from 'src/modules/prospecting/discovery/types/company-discovery-record.type';
-import { extractDiscoveryDomain } from 'src/modules/prospecting/discovery/utils/extract-discovery-domain.util';
+import { normalizeCompanyDomain } from 'src/modules/prospecting/identity-resolution/utils/normalize-company-domain.util';
 
 const parseEmployeeCount = (value: string | undefined): number | null => {
   const employeeCount = Number(value);
@@ -47,7 +47,7 @@ export const mapWikidataCompanyBinding = ({
     licenceId: WIKIDATA_DISCOVERY_CAPABILITIES.licence.id,
     retrievedAt,
     name,
-    domain: extractDiscoveryDomain(binding.officialWebsite?.value),
+    domain: normalizeCompanyDomain(binding.officialWebsite?.value),
     countryCode,
     region: null,
     registrationAuthority: null,
