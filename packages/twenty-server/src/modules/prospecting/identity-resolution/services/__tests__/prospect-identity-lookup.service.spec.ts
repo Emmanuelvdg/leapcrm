@@ -24,6 +24,7 @@ describe('ProspectIdentityLookupService', () => {
     await service.findCampaignCandidates({
       workspaceId: WORKSPACE_ID,
       campaignId: CAMPAIGN_ID,
+      identityKeys: [],
       identities: [
         buildCompanyIdentity({
           name: 'Headstand Pte Ltd',
@@ -77,6 +78,7 @@ describe('ProspectIdentityLookupService', () => {
     const candidates = await service.findCampaignCandidates({
       workspaceId: WORKSPACE_ID,
       campaignId: CAMPAIGN_ID,
+      identityKeys: [],
       identities: [buildCompanyIdentity({ name: null })],
     });
 

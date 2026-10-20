@@ -21,6 +21,7 @@ import { type CreateProspectingJobInput } from 'src/engine/core-modules/prospect
 import { type ProspectingJobFailure } from 'src/engine/core-modules/prospecting-job/types/prospecting-job-failure.type';
 import { type ProspectingJobPayload } from 'src/engine/core-modules/prospecting-job/types/prospecting-job-payload.type';
 import { type ProspectingJobRunnerJobData } from 'src/engine/core-modules/prospecting-job/types/prospecting-job-runner-job-data.type';
+import { type ProspectingJobStatus } from 'src/engine/core-modules/prospecting-job/types/prospecting-job-status.type';
 import { computeProspectingJobRetry } from 'src/engine/core-modules/prospecting-job/utils/compute-prospecting-job-retry.util';
 
 type EnqueueableProspectingJob = Pick<
@@ -160,13 +161,14 @@ export class ProspectingJobLedgerService {
     return true;
   }
 
+  // Returns the status the job was left in, or null when the lease was lost.
   async failJob({
     claimedJob,
     failure,
   }: {
     claimedJob: ClaimedProspectingJob;
     failure: ProspectingJobFailure;
-  }): Promise<boolean> {
+  }): Promise<ProspectingJobStatus | null> {
     const retryDecision = computeProspectingJobRetry({
       attempts: claimedJob.job.attempts,
       maxAttempts: claimedJob.job.maxAttempts,
@@ -199,7 +201,7 @@ export class ProspectingJobLedgerService {
       .execute();
 
     if (updateResult.affected !== 1) {
-      return false;
+      return null;
     }
 
     if (nextRunAt) {
@@ -212,7 +214,45 @@ export class ProspectingJobLedgerService {
       ]);
     }
 
-    return true;
+    return retryDecision.status;
+  }
+
+  // For a job picked up while its campaign is paused: it goes back on hold
+  // without using up an attempt, and resuming the campaign releases it.
+  async deferClaimedJob(claimedJob: ClaimedProspectingJob): Promise<boolean> {
+    const updateResult = await this.prospectingJobRepository
+      .createQueryBuilder()
+      .update(ProspectingJobEntity)
+      .set({
+        status: 'PENDING',
+        attempts: () => 'GREATEST("attempts" - 1, 0)',
+        nextRunAt: () => "'infinity'",
+        lockedAt: null,
+        lockedBy: null,
+      })
+      .where(this.buildLeaseHolderCondition(), {
+        prospectingJobId: claimedJob.job.id,
+        workspaceId: claimedJob.job.workspaceId,
+        lockToken: claimedJob.lockToken,
+      })
+      .execute();
+
+    return updateResult.affected === 1;
+  }
+
+  async cancelClaimedJob(claimedJob: ClaimedProspectingJob): Promise<boolean> {
+    const updateResult = await this.prospectingJobRepository
+      .createQueryBuilder()
+      .update(ProspectingJobEntity)
+      .set({ status: 'CANCELLED', lockedAt: null, lockedBy: null })
+      .where(this.buildLeaseHolderCondition(), {
+        prospectingJobId: claimedJob.job.id,
+        workspaceId: claimedJob.job.workspaceId,
+        lockToken: claimedJob.lockToken,
+      })
+      .execute();
+
+    return updateResult.affected === 1;
   }
 
   // Running jobs are cancelled too: their lease token no longer matches a

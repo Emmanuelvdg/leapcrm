@@ -30,6 +30,7 @@ import { EnterpriseModule } from 'src/engine/core-modules/enterprise/enterprise.
 import { EventLogIngestionModule } from 'src/engine/core-modules/event-logs/ingest/event-log-ingestion.module';
 import { FeatureFlagModule } from 'src/engine/core-modules/feature-flag/feature-flag.module';
 import { ProspectingJobModule } from 'src/engine/core-modules/prospecting-job/prospecting-job.module';
+import { ProspectingModule } from 'src/modules/prospecting/prospecting.module';
 import { GenerateSdkClientJob } from 'src/engine/core-modules/sdk-client/jobs/generate-sdk-client.job';
 import { SdkClientModule } from 'src/engine/core-modules/sdk-client/sdk-client.module';
 import { UserWorkspaceModule } from 'src/engine/core-modules/user-workspace/user-workspace.module';
@@ -102,6 +103,7 @@ import { WorkflowModule } from 'src/modules/workflow/workflow.module';
     OnboardingModule,
     BillingReminderModule,
     ProspectingJobModule,
+    ProspectingModule,
   ],
   providers: [
     BillingReminderCronJob,

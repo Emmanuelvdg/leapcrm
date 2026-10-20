@@ -16,6 +16,7 @@ export const prospectingGraphqlApiExceptionHandler = (error: Error) => {
         throw new NotFoundError(error);
       case 'INVALID_CAMPAIGN_STATUS_TRANSITION':
       case 'CAMPAIGN_NOT_STARTABLE':
+      case 'CAMPAIGN_NOT_IMPORTABLE':
         throw new UserInputError(error);
       case 'CAMPAIGN_STATUS_CONFLICT':
         throw new ConflictError(error);

@@ -18,4 +18,5 @@ export const FIXTURE_DISCOVERY_CAPABILITIES: DiscoveryCapabilities = {
   requiresCredential: false,
   precisionRank: 100,
   isAutoSelectable: false,
+  isDirectoryShareable: false,
 };

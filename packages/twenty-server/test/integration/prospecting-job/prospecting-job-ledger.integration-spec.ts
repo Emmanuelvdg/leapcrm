@@ -241,7 +241,7 @@ describe('ProspectingJobLedgerService (integration)', () => {
       throw new Error('Expected the job to be claimed');
     }
 
-    await ledgerService.failJob({
+    const failedStatus = await ledgerService.failJob({
       claimedJob,
       failure: {
         code: 'PROVIDER_TIMEOUT',
@@ -252,6 +252,7 @@ describe('ProspectingJobLedgerService (integration)', () => {
 
     const storedJob = await findJob(job.id);
 
+    expect(failedStatus).toBe('PENDING');
     expect(storedJob.status).toBe('PENDING');
     expect(storedJob.lastErrorCode).toBe('PROVIDER_TIMEOUT');
     expect(storedJob.nextRunAt.getTime()).toBeGreaterThan(Date.now());
@@ -358,5 +359,60 @@ describe('ProspectingJobLedgerService (integration)', () => {
       expect.any(Object),
     );
     expect(claimAfterRelease).not.toBeNull();
+  });
+
+  it('holds a claimed job of a paused campaign without using an attempt', async () => {
+    const job = await createSingleJob();
+    const claimedJob = await ledgerService.claimJob({
+      workspaceId,
+      prospectingJobId: job.id,
+    });
+
+    if (!isDefined(claimedJob)) {
+      throw new Error('Expected the job to be claimed');
+    }
+
+    await ledgerService.deferClaimedJob(claimedJob);
+
+    const heldJob = await findJob(job.id);
+    const claimWhileHeld = await ledgerService.claimJob({
+      workspaceId,
+      prospectingJobId: job.id,
+    });
+
+    expect(heldJob.status).toBe('PENDING');
+    expect(heldJob.attempts).toBe(0);
+    expect(claimWhileHeld).toBeNull();
+
+    await ledgerService.releaseCampaignJobs({ workspaceId, campaignId });
+
+    const claimAfterRelease = await ledgerService.claimJob({
+      workspaceId,
+      prospectingJobId: job.id,
+    });
+
+    expect(claimAfterRelease?.job.attempts).toBe(1);
+  });
+
+  it('cancels a claimed job so its runner can no longer complete it', async () => {
+    const job = await createSingleJob();
+    const claimedJob = await ledgerService.claimJob({
+      workspaceId,
+      prospectingJobId: job.id,
+    });
+
+    if (!isDefined(claimedJob)) {
+      throw new Error('Expected the job to be claimed');
+    }
+
+    await ledgerService.cancelClaimedJob(claimedJob);
+
+    const isCompleted = await ledgerService.completeJob({
+      claimedJob,
+      result: {},
+    });
+
+    expect((await findJob(job.id)).status).toBe('CANCELLED');
+    expect(isCompleted).toBe(false);
   });
 });

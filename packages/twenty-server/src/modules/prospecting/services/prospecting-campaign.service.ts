@@ -6,6 +6,11 @@ import { ProspectingJobLedgerService } from 'src/engine/core-modules/prospecting
 import { UserRoleService } from 'src/engine/metadata-modules/user-role/user-role.service';
 import { GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
 import { DiscoveryProviderRegistryService } from 'src/modules/prospecting/discovery/services/discovery-provider-registry.service';
+import {
+  buildDiscoveryStages,
+  type DiscoveryStage,
+} from 'src/modules/prospecting/discovery/utils/build-discovery-stages.util';
+import { buildDiscoverPageJob } from 'src/modules/prospecting/discovery/utils/discover-page-job.util';
 import { ProspectingException } from 'src/modules/prospecting/exceptions/prospecting.exception';
 import { ProspectingCampaignWorkspaceEntity } from 'src/modules/prospecting/standard-objects/prospecting-campaign.workspace-entity';
 import { type ProspectingCampaignStatus } from 'src/modules/prospecting/types/prospecting-campaign-status.type';
@@ -23,6 +28,16 @@ type ProspectingCampaignStatusChange = {
   status: ProspectingCampaignStatus;
 };
 
+type CampaignUpdate = Partial<
+  Pick<ProspectingCampaignWorkspaceEntity, 'lastRunAt' | 'discoverySources'>
+>;
+
+type CampaignRunPlan = {
+  update: CampaignUpdate;
+  firstStage: DiscoveryStage;
+  icpVersion: number;
+};
+
 @Injectable()
 export class ProspectingCampaignService {
   constructor(
@@ -35,18 +50,24 @@ export class ProspectingCampaignService {
   async start(
     args: ProspectingCampaignActionArgs,
   ): Promise<ProspectingCampaignStatusChange> {
-    return this.transitionStatus({
+    const { statusChange, plan } = await this.transitionStatus({
       ...args,
       allowedFromStatuses: ['DRAFT'],
       toStatus: 'RUNNING',
-      buildUpdate: (campaign) => this.buildRunUpdateOrThrow(campaign),
+      prepare: (campaign) => this.buildRunPlanOrThrow(campaign),
     });
+
+    if (isDefined(plan)) {
+      await this.planFirstDiscoveryJob({ ...args, plan });
+    }
+
+    return statusChange;
   }
 
   async pause(
     args: ProspectingCampaignActionArgs,
   ): Promise<ProspectingCampaignStatusChange> {
-    const statusChange = await this.transitionStatus({
+    const { statusChange } = await this.transitionStatus({
       ...args,
       allowedFromStatuses: ['RUNNING'],
       toStatus: 'PAUSED',
@@ -64,17 +85,25 @@ export class ProspectingCampaignService {
   async resume(
     args: ProspectingCampaignActionArgs,
   ): Promise<ProspectingCampaignStatusChange> {
-    const statusChange = await this.transitionStatus({
+    const { statusChange, plan } = await this.transitionStatus({
       ...args,
       allowedFromStatuses: ['PAUSED'],
       toStatus: 'RUNNING',
-      buildUpdate: (campaign) => this.buildRunUpdateOrThrow(campaign),
+      prepare: (campaign) => this.buildRunPlanOrThrow(campaign),
     });
 
-    await this.prospectingJobLedgerService.releaseCampaignJobs({
-      workspaceId: args.workspaceId,
-      campaignId: args.campaignId,
-    });
+    const releasedJobCount =
+      await this.prospectingJobLedgerService.releaseCampaignJobs({
+        workspaceId: args.workspaceId,
+        campaignId: args.campaignId,
+      });
+
+    // Nothing was on hold, for example when the ICP changed and the old jobs
+    // no longer apply: plan again. Pages already done keep their keys and are
+    // not repeated.
+    if (releasedJobCount === 0 && isDefined(plan)) {
+      await this.planFirstDiscoveryJob({ ...args, plan });
+    }
 
     return statusChange;
   }
@@ -82,7 +111,7 @@ export class ProspectingCampaignService {
   async cancel(
     args: ProspectingCampaignActionArgs,
   ): Promise<ProspectingCampaignStatusChange> {
-    const statusChange = await this.transitionStatus({
+    const { statusChange } = await this.transitionStatus({
       ...args,
       allowedFromStatuses: ['DRAFT', 'RUNNING', 'PAUSED'],
       toStatus: 'CANCELLED',
@@ -96,22 +125,38 @@ export class ProspectingCampaignService {
     return statusChange;
   }
 
+  private async planFirstDiscoveryJob({
+    workspaceId,
+    campaignId,
+    plan,
+  }: ProspectingCampaignActionArgs & { plan: CampaignRunPlan }): Promise<void> {
+    await this.prospectingJobLedgerService.createJobs([
+      buildDiscoverPageJob({
+        workspaceId,
+        campaignId,
+        icpVersion: plan.icpVersion,
+        stage: plan.firstStage,
+        cursor: null,
+        pageIndex: 0,
+      }),
+    ]);
+  }
+
   private async transitionStatus({
     workspaceId,
     userWorkspaceId,
     campaignId,
     allowedFromStatuses,
     toStatus,
-    buildUpdate,
+    prepare,
   }: ProspectingCampaignActionArgs & {
     allowedFromStatuses: ProspectingCampaignStatus[];
     toStatus: ProspectingCampaignStatus;
-    buildUpdate?: (
-      campaign: ProspectingCampaignWorkspaceEntity,
-    ) => Partial<
-      Pick<ProspectingCampaignWorkspaceEntity, 'lastRunAt' | 'discoverySources'>
-    >;
-  }): Promise<ProspectingCampaignStatusChange> {
+    prepare?: (campaign: ProspectingCampaignWorkspaceEntity) => CampaignRunPlan;
+  }): Promise<{
+    statusChange: ProspectingCampaignStatusChange;
+    plan: CampaignRunPlan | undefined;
+  }> {
     const roleId = await this.userRoleService.getRoleIdForUserWorkspace({
       workspaceId,
       userWorkspaceId,
@@ -150,13 +195,13 @@ export class ProspectingCampaignService {
           );
         }
 
-        const additionalUpdate = buildUpdate?.(campaign) ?? {};
+        const plan = prepare?.(campaign);
 
         // Conditional on the status read above, so two concurrent actions on
         // the same campaign cannot both apply.
         const { affected } = await campaignRepository.update(
           { id: campaignId, status: campaign.status },
-          { ...additionalUpdate, status: toStatus },
+          { ...(plan?.update ?? {}), status: toStatus },
         );
 
         if (affected !== 1) {
@@ -166,19 +211,16 @@ export class ProspectingCampaignService {
           );
         }
 
-        return { campaignId, status: toStatus };
+        return { statusChange: { campaignId, status: toStatus }, plan };
       },
     );
   }
 
   // An empty source list means automatic selection; the resolved list is saved
   // so the campaign shows which sources ran.
-  private buildRunUpdateOrThrow(
+  private buildRunPlanOrThrow(
     campaign: ProspectingCampaignWorkspaceEntity,
-  ): Pick<
-    ProspectingCampaignWorkspaceEntity,
-    'lastRunAt' | 'discoverySources'
-  > {
+  ): CampaignRunPlan {
     const startableCampaign =
       startableProspectingCampaignSchema.safeParse(campaign);
 
@@ -218,9 +260,18 @@ export class ProspectingCampaignService {
       );
     }
 
+    const [firstStage] = buildDiscoveryStages({
+      countryCodes: icp.targetGeographies.map(({ countryCode }) => countryCode),
+      providerIds: resolvedDiscoverySources,
+    });
+
     return {
-      lastRunAt: new Date(),
-      discoverySources: resolvedDiscoverySources,
+      update: {
+        lastRunAt: new Date(),
+        discoverySources: resolvedDiscoverySources,
+      },
+      firstStage,
+      icpVersion: campaign.icpVersion,
     };
   }
 

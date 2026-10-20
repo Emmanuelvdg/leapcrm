@@ -3,6 +3,7 @@ import { type ActorMetadata, type LinksMetadata } from 'twenty-shared/types';
 import { BaseWorkspaceEntity } from 'src/engine/twenty-orm/base.workspace-entity';
 import { type EntityRelation } from 'src/engine/workspace-manager/workspace-migration/types/entity-relation.interface';
 import { type CompanyWorkspaceEntity } from 'src/modules/company/standard-objects/company.workspace-entity';
+import { type CandidateSource } from 'src/modules/prospecting/candidate/types/discovered-company.type';
 import { type ProspectingCampaignWorkspaceEntity } from 'src/modules/prospecting/standard-objects/prospecting-campaign.workspace-entity';
 import { type ProspectCandidateLifecycleStage } from 'src/modules/prospecting/types/prospect-candidate-lifecycle-stage.type';
 
@@ -22,7 +23,7 @@ export class ProspectCandidateWorkspaceEntity extends BaseWorkspaceEntity {
   lifecycleStage: ProspectCandidateLifecycleStage;
   matchStatus: string | null;
   identityKey: string;
-  sources: Record<string, unknown>[] | null;
+  sources: CandidateSource[] | null;
   attributes: Record<string, unknown> | null;
   createdBy: ActorMetadata;
   updatedBy: ActorMetadata;

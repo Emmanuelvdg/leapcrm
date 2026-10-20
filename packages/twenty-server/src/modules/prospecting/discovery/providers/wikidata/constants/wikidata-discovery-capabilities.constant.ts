@@ -18,4 +18,5 @@ export const WIKIDATA_DISCOVERY_CAPABILITIES: DiscoveryCapabilities = {
   requiresCredential: false,
   precisionRank: 20,
   isAutoSelectable: true,
+  isDirectoryShareable: true,
 };

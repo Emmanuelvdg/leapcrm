@@ -17,4 +17,5 @@ export const GLEIF_DISCOVERY_CAPABILITIES: DiscoveryCapabilities = {
   requiresCredential: false,
   precisionRank: 10,
   isAutoSelectable: true,
+  isDirectoryShareable: true,
 };

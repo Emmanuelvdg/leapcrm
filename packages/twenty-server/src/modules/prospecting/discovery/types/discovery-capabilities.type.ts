@@ -46,4 +46,7 @@ export type DiscoveryCapabilities = {
   // open knowledge, open knowledge before search.
   precisionRank: number;
   isAutoSelectable: boolean;
+  // Only public sources whose terms allow reuse may feed the shared
+  // directory; test data and customer files never do.
+  isDirectoryShareable: boolean;
 };

@@ -17,6 +17,8 @@ const getProspectingExceptionUserFriendlyMessage = (
       return msg`The campaign is not ready to start. Check its ideal customer profile and target number of candidates.`;
     case 'CAMPAIGN_STATUS_CONFLICT':
       return msg`The campaign changed while you were updating it. Refresh and try again.`;
+    case 'CAMPAIGN_NOT_IMPORTABLE':
+      return msg`Companies can only be imported into a campaign that has not ended.`;
     default:
       return assertUnreachable(code);
   }

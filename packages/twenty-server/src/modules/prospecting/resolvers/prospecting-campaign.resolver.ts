@@ -15,6 +15,9 @@ import {
 } from 'src/engine/guards/feature-flag.guard';
 import { SettingsPermissionGuard } from 'src/engine/guards/settings-permission.guard';
 import { WorkspaceAuthGuard } from 'src/engine/guards/workspace-auth.guard';
+import { ProspectCandidateImportService } from 'src/modules/prospecting/candidate/services/prospect-candidate-import.service';
+import { ImportProspectCandidatesOutputDTO } from 'src/modules/prospecting/dtos/import-prospect-candidates-output.dto';
+import { ImportProspectCandidatesInput } from 'src/modules/prospecting/dtos/import-prospect-candidates.input';
 import { ProspectingCampaignIdInput } from 'src/modules/prospecting/dtos/prospecting-campaign-id.input';
 import { ProspectingCampaignStatusDTO } from 'src/modules/prospecting/dtos/prospecting-campaign-status.dto';
 import { ProspectingGraphqlApiExceptionInterceptor } from 'src/modules/prospecting/interceptors/prospecting-graphql-api-exception.interceptor';
@@ -31,6 +34,7 @@ import { ProspectingCampaignService } from 'src/modules/prospecting/services/pro
 export class ProspectingCampaignResolver {
   constructor(
     private readonly prospectingCampaignService: ProspectingCampaignService,
+    private readonly prospectCandidateImportService: ProspectCandidateImportService,
   ) {}
 
   @Mutation(() => ProspectingCampaignStatusDTO)
@@ -86,6 +90,21 @@ export class ProspectingCampaignResolver {
       workspaceId: currentWorkspace.id,
       userWorkspaceId,
       campaignId: input.campaignId,
+    });
+  }
+
+  @Mutation(() => ImportProspectCandidatesOutputDTO)
+  @RequireFeatureFlag(FeatureFlagKey.IS_PROSPECTING_ENABLED)
+  async importProspectCandidates(
+    @Args('input') input: ImportProspectCandidatesInput,
+    @AuthWorkspace() currentWorkspace: WorkspaceEntity,
+    @AuthUserWorkspaceId() userWorkspaceId: string,
+  ): Promise<ImportProspectCandidatesOutputDTO> {
+    return this.prospectCandidateImportService.importCompanies({
+      workspaceId: currentWorkspace.id,
+      userWorkspaceId,
+      campaignId: input.campaignId,
+      rows: input.companies,
     });
   }
 }

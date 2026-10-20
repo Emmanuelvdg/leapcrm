@@ -24,6 +24,10 @@ export type IdentifiedRecord = {
   identity: CompanyIdentity;
 };
 
+export type IdentifiedCandidate = IdentifiedRecord & {
+  candidate: ProspectCandidateWorkspaceEntity;
+};
+
 // Must run inside a workspace context. Reads bypass record permissions
 // because discovery runs as the system, never on behalf of a user.
 @Injectable()
@@ -36,11 +40,13 @@ export class ProspectIdentityLookupService {
     workspaceId,
     campaignId,
     identities,
+    identityKeys,
   }: {
     workspaceId: string;
     campaignId: string;
     identities: CompanyIdentity[];
-  }): Promise<IdentifiedRecord[]> {
+    identityKeys: string[];
+  }): Promise<IdentifiedCandidate[]> {
     const leis = getUniqueIdentityValues(identities, ({ lei }) => lei);
     const registrationNumbers = getUniqueIdentityValues(
       identities,
@@ -53,6 +59,9 @@ export class ProspectIdentityLookupService {
     );
 
     const conditions = [
+      ...(identityKeys.length > 0
+        ? [{ campaignId, identityKey: In(identityKeys) }]
+        : []),
       ...(leis.length > 0 ? [{ campaignId, lei: In(leis) }] : []),
       ...(registrationNumbers.length > 0
         ? [{ campaignId, registrationNumber: In(registrationNumbers) }]
@@ -85,6 +94,7 @@ export class ProspectIdentityLookupService {
 
     return candidates.map((candidate) => ({
       id: candidate.id,
+      candidate,
       identity: buildCompanyIdentity({
         name: candidate.name,
         lei: candidate.lei,

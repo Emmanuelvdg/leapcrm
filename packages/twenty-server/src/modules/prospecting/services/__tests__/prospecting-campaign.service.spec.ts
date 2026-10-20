@@ -26,6 +26,7 @@ const buildCampaign = (
     icp: { targetGeographies: [{ countryCode: 'SG' }] },
     discoverySources: null,
     targetCandidateCount: 100,
+    icpVersion: 1,
     ...overrides,
   }) as ProspectingCampaignWorkspaceEntity;
 
@@ -34,6 +35,7 @@ describe('ProspectingCampaignService', () => {
   let campaignRepository: { findOne: jest.Mock; update: jest.Mock };
   let getRepository: jest.Mock;
   let ledgerService: {
+    createJobs: jest.Mock;
     holdCampaignJobs: jest.Mock;
     releaseCampaignJobs: jest.Mock;
     cancelCampaignJobs: jest.Mock;
@@ -63,6 +65,7 @@ describe('ProspectingCampaignService', () => {
     };
     getRepository = jest.fn().mockResolvedValue(campaignRepository);
     ledgerService = {
+      createJobs: jest.fn().mockResolvedValue([]),
       holdCampaignJobs: jest.fn().mockResolvedValue(0),
       releaseCampaignJobs: jest.fn().mockResolvedValue(0),
       cancelCampaignJobs: jest.fn().mockResolvedValue(0),
@@ -109,6 +112,33 @@ describe('ProspectingCampaignService', () => {
         discoverySources: ['gleif'],
       },
     );
+  });
+
+  it('plans the first discovery job, reading the directory first', async () => {
+    givenCampaign(buildCampaign());
+
+    await service.start(actionArgs);
+
+    expect(ledgerService.createJobs).toHaveBeenCalledWith([
+      expect.objectContaining({
+        campaignId: CAMPAIGN_ID,
+        operation: 'DISCOVER_PAGE',
+        input: {
+          providerId: 'internal-directory',
+          countryCode: 'SG',
+          cursor: null,
+          pageIndex: 0,
+        },
+      }),
+    ]);
+  });
+
+  it('plans again on resume when no job was on hold', async () => {
+    givenCampaign(buildCampaign({ status: 'PAUSED' }));
+
+    await service.resume(actionArgs);
+
+    expect(ledgerService.createJobs).toHaveBeenCalledTimes(1);
   });
 
   it('keeps the discovery sources the user chose', async () => {
