@@ -14,6 +14,7 @@ import { buildDiscoverPageJob } from 'src/modules/prospecting/discovery/utils/di
 import { ProspectingException } from 'src/modules/prospecting/exceptions/prospecting.exception';
 import { ProspectingCampaignWorkspaceEntity } from 'src/modules/prospecting/standard-objects/prospecting-campaign.workspace-entity';
 import { type ProspectingCampaignStatus } from 'src/modules/prospecting/types/prospecting-campaign-status.type';
+import { buildCampaignStatusChangeCriteria } from 'src/modules/prospecting/utils/build-campaign-status-change-criteria.util';
 import { isProspectingCampaignStatusTransitionAllowed } from 'src/modules/prospecting/utils/is-prospecting-campaign-status-transition-allowed.util';
 import { startableProspectingCampaignSchema } from 'src/modules/prospecting/zod-schemas/startable-prospecting-campaign.zod-schema';
 
@@ -200,7 +201,13 @@ export class ProspectingCampaignService {
         // Conditional on the status read above, so two concurrent actions on
         // the same campaign cannot both apply.
         const { affected } = await campaignRepository.update(
-          { id: campaignId, status: campaign.status },
+          {
+            id: campaignId,
+            status: buildCampaignStatusChangeCriteria({
+              fromStatus: campaign.status,
+              toStatus,
+            }),
+          },
           { ...(plan?.update ?? {}), status: toStatus },
         );
 

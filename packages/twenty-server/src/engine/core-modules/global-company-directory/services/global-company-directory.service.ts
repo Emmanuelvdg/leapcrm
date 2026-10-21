@@ -216,6 +216,55 @@ export class GlobalCompanyDirectoryService {
     }));
   }
 
+  // Operator view only, from the admin panel: includes quarantined entries.
+  async listForOperator({
+    search,
+    offset,
+    limit,
+  }: {
+    search: string | null;
+    offset: number;
+    limit: number;
+  }): Promise<{ directoryCompanies: DirectoryCompany[]; totalCount: number }> {
+    const queryBuilder =
+      this.globalCompanyRepository.createQueryBuilder('globalCompany');
+
+    if (isDefined(search) && search.trim().length > 0) {
+      const searchPattern = `%${escapeSqlLikePattern(search.trim())}%`;
+
+      queryBuilder.where(
+        '(globalCompany.name ILIKE :searchPattern OR globalCompany.lei ILIKE :searchPattern OR globalCompany.canonicalDomain ILIKE :searchPattern OR globalCompany.registrationNumber ILIKE :searchPattern)',
+        { searchPattern },
+      );
+    }
+
+    const [globalCompanies, totalCount] = await queryBuilder
+      .orderBy('globalCompany.lastVerifiedAt', 'DESC')
+      .addOrderBy('globalCompany.id', 'ASC')
+      .skip(offset)
+      .take(limit)
+      .getManyAndCount();
+
+    if (globalCompanies.length === 0) {
+      return { directoryCompanies: [], totalCount };
+    }
+
+    const sources = await this.globalCompanySourceRepository.find({
+      where: { globalCompanyId: In(globalCompanies.map(({ id }) => id)) },
+      order: { sourceRank: 'ASC', retrievedAt: 'DESC' },
+    });
+
+    return {
+      directoryCompanies: globalCompanies.map((globalCompany) => ({
+        globalCompany,
+        sources: sources.filter(
+          (source) => source.globalCompanyId === globalCompany.id,
+        ),
+      })),
+      totalCount,
+    };
+  }
+
   // Operator action only, from the admin panel.
   async setQuarantined({
     globalCompanyId,

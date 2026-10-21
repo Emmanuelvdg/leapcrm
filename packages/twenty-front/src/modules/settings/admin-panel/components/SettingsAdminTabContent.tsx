@@ -1,5 +1,6 @@
 import { SettingsAdminAI } from '@/settings/admin-panel/ai/components/SettingsAdminAI';
 import { SettingsAdminApps } from '@/settings/admin-panel/apps/components/SettingsAdminApps';
+import { SettingsAdminCompanyDirectory } from '@/settings/admin-panel/company-directory/components/SettingsAdminCompanyDirectory';
 import { SettingsAdminGeneral } from '@/settings/admin-panel/components/SettingsAdminGeneral';
 import { SettingsAdminConfigVariables } from '@/settings/admin-panel/config-variables/components/SettingsAdminConfigVariables';
 import { SETTINGS_ADMIN_TABS } from '@/settings/admin-panel/constants/SettingsAdminTabs';
@@ -25,6 +26,8 @@ export const SettingsAdminTabContent = ({
       return <SettingsAdminSubscriptionBilling />;
     case SETTINGS_ADMIN_TABS.TENANTS:
       return <SettingsAdminTenants />;
+    case SETTINGS_ADMIN_TABS.COMPANY_DIRECTORY:
+      return <SettingsAdminCompanyDirectory />;
     case SETTINGS_ADMIN_TABS.HEALTH_STATUS:
       return <SettingsAdminHealthStatus />;
     default:

@@ -8,6 +8,7 @@ import { SyncConversationStandardObjectsCommand } from 'src/database/commands/up
 import { AddPersonConversationsTabCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1789782287414-add-person-conversations-tab.command';
 import { BackfillStandardPermissionFlagsCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1792286576249-backfill-standard-permission-flags.command';
 import { SyncProspectingStandardObjectsCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1792290000000-sync-prospecting-standard-objects.command';
+import { AddProspectingRecordPagesAndActionsCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1792488900000-add-prospecting-record-pages-and-actions.command';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
 import { FieldMetadataEntity } from 'src/engine/metadata-modules/field-metadata/field-metadata.entity';
 import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache.module';
@@ -30,6 +31,7 @@ import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace
     AddPersonConversationsTabCommand,
     BackfillStandardPermissionFlagsCommand,
     SyncProspectingStandardObjectsCommand,
+    AddProspectingRecordPagesAndActionsCommand,
   ],
 })
 export class V2_33_UpgradeVersionCommandModule {}

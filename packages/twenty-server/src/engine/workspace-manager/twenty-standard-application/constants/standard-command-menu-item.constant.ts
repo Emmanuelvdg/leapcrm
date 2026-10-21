@@ -1470,4 +1470,104 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     engineComponentKey: EngineComponentKey.COMPOSE_EMAIL,
     hotKeys: null,
   },
+  startProspectingCampaign: {
+    universalIdentifier: '20eb83c6-2946-494a-b8b9-961fc8ede9d0',
+    label: i18nLabel(
+      msg({ message: `Start Campaign`, context: 'commandMenuItem.label' }),
+    ),
+    icon: 'IconPlayerPlay',
+    isPinned: true,
+    position: 71,
+    shortLabel: i18nLabel(
+      msg({ message: `Start`, context: 'commandMenuItem.shortLabel' }),
+    ),
+    availabilityType: CommandMenuItemAvailabilityType.RECORD_SELECTION,
+    conditionalAvailabilityExpression:
+      'featureFlags.IS_PROSPECTING_ENABLED and permissionFlags.PROSPECTING and numberOfSelectedRecords == 1 and noneDefined(selectedRecords, "deletedAt") and everyEquals(selectedRecords, "status", "DRAFT")',
+    availabilityObjectMetadataUniversalIdentifier:
+      STANDARD_OBJECTS.prospectingCampaign.universalIdentifier,
+    frontComponentUniversalIdentifier: null,
+    engineComponentKey: EngineComponentKey.START_PROSPECTING_CAMPAIGN,
+    hotKeys: null,
+  },
+  pauseProspectingCampaign: {
+    universalIdentifier: '3ce97ab3-d6e2-46f7-b965-cf6745381221',
+    label: i18nLabel(
+      msg({ message: `Pause Campaign`, context: 'commandMenuItem.label' }),
+    ),
+    icon: 'IconPlayerPause',
+    isPinned: true,
+    position: 72,
+    shortLabel: i18nLabel(
+      msg({ message: `Pause`, context: 'commandMenuItem.shortLabel' }),
+    ),
+    availabilityType: CommandMenuItemAvailabilityType.RECORD_SELECTION,
+    conditionalAvailabilityExpression:
+      'featureFlags.IS_PROSPECTING_ENABLED and permissionFlags.PROSPECTING and numberOfSelectedRecords == 1 and noneDefined(selectedRecords, "deletedAt") and everyEquals(selectedRecords, "status", "RUNNING")',
+    availabilityObjectMetadataUniversalIdentifier:
+      STANDARD_OBJECTS.prospectingCampaign.universalIdentifier,
+    frontComponentUniversalIdentifier: null,
+    engineComponentKey: EngineComponentKey.PAUSE_PROSPECTING_CAMPAIGN,
+    hotKeys: null,
+  },
+  resumeProspectingCampaign: {
+    universalIdentifier: '84cc19e8-fd02-4d6a-85a9-7a6ceb42fa2c',
+    label: i18nLabel(
+      msg({ message: `Resume Campaign`, context: 'commandMenuItem.label' }),
+    ),
+    icon: 'IconPlayerPlay',
+    isPinned: true,
+    position: 73,
+    shortLabel: i18nLabel(
+      msg({ message: `Resume`, context: 'commandMenuItem.shortLabel' }),
+    ),
+    availabilityType: CommandMenuItemAvailabilityType.RECORD_SELECTION,
+    conditionalAvailabilityExpression:
+      'featureFlags.IS_PROSPECTING_ENABLED and permissionFlags.PROSPECTING and numberOfSelectedRecords == 1 and noneDefined(selectedRecords, "deletedAt") and everyEquals(selectedRecords, "status", "PAUSED")',
+    availabilityObjectMetadataUniversalIdentifier:
+      STANDARD_OBJECTS.prospectingCampaign.universalIdentifier,
+    frontComponentUniversalIdentifier: null,
+    engineComponentKey: EngineComponentKey.RESUME_PROSPECTING_CAMPAIGN,
+    hotKeys: null,
+  },
+  importProspectCandidates: {
+    universalIdentifier: '0b244169-cd99-4500-b966-555df5889bdd',
+    label: i18nLabel(
+      msg({ message: `Import Companies`, context: 'commandMenuItem.label' }),
+    ),
+    icon: 'IconFileImport',
+    isPinned: true,
+    position: 74,
+    shortLabel: i18nLabel(
+      msg({ message: `Import`, context: 'commandMenuItem.shortLabel' }),
+    ),
+    availabilityType: CommandMenuItemAvailabilityType.RECORD_SELECTION,
+    conditionalAvailabilityExpression:
+      'featureFlags.IS_PROSPECTING_ENABLED and permissionFlags.PROSPECTING and numberOfSelectedRecords == 1 and noneDefined(selectedRecords, "deletedAt") and noneEquals(selectedRecords, "status", "COMPLETED") and noneEquals(selectedRecords, "status", "CANCELLED") and noneEquals(selectedRecords, "status", "FAILED")',
+    availabilityObjectMetadataUniversalIdentifier:
+      STANDARD_OBJECTS.prospectingCampaign.universalIdentifier,
+    frontComponentUniversalIdentifier: null,
+    engineComponentKey: EngineComponentKey.IMPORT_PROSPECT_CANDIDATES,
+    hotKeys: null,
+  },
+  cancelProspectingCampaign: {
+    universalIdentifier: 'd042da28-643a-414f-8e72-3c8203e44e4a',
+    label: i18nLabel(
+      msg({ message: `Cancel Campaign`, context: 'commandMenuItem.label' }),
+    ),
+    icon: 'IconPlayerStop',
+    isPinned: false,
+    position: 75,
+    shortLabel: i18nLabel(
+      msg({ message: `Cancel`, context: 'commandMenuItem.shortLabel' }),
+    ),
+    availabilityType: CommandMenuItemAvailabilityType.RECORD_SELECTION,
+    conditionalAvailabilityExpression:
+      'featureFlags.IS_PROSPECTING_ENABLED and permissionFlags.PROSPECTING and numberOfSelectedRecords == 1 and noneDefined(selectedRecords, "deletedAt") and noneEquals(selectedRecords, "status", "COMPLETED") and noneEquals(selectedRecords, "status", "CANCELLED") and noneEquals(selectedRecords, "status", "FAILED")',
+    availabilityObjectMetadataUniversalIdentifier:
+      STANDARD_OBJECTS.prospectingCampaign.universalIdentifier,
+    frontComponentUniversalIdentifier: null,
+    engineComponentKey: EngineComponentKey.CANCEL_PROSPECTING_CAMPAIGN,
+    hotKeys: null,
+  },
 } as const;

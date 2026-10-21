@@ -18,6 +18,7 @@ import {
   type MessageCampaignDetailsConfiguration,
   type NotesConfiguration,
   type PieChartConfiguration,
+  type ProspectingDiscoveryStatusConfiguration,
   type RecordTableConfiguration,
   type StandaloneRichTextConfiguration,
   type TasksConfiguration,
@@ -87,6 +88,12 @@ type WidgetConfigurationTypenameMap = {
     'configurationType'
   > & {
     configurationType: WidgetConfigurationType.CONVERSATIONS;
+  };
+  ProspectingDiscoveryStatusConfiguration: Omit<
+    ProspectingDiscoveryStatusConfiguration,
+    'configurationType'
+  > & {
+    configurationType: WidgetConfigurationType.PROSPECTING_DISCOVERY_STATUS;
   };
   FieldConfiguration: Omit<FieldConfiguration, 'configurationType'> & {
     configurationType: WidgetConfigurationType.FIELD;

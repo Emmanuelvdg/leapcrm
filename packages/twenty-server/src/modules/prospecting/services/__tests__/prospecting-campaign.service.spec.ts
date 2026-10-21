@@ -1,3 +1,5 @@
+import { In } from 'typeorm';
+
 import { type ProspectingJobLedgerService } from 'src/engine/core-modules/prospecting-job/services/prospecting-job-ledger.service';
 import { type SecureHttpClientService } from 'src/engine/core-modules/secure-http-client/secure-http-client.service';
 import { type TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
@@ -105,7 +107,7 @@ describe('ProspectingCampaignService', () => {
       },
     );
     expect(campaignRepository.update).toHaveBeenCalledWith(
-      { id: CAMPAIGN_ID, status: 'DRAFT' },
+      { id: CAMPAIGN_ID, status: In(['DRAFT', 'RUNNING']) },
       {
         status: 'RUNNING',
         lastRunAt: expect.any(Date),

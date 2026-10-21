@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+import { CoreObjectNameSingular } from 'twenty-shared/types';
 
 import { SidePanelToggleButton } from '@/side-panel/components/SidePanelToggleButton';
 import { RecordShowCommandMenu } from '@/command-menu-item/components/RecordShowCommandMenu';
@@ -12,6 +13,7 @@ import { PageLayoutRecordPageRenderer } from '@/object-record/record-show/compon
 import { RecordShowPageSSESubscribeEffect } from '@/object-record/record-show/components/RecordShowPageSSESubscribeEffect';
 import { useRecordShowPage } from '@/object-record/record-show/hooks/useRecordShowPage';
 import { computeRecordShowComponentInstanceId } from '@/object-record/record-show/utils/computeRecordShowComponentInstanceId';
+import { SpreadsheetImportProvider } from '@/spreadsheet-import/provider/components/SpreadsheetImportProvider';
 import { PageCardLayout } from '@/ui/layout/page/components/PageCardLayout';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { RecordShowPageHeader } from '~/pages/object-record/RecordShowPageHeader';
@@ -76,6 +78,10 @@ export const RecordShowPage = () => {
                 objectNameSingular={objectNameSingular}
                 recordId={objectRecordId}
               />
+              {objectNameSingular ===
+                CoreObjectNameSingular.ProspectingCampaign && (
+                <SpreadsheetImportProvider />
+              )}
             </TimelineActivityContext.Provider>
           </PageCardLayout>
         </CommandMenuComponentInstanceContext.Provider>

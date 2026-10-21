@@ -202,6 +202,11 @@ export const validateWidgetConfigurationInput = ({
         'Conversations configuration is not supported yet',
         PageLayoutWidgetExceptionCode.INVALID_PAGE_LAYOUT_WIDGET_DATA,
       );
+    case WidgetConfigurationType.PROSPECTING_DISCOVERY_STATUS:
+      throw new PageLayoutWidgetException(
+        'Prospecting discovery status configuration is not supported yet',
+        PageLayoutWidgetExceptionCode.INVALID_PAGE_LAYOUT_WIDGET_DATA,
+      );
     case WidgetConfigurationType.CALENDAR:
       throw new PageLayoutWidgetException(
         'Calendar configuration is not supported yet',

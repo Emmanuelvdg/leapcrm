@@ -159,6 +159,10 @@ export type ConversationsConfiguration = {
   configurationType: 'CONVERSATIONS';
 };
 
+export type ProspectingDiscoveryStatusConfiguration = {
+  configurationType: 'PROSPECTING_DISCOVERY_STATUS';
+};
+
 export type EmailThreadConfiguration = {
   configurationType: 'EMAIL_THREAD';
 };
@@ -214,6 +218,7 @@ export type PageLayoutWidgetConfiguration =
   | FilesConfiguration
   | EmailsConfiguration
   | ConversationsConfiguration
+  | ProspectingDiscoveryStatusConfiguration
   | CalendarConfiguration
   | WorkflowConfiguration
   | WorkflowVersionConfiguration

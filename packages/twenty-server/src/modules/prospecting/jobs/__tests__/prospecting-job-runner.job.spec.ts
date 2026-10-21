@@ -1,3 +1,5 @@
+import { In } from 'typeorm';
+
 import { type ProspectingJobLedgerService } from 'src/engine/core-modules/prospecting-job/services/prospecting-job-ledger.service';
 import { type GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
 import { DiscoveryProviderException } from 'src/modules/prospecting/discovery/exceptions/discovery-provider.exception';
@@ -103,7 +105,7 @@ describe('ProspectingJobRunnerJob', () => {
     await run();
 
     expect(campaignRepository.update).toHaveBeenCalledWith(
-      { id: CAMPAIGN_ID, status: 'RUNNING' },
+      { id: CAMPAIGN_ID, status: In(['RUNNING', 'COMPLETED']) },
       { status: 'COMPLETED' },
     );
   });
@@ -156,7 +158,7 @@ describe('ProspectingJobRunnerJob', () => {
     await run();
 
     expect(campaignRepository.update).toHaveBeenCalledWith(
-      { id: CAMPAIGN_ID, status: 'RUNNING' },
+      { id: CAMPAIGN_ID, status: In(['RUNNING', 'FAILED']) },
       { status: 'FAILED' },
     );
   });

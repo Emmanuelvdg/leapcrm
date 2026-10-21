@@ -3,6 +3,7 @@ import { SETTINGS_ADMIN_TABS } from '@/settings/admin-panel/constants/SettingsAd
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { t } from '@lingui/core/macro';
 import {
+  IconAddressBook,
   IconApps,
   IconBuildingSkyscraper,
   IconCreditCard,
@@ -53,6 +54,12 @@ export const useSettingsAdminTabs = () => {
       id: SETTINGS_ADMIN_TABS.TENANTS,
       title: t`Tenants`,
       Icon: IconBuildingSkyscraper,
+      disabled: !canAccessFullAdminPanel,
+    },
+    {
+      id: SETTINGS_ADMIN_TABS.COMPANY_DIRECTORY,
+      title: t`Directory`,
+      Icon: IconAddressBook,
       disabled: !canAccessFullAdminPanel,
     },
     {

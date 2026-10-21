@@ -512,6 +512,32 @@ export const STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS = {
       },
     },
   }),
+  prospectingCampaignRecordPage: buildStandardObjectRecordPageLayout({
+    objectUniversalIdentifier:
+      STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.prospectingCampaign,
+    tabs: {
+      home: {
+        title: 'Home',
+        widgets: {
+          discoveryStatus: 'Discovery status',
+          fields: 'Fields',
+          candidates: 'Candidates',
+        },
+      },
+    },
+  }),
+  prospectCandidateRecordPage: buildStandardObjectRecordPageLayout({
+    objectUniversalIdentifier:
+      STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.prospectCandidate,
+    tabs: {
+      home: {
+        title: 'Home',
+        widgets: {
+          fields: 'Fields',
+        },
+      },
+    },
+  }),
   messageCampaignRecordPage: buildStandardObjectRecordPageLayout({
     objectUniversalIdentifier:
       STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.messageCampaign,

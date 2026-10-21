@@ -208,6 +208,12 @@ export const WIDGET_PROPS = {
     gridPosition: GRID_POSITIONS.HALF_HEIGHT,
     position: VERTICAL_LIST_LAYOUT_POSITIONS.FIRST,
   },
+  prospectingDiscoveryStatus: {
+    title: 'Discovery status',
+    type: WidgetType.PROSPECTING_DISCOVERY_STATUS,
+    gridPosition: GRID_POSITIONS.FULL_WIDTH,
+    position: VERTICAL_LIST_LAYOUT_POSITIONS.FIRST,
+  },
   calendar: {
     title: 'Calendar',
     type: WidgetType.CALENDAR,

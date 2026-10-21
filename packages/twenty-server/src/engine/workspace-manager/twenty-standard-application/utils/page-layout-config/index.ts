@@ -6,6 +6,8 @@ export { STANDARD_CALL_RECORDING_PAGE_LAYOUT_CONFIG } from './standard-call-reco
 export { STANDARD_COMPANY_PAGE_LAYOUT_CONFIG } from './standard-company-page-layout.config';
 export { STANDARD_DASHBOARD_PAGE_LAYOUT_CONFIG } from './standard-dashboard-page-layout.config';
 export { STANDARD_MESSAGE_CAMPAIGN_PAGE_LAYOUT_CONFIG } from './standard-message-campaign-page-layout.config';
+export { STANDARD_PROSPECT_CANDIDATE_PAGE_LAYOUT_CONFIG } from './standard-prospect-candidate-page-layout.config';
+export { STANDARD_PROSPECTING_CAMPAIGN_PAGE_LAYOUT_CONFIG } from './standard-prospecting-campaign-page-layout.config';
 export { STANDARD_MESSAGE_CHANNEL_MESSAGE_ASSOCIATION_MESSAGE_FOLDER_PAGE_LAYOUT_CONFIG } from './standard-message-channel-message-association-message-folder-page-layout.config';
 export { STANDARD_MESSAGE_CHANNEL_MESSAGE_ASSOCIATION_PAGE_LAYOUT_CONFIG } from './standard-message-channel-message-association-page-layout.config';
 export { STANDARD_MESSAGE_PARTICIPANT_PAGE_LAYOUT_CONFIG } from './standard-message-participant-page-layout.config';

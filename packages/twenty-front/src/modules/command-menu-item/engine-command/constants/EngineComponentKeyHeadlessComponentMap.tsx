@@ -5,6 +5,8 @@ import { HeadlessOpenSidePanelPageEngineCommand } from '@/command-menu-item/engi
 import { NavigationEngineCommand } from '@/command-menu-item/engine-command/components/NavigationEngineCommand';
 import { ComposeCampaignCommand } from '@/command-menu-item/engine-command/global/components/ComposeCampaignCommand';
 import { SendMessageCampaignSingleRecordCommand } from '@/command-menu-item/engine-command/record/single-record/message-campaign/components/SendMessageCampaignSingleRecordCommand';
+import { ImportProspectCandidatesSingleRecordCommand } from '@/command-menu-item/engine-command/record/single-record/prospecting-campaign/components/ImportProspectCandidatesSingleRecordCommand';
+import { ProspectingCampaignStatusSingleRecordCommand } from '@/command-menu-item/engine-command/record/single-record/prospecting-campaign/components/ProspectingCampaignStatusSingleRecordCommand';
 import { SendMessageCampaignTestSingleRecordCommand } from '@/command-menu-item/engine-command/record/single-record/message-campaign/components/SendMessageCampaignTestSingleRecordCommand';
 import { OpenEmailBlockSettingsSingleRecordCommand } from '@/command-menu-item/engine-command/record/components/OpenEmailBlockSettingsSingleRecordCommand';
 import { ComposeEmailCommand } from '@/command-menu-item/engine-command/global/components/ComposeEmailCommand';
@@ -262,6 +264,21 @@ export const ENGINE_COMPONENT_KEY_COMPONENT_MAP: Record<
   ),
   [EngineComponentKey.EMAIL_BLOCK_SETTINGS]: (
     <OpenEmailBlockSettingsSingleRecordCommand />
+  ),
+  [EngineComponentKey.START_PROSPECTING_CAMPAIGN]: (
+    <ProspectingCampaignStatusSingleRecordCommand action="start" />
+  ),
+  [EngineComponentKey.PAUSE_PROSPECTING_CAMPAIGN]: (
+    <ProspectingCampaignStatusSingleRecordCommand action="pause" />
+  ),
+  [EngineComponentKey.RESUME_PROSPECTING_CAMPAIGN]: (
+    <ProspectingCampaignStatusSingleRecordCommand action="resume" />
+  ),
+  [EngineComponentKey.CANCEL_PROSPECTING_CAMPAIGN]: (
+    <ProspectingCampaignStatusSingleRecordCommand action="cancel" />
+  ),
+  [EngineComponentKey.IMPORT_PROSPECT_CANDIDATES]: (
+    <ImportProspectCandidatesSingleRecordCommand />
   ),
 
   // Deprecated keys kept for backward compatibility until migration runs

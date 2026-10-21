@@ -5,7 +5,6 @@ import { useDropzone } from 'react-dropzone';
 import { read, type WorkBook } from 'xlsx-ugnis';
 
 import { useNumberFormat } from '@/localization/hooks/useNumberFormat';
-import { SPREADSHEET_MAX_RECORD_IMPORT_CAPACITY } from '@/spreadsheet-import/constants/SpreadsheetMaxRecordImportCapacity';
 import { useSpreadsheetImportInternal } from '@/spreadsheet-import/hooks/useSpreadsheetImportInternal';
 import { useDownloadFakeRecords } from '@/spreadsheet-import/steps/components/UploadStep/hooks/useDownloadFakeRecords';
 import { readFileAsync } from '@/spreadsheet-import/utils/readFilesAsync';
@@ -112,7 +111,8 @@ type DropZoneProps = {
 };
 
 export const DropZone = ({ onContinue, isLoading }: DropZoneProps) => {
-  const { maxFileSize, dateFormat, parseRaw } = useSpreadsheetImportInternal();
+  const { maxFileSize, maxRecords, dateFormat, parseRaw } =
+    useSpreadsheetImportInternal();
   const { formatNumber } = useNumberFormat();
 
   const [loading, setLoading] = useState(false);
@@ -162,9 +162,7 @@ export const DropZone = ({ onContinue, isLoading }: DropZoneProps) => {
 
   const { t } = useLingui();
 
-  const formatSpreadsheetMaxRecordImportCapacity = formatNumber(
-    SPREADSHEET_MAX_RECORD_IMPORT_CAPACITY,
-  );
+  const formatSpreadsheetMaxRecordImportCapacity = formatNumber(maxRecords);
 
   return (
     <StyledContainer

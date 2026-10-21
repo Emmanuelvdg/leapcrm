@@ -1,20 +1,23 @@
-import { useContextStoreObjectMetadataItemOrThrow } from '@/context-store/hooks/useContextStoreObjectMetadataItemOrThrow';
-import { spreadsheetImportFilterAvailableFieldMetadataItems } from '@/object-record/spreadsheet-import/utils/spreadsheetImportFilterAvailableFieldMetadataItems';
+import { objectMetadataItemsSelector } from '@/object-metadata/states/objectMetadataItemsSelector';
 import { getCompositeSubFieldLabelWithFieldLabel } from '@/object-record/spreadsheet-import/utils/spreadsheetImportGetCompositeSubFieldLabelWithFieldLabel';
 import { SETTINGS_COMPOSITE_FIELD_TYPE_CONFIGS } from '@/settings/data-model/constants/SettingsCompositeFieldTypeConfigs';
 import { SETTINGS_NON_COMPOSITE_FIELD_TYPE_CONFIGS } from '@/settings/data-model/constants/SettingsNonCompositeFieldTypeConfigs';
+import { useSpreadsheetImportInternal } from '@/spreadsheet-import/hooks/useSpreadsheetImportInternal';
 import { formatValueForCSV } from '@/spreadsheet-import/utils/formatValueForCSV';
 import { sanitizeValueForCSVExport } from '@/spreadsheet-import/utils/sanitizeValueForCSVExport';
+import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { saveAs } from 'file-saver';
 import { FieldMetadataType } from 'twenty-shared/types';
 
 export const useDownloadFakeRecords = () => {
-  const { objectMetadataItem } = useContextStoreObjectMetadataItemOrThrow();
+  // The fields the dialog was opened with, which can differ from the page's
+  // object (for example importing companies from a campaign page).
+  const { availableFieldMetadataItems } = useSpreadsheetImportInternal();
+  const objectMetadataItems = useAtomStateValue(objectMetadataItemsSelector);
 
-  const availableFieldMetadataItems =
-    spreadsheetImportFilterAvailableFieldMetadataItems(
-      objectMetadataItem.updatableFields,
-    );
+  const importedObjectMetadataItem = objectMetadataItems.find(({ fields }) =>
+    fields.some(({ id }) => id === availableFieldMetadataItems[0]?.id),
+  );
 
   const buildTableWithFakeRecords = () => {
     const headerRow: string[] = [];
@@ -138,7 +141,10 @@ export const useDownloadFakeRecords = () => {
     const { headerRow, bodyRows } = buildTableWithFakeRecords();
     const csvContent = formatToCsvContent([headerRow, ...bodyRows]);
     const blob = new Blob(csvContent, { type: 'text/csv' });
-    saveAs(blob, `${objectMetadataItem.labelPlural.toLowerCase()}-sample.csv`);
+    saveAs(
+      blob,
+      `${importedObjectMetadataItem?.labelPlural.toLowerCase() ?? 'records'}-sample.csv`,
+    );
   };
 
   return { downloadSample };

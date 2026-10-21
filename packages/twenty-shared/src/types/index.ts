@@ -216,6 +216,7 @@ export type {
   FilesConfiguration,
   EmailsConfiguration,
   ConversationsConfiguration,
+  ProspectingDiscoveryStatusConfiguration,
   EmailThreadConfiguration,
   MessageCampaignBodyConfiguration,
   MessageCampaignDetailsConfiguration,

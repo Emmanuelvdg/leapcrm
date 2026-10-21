@@ -6,6 +6,7 @@ import { YogaDriver, type YogaDriverConfig } from '@graphql-yoga/nestjs';
 import { adminPanelModuleFactory } from 'src/engine/api/graphql/admin-panel.module-factory';
 import { GraphQLConfigModule } from 'src/engine/api/graphql/graphql-config/graphql-config.module';
 import { AdminPanelModule } from 'src/engine/core-modules/admin-panel/admin-panel.module';
+import { ProspectingDirectoryAdminModule } from 'src/modules/prospecting/admin/prospecting-directory-admin.module';
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
 import { I18nModule } from 'src/engine/core-modules/i18n/i18n.module';
 import { I18nService } from 'src/engine/core-modules/i18n/i18n.service';
@@ -35,6 +36,7 @@ import { DataloaderService } from 'src/engine/dataloaders/dataloader.service';
       ],
     }),
     AdminPanelModule,
+    ProspectingDirectoryAdminModule,
   ],
 })
 export class AdminPanelGraphQLApiModule {}

@@ -2,6 +2,7 @@ import { AggregateChartConfigurationDTO } from 'src/engine/metadata-modules/page
 import { CallRecordingSummaryConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/call-recording-summary-configuration.dto';
 import { CallRecordingTranscriptConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/call-recording-transcript-configuration.dto';
 import { ConversationsConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/conversations-configuration.dto';
+import { ProspectingDiscoveryStatusConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/prospecting-discovery-status-configuration.dto';
 import { EmailThreadConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/email-thread-configuration.dto';
 import { MessageCampaignBodyConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/message-campaign-body-configuration.dto';
 import { MessageCampaignDetailsConfigurationDTO } from 'src/engine/metadata-modules/page-layout-widget/dtos/message-campaign-details-configuration.dto';
@@ -40,6 +41,7 @@ export const ALL_WIDGET_CONFIGURATION_TYPE_VALIDATOR_BY_WIDGET_CONFIGURATION_TYP
     FRONT_COMPONENT: FrontComponentConfigurationDTO,
     EMAILS: EmailsConfigurationDTO,
     CONVERSATIONS: ConversationsConfigurationDTO,
+    PROSPECTING_DISCOVERY_STATUS: ProspectingDiscoveryStatusConfigurationDTO,
     EMAIL_THREAD: EmailThreadConfigurationDTO,
     CALL_RECORDING_SUMMARY: CallRecordingSummaryConfigurationDTO,
     CALL_RECORDING_TRANSCRIPT: CallRecordingTranscriptConfigurationDTO,

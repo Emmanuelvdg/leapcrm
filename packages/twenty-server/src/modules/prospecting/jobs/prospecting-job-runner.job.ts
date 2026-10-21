@@ -18,6 +18,7 @@ import {
   type DiscoveryPageOutcome,
 } from 'src/modules/prospecting/discovery/services/discovery-page.service';
 import { ProspectingCampaignWorkspaceEntity } from 'src/modules/prospecting/standard-objects/prospecting-campaign.workspace-entity';
+import { buildCampaignStatusChangeCriteria } from 'src/modules/prospecting/utils/build-campaign-status-change-criteria.util';
 import { toProspectingJobFailure } from 'src/modules/prospecting/utils/to-prospecting-job-failure.util';
 
 // Queue messages only point at a ledger row; the claim decides whether this
@@ -160,7 +161,13 @@ export class ProspectingJobRunnerJob {
     const campaignRepository = await this.getCampaignRepository(workspaceId);
 
     await campaignRepository.update(
-      { id: campaignId, status: 'RUNNING' },
+      {
+        id: campaignId,
+        status: buildCampaignStatusChangeCriteria({
+          fromStatus: 'RUNNING',
+          toStatus: status,
+        }),
+      },
       { status },
     );
   }

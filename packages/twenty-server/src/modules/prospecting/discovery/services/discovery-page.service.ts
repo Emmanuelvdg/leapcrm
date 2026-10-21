@@ -8,7 +8,10 @@ import { type CreateProspectingJobInput } from 'src/engine/core-modules/prospect
 import { type ProspectingJobPayload } from 'src/engine/core-modules/prospecting-job/types/prospecting-job-payload.type';
 import { ProspectCampaignCandidateCounterService } from 'src/modules/prospecting/candidate/services/prospect-campaign-candidate-counter.service';
 import { ProspectCandidateWriterService } from 'src/modules/prospecting/candidate/services/prospect-candidate-writer.service';
-import { type DiscoveredCompany } from 'src/modules/prospecting/candidate/types/discovered-company.type';
+import {
+  type DiscoveredCompany,
+  type WrittenCandidate,
+} from 'src/modules/prospecting/candidate/types/discovered-company.type';
 import { buildCandidateSource } from 'src/modules/prospecting/candidate/utils/build-candidate-source.util';
 import { DISCOVERY_PAGE_SIZE } from 'src/modules/prospecting/discovery/constants/discovery-page-size.constant';
 import { DiscoveryProviderException } from 'src/modules/prospecting/discovery/exceptions/discovery-provider.exception';
@@ -35,11 +38,13 @@ import { ProspectingCampaignWorkspaceEntity } from 'src/modules/prospecting/stan
 import { type ProspectingIcp } from 'src/modules/prospecting/zod-schemas/prospecting-icp.zod-schema';
 import { startableProspectingCampaignSchema } from 'src/modules/prospecting/zod-schemas/startable-prospecting-campaign.zod-schema';
 
+type FetchedCompany = {
+  discoveredCompany: DiscoveredCompany;
+  globalCompanyId: string | null;
+};
+
 type FetchedPage = {
-  discoveredCompanies: {
-    discoveredCompany: DiscoveredCompany;
-    globalCompanyId: string | null;
-  }[];
+  discoveredCompanies: FetchedCompany[];
   nextCursor: string | null;
   errorCode: string | null;
 };
@@ -114,29 +119,21 @@ export class DiscoveryPageService {
       icp,
       stage,
       cursor: jobInput.cursor,
-      pageSize: Math.min(DISCOVERY_PAGE_SIZE, remainingCandidateCount),
+      pageSize: DISCOVERY_PAGE_SIZE,
       isLastAttempt: claimedJob.job.attempts >= claimedJob.job.maxAttempts,
     });
 
-    const keptCompanies = this.filterCompanies(fetchedPage, icp);
-
-    const writtenCandidates =
-      await this.prospectCandidateWriterService.writeDiscoveredCompanies({
-        workspaceId,
-        campaignId: campaign.id,
-        discoveredCompanies: keptCompanies.map(
-          ({ discoveredCompany }) => discoveredCompany,
-        ),
-        writePermissions: { shouldBypassPermissionChecks: true },
-      });
+    const writtenCompanies = await this.writeUntilTargetReached({
+      workspaceId,
+      campaignId: campaign.id,
+      companies: this.filterCompanies(fetchedPage, icp),
+      missingCandidateCount: remainingCandidateCount,
+    });
 
     await this.shareWithDirectory({
       workspaceId,
       stage,
-      companies: keptCompanies.map((company, index) => ({
-        ...company,
-        candidateId: writtenCandidates[index].candidateId,
-      })),
+      companies: writtenCompanies,
     });
 
     const candidatesFound =
@@ -162,10 +159,10 @@ export class DiscoveryPageService {
         providerId: stage.providerId,
         countryCode: stage.countryCode,
         recordCount: fetchedPage.discoveredCompanies.length,
-        createdCount: writtenCandidates.filter(
+        createdCount: writtenCompanies.filter(
           ({ outcome }) => outcome === 'CREATED',
         ).length,
-        mergedCount: writtenCandidates.filter(
+        mergedCount: writtenCompanies.filter(
           ({ outcome }) => outcome === 'MERGED',
         ).length,
         candidatesFound,
@@ -285,6 +282,57 @@ export class DiscoveryPageService {
     return fetchedPage.discoveredCompanies.filter(({ discoveredCompany }) =>
       keptRecords.has(discoveredCompany.record),
     );
+  }
+
+  // Pages keep a fixed size because some providers page by number, so a page
+  // can hold more companies than the campaign still needs. It is written in
+  // chunks of what is still missing, since merged companies do not count; the
+  // rest of the page is dropped only once the target is reached and the
+  // campaign ends.
+  private async writeUntilTargetReached({
+    workspaceId,
+    campaignId,
+    companies,
+    missingCandidateCount,
+  }: {
+    workspaceId: string;
+    campaignId: string;
+    companies: FetchedCompany[];
+    missingCandidateCount: number;
+  }): Promise<(FetchedCompany & WrittenCandidate)[]> {
+    const writtenCompanies: (FetchedCompany & WrittenCandidate)[] = [];
+    let stillMissingCount = missingCandidateCount;
+
+    while (
+      writtenCompanies.length < companies.length &&
+      stillMissingCount > 0
+    ) {
+      const chunk = companies.slice(
+        writtenCompanies.length,
+        writtenCompanies.length + stillMissingCount,
+      );
+      const writtenCandidates =
+        await this.prospectCandidateWriterService.writeDiscoveredCompanies({
+          workspaceId,
+          campaignId,
+          discoveredCompanies: chunk.map(
+            ({ discoveredCompany }) => discoveredCompany,
+          ),
+          writePermissions: { shouldBypassPermissionChecks: true },
+        });
+
+      writtenCompanies.push(
+        ...chunk.map((company, index) => ({
+          ...company,
+          ...writtenCandidates[index],
+        })),
+      );
+      stillMissingCount -= writtenCandidates.filter(
+        ({ outcome }) => outcome === 'CREATED',
+      ).length;
+    }
+
+    return writtenCompanies;
   }
 
   // Directory upkeep never blocks discovery: a failed write is logged and the

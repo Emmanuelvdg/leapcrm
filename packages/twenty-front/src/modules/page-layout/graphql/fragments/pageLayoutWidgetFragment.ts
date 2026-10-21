@@ -158,6 +158,9 @@ export const PAGE_LAYOUT_WIDGET_FRAGMENT = gql`
       ... on ConversationsConfiguration {
         configurationType
       }
+      ... on ProspectingDiscoveryStatusConfiguration {
+        configurationType
+      }
       ... on EmailThreadConfiguration {
         configurationType
       }

@@ -110,6 +110,9 @@ export class FlatPageLayoutWidgetTypeValidatorService {
       CONVERSATIONS: validateSimpleRecordPageWidgetForCreation(
         WidgetConfigurationType.CONVERSATIONS,
       ),
+      PROSPECTING_DISCOVERY_STATUS: validateSimpleRecordPageWidgetForCreation(
+        WidgetConfigurationType.PROSPECTING_DISCOVERY_STATUS,
+      ),
     };
 
   private readonly PAGE_LAYOUT_WIDGET_TYPE_VALIDATOR_FOR_UPDATE_HASHMAP: FlatPageLayoutWidgetTypeValidatorForUpdate =
@@ -178,6 +181,9 @@ export class FlatPageLayoutWidgetTypeValidatorService {
       ),
       CONVERSATIONS: validateSimpleRecordPageWidgetForUpdate(
         WidgetConfigurationType.CONVERSATIONS,
+      ),
+      PROSPECTING_DISCOVERY_STATUS: validateSimpleRecordPageWidgetForUpdate(
+        WidgetConfigurationType.PROSPECTING_DISCOVERY_STATUS,
       ),
     };
 

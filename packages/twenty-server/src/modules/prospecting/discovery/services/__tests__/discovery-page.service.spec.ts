@@ -257,6 +257,57 @@ describe('DiscoveryPageService', () => {
     expect(outcome.followUpJobs).toEqual([]);
   });
 
+  it('asks for full pages even when few candidates are missing', async () => {
+    const search = jest
+      .spyOn(gleifProvider, 'search')
+      .mockResolvedValue({ records: [], nextCursor: null });
+
+    await process(
+      { providerId: 'gleif', countryCode: 'SG', cursor: '0:3', pageIndex: 2 },
+      buildCampaign({ candidatesFound: 98 }),
+    );
+
+    expect(search).toHaveBeenCalledWith(
+      expect.objectContaining({ cursor: '0:3', pageSize: 50 }),
+      expect.anything(),
+    );
+  });
+
+  it('writes only the companies the campaign still needs', async () => {
+    const outcome = await process(
+      { providerId: 'fixture', countryCode: 'SG', cursor: null, pageIndex: 0 },
+      buildCampaign({ candidatesFound: 97 }),
+    );
+
+    expect(writeDiscoveredCompanies).toHaveBeenCalledTimes(1);
+    expect(
+      writeDiscoveredCompanies.mock.calls[0][0].discoveredCompanies,
+    ).toHaveLength(3);
+    expect(outcome.result).toMatchObject({ recordCount: 25, createdCount: 3 });
+  });
+
+  it('keeps writing past companies that were already candidates', async () => {
+    writeDiscoveredCompanies.mockImplementationOnce(
+      async ({
+        discoveredCompanies,
+      }: {
+        discoveredCompanies: DiscoveredCompany[];
+      }) =>
+        discoveredCompanies.map((_, index) => ({
+          candidateId: `existing-${index}`,
+          outcome: 'MERGED',
+        })),
+    );
+
+    const outcome = await process(
+      { providerId: 'fixture', countryCode: 'SG', cursor: null, pageIndex: 0 },
+      buildCampaign({ candidatesFound: 97 }),
+    );
+
+    expect(writeDiscoveredCompanies).toHaveBeenCalledTimes(2);
+    expect(outcome.result).toMatchObject({ createdCount: 3, mergedCount: 3 });
+  });
+
   it('finishes the campaign after the last stage is exhausted', async () => {
     jest
       .spyOn(gleifProvider, 'search')
