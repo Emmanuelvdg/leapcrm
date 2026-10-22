@@ -1,23 +1,19 @@
 import crypto from 'crypto';
 
-import { config } from 'dotenv';
-import { DataSource } from 'typeorm';
+import { getAppProviderByClassName } from 'test/integration/utils/get-app-provider-by-class-name.util';
+import { getCoreRepository } from 'test/integration/utils/get-core-repository.util';
+import { type Repository } from 'typeorm';
 
 import { GlobalCompanyCandidateLinkEntity } from 'src/engine/core-modules/global-company-directory/entities/global-company-candidate-link.entity';
 import { GlobalCompanySourceEntity } from 'src/engine/core-modules/global-company-directory/entities/global-company-source.entity';
 import { GlobalCompanyEntity } from 'src/engine/core-modules/global-company-directory/entities/global-company.entity';
-import { GlobalCompanyDirectoryService } from 'src/engine/core-modules/global-company-directory/services/global-company-directory.service';
+import { type GlobalCompanyDirectoryService } from 'src/engine/core-modules/global-company-directory/services/global-company-directory.service';
 import {
   type GlobalCompanyValues,
   type PublicCompanyObservation,
 } from 'src/engine/core-modules/global-company-directory/types/global-company-values.type';
 
 jest.useRealTimers();
-
-config({
-  path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
-  override: true,
-});
 
 const RUN_ID = crypto.randomUUID().slice(0, 8);
 const REGISTRY_PROVIDER_ID = `it-registry-${RUN_ID}`;
@@ -68,35 +64,29 @@ const buildObservation = ({
 });
 
 describe('GlobalCompanyDirectoryService (integration)', () => {
-  let dataSource: DataSource;
+  let globalCompanyRepository: Repository<GlobalCompanyEntity>;
+  let globalCompanySourceRepository: Repository<GlobalCompanySourceEntity>;
+  let globalCompanyCandidateLinkRepository: Repository<GlobalCompanyCandidateLinkEntity>;
   let directoryService: GlobalCompanyDirectoryService;
   let workspaceIds: string[];
 
   const findCompany = (globalCompanyId: string) =>
-    dataSource
-      .getRepository(GlobalCompanyEntity)
-      .findOneByOrFail({ id: globalCompanyId });
+    globalCompanyRepository.findOneByOrFail({ id: globalCompanyId });
 
   beforeAll(async () => {
-    dataSource = new DataSource({
-      type: 'postgres',
-      url: process.env.PG_DATABASE_URL,
-      schema: 'core',
-      entities: [
-        'src/engine/core-modules/**/*.entity.ts',
-        'src/engine/metadata-modules/**/*.entity.ts',
-      ],
-      synchronize: false,
-    });
-    await dataSource.initialize();
-
-    directoryService = new GlobalCompanyDirectoryService(
-      dataSource.getRepository(GlobalCompanyEntity),
-      dataSource.getRepository(GlobalCompanySourceEntity),
-      dataSource.getRepository(GlobalCompanyCandidateLinkEntity),
+    globalCompanyRepository =
+      getCoreRepository<GlobalCompanyEntity>(GlobalCompanyEntity);
+    globalCompanySourceRepository =
+      getCoreRepository<GlobalCompanySourceEntity>(GlobalCompanySourceEntity);
+    globalCompanyCandidateLinkRepository =
+      getCoreRepository<GlobalCompanyCandidateLinkEntity>(
+        GlobalCompanyCandidateLinkEntity,
+      );
+    directoryService = getAppProviderByClassName<GlobalCompanyDirectoryService>(
+      'GlobalCompanyDirectoryService',
     );
 
-    const workspaces: { id: string }[] = await dataSource.query(
+    const workspaces: { id: string }[] = await globalCompanyRepository.query(
       `SELECT id FROM "core"."workspace" ORDER BY "createdAt" LIMIT 2`,
     );
 
@@ -110,14 +100,13 @@ describe('GlobalCompanyDirectoryService (integration)', () => {
   });
 
   afterAll(async () => {
-    await dataSource.query(
+    await globalCompanyRepository.query(
       `DELETE FROM "core"."globalCompany" WHERE id IN (
          SELECT "globalCompanyId" FROM "core"."globalCompanySource"
          WHERE "providerId" IN ($1, $2)
        )`,
       [REGISTRY_PROVIDER_ID, OPEN_DATA_PROVIDER_ID],
     );
-    await dataSource.destroy();
   });
 
   it('keeps one entry per company across sources and credits every source', async () => {
@@ -144,9 +133,9 @@ describe('GlobalCompanyDirectoryService (integration)', () => {
     );
 
     const company = await findCompany(registryEntryId ?? '');
-    const sources = await dataSource
-      .getRepository(GlobalCompanySourceEntity)
-      .findBy({ globalCompanyId: registryEntryId ?? '' });
+    const sources = await globalCompanySourceRepository.findBy({
+      globalCompanyId: registryEntryId ?? '',
+    });
 
     expect(openDataEntryId).toBe(registryEntryId);
     expect(company).toMatchObject({
@@ -172,9 +161,9 @@ describe('GlobalCompanyDirectoryService (integration)', () => {
       buildObservation({ externalId, values: { lei, employeeCount: 25 } }),
     );
 
-    const sourceCount = await dataSource
-      .getRepository(GlobalCompanySourceEntity)
-      .countBy({ globalCompanyId: firstEntryId ?? '' });
+    const sourceCount = await globalCompanySourceRepository.countBy({
+      globalCompanyId: firstEntryId ?? '',
+    });
 
     expect(secondEntryId).toBe(firstEntryId);
     expect(sourceCount).toBe(1);
@@ -289,9 +278,9 @@ describe('GlobalCompanyDirectoryService (integration)', () => {
       globalCompanyId: secondEntryId ?? '',
     });
 
-    const links = await dataSource
-      .getRepository(GlobalCompanyCandidateLinkEntity)
-      .findBy({ candidateId });
+    const links = await globalCompanyCandidateLinkRepository.findBy({
+      candidateId,
+    });
 
     expect(
       links
@@ -307,9 +296,7 @@ describe('GlobalCompanyDirectoryService (integration)', () => {
       ].sort(),
     );
 
-    await dataSource
-      .getRepository(GlobalCompanyCandidateLinkEntity)
-      .delete({ candidateId });
+    await globalCompanyCandidateLinkRepository.delete({ candidateId });
   });
 
   it('records the same new company from concurrent workers as one entry', async () => {
@@ -323,9 +310,7 @@ describe('GlobalCompanyDirectoryService (integration)', () => {
       ),
     );
 
-    const companyCount = await dataSource
-      .getRepository(GlobalCompanyEntity)
-      .countBy({ lei });
+    const companyCount = await globalCompanyRepository.countBy({ lei });
 
     expect(new Set(entryIds).size).toBe(1);
     expect(companyCount).toBe(1);

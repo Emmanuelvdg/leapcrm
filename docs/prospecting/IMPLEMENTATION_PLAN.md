@@ -110,6 +110,7 @@ Each milestone ends with lint (`npx oxlint` on changed files, since `nx lint:dif
 
 - Integration tests using the Apple and YCombinator seeded workspaces: one workspace cannot read or mutate the other's campaigns or candidates, cannot start or cancel the other's campaign, and a job created for one workspace never writes to the other.
 - Acceptance: all pass; the suite runs in the existing integration test target.
+- As built: `test/integration/prospecting/prospecting-tenant-isolation.integration-spec.ts` signs in as an admin of each seeded workspace (Jane in Apple, Tim in YCombinator) and runs Apple's credentials against YCombinator's records. It checks that YCombinator's campaign and candidate are absent from Apple's reads; that updates and deletes fail and leave them unchanged; that start, pause, resume, cancel and import report `NOT_FOUND` without changing status, creating ledger jobs or adding candidates; that a real fixture campaign in Apple completes with every ledger job in Apple and no change to YCombinator's candidates; and that a ledger job forged with YCombinator's workspace id against a running Apple campaign is cancelled without writing anywhere. Running it locally without ClickHouse needs `CLICKHOUSE_URL` unset in `.env.test`, since unsent event logs otherwise keep the queues from draining. The 1.3 ledger and 1.6b directory specs now use the app's repositories and classes instead of opening their own data source over every entity file, which overran the hook timeout inside the real integration suite.
 
 ### Phase 1 deploy notes
 

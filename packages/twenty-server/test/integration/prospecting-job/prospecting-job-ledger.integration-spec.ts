@@ -1,27 +1,23 @@
 import crypto from 'crypto';
 
-import { config } from 'dotenv';
+import { getAppProviderByClassName } from 'test/integration/utils/get-app-provider-by-class-name.util';
+import { getCoreRepository } from 'test/integration/utils/get-core-repository.util';
 import { isDefined } from 'twenty-shared/utils';
-import { DataSource, type Repository } from 'typeorm';
+import { type Repository } from 'typeorm';
 
 import { type MessageQueueService } from 'src/engine/core-modules/message-queue/services/message-queue.service';
 import { PROSPECTING_JOB_LEASE_DURATION_MS } from 'src/engine/core-modules/prospecting-job/constants/prospecting-job-lease-duration-ms.constant';
 import { PROSPECTING_JOB_REENQUEUE_AFTER_MS } from 'src/engine/core-modules/prospecting-job/constants/prospecting-job-reenqueue-after-ms.constant';
 import { ProspectingJobEntity } from 'src/engine/core-modules/prospecting-job/prospecting-job.entity';
-import { ProspectingJobLedgerService } from 'src/engine/core-modules/prospecting-job/services/prospecting-job-ledger.service';
+import { type ProspectingJobLedgerService } from 'src/engine/core-modules/prospecting-job/services/prospecting-job-ledger.service';
 import { type CreateProspectingJobInput } from 'src/engine/core-modules/prospecting-job/types/create-prospecting-job-input.type';
 
 jest.useRealTimers();
 
-config({
-  path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
-  override: true,
-});
-
 describe('ProspectingJobLedgerService (integration)', () => {
-  let dataSource: DataSource;
   let prospectingJobRepository: Repository<ProspectingJobEntity>;
   let ledgerService: ProspectingJobLedgerService;
+  let AppProspectingJobLedgerService: typeof ProspectingJobLedgerService;
   let enqueue: jest.Mock;
   let workspaceId: string;
   let campaignId: string;
@@ -46,7 +42,7 @@ describe('ProspectingJobLedgerService (integration)', () => {
   };
 
   const expireLease = (prospectingJobId: string) =>
-    dataSource.query(
+    prospectingJobRepository.query(
       `UPDATE "core"."prospectingJob" SET "lockedAt" = now() - ($1 * interval '1 millisecond') WHERE "id" = $2`,
       [PROSPECTING_JOB_LEASE_DURATION_MS + 60_000, prospectingJobId],
     );
@@ -55,21 +51,18 @@ describe('ProspectingJobLedgerService (integration)', () => {
     prospectingJobRepository.findOneByOrFail({ id: prospectingJobId });
 
   beforeAll(async () => {
-    dataSource = new DataSource({
-      type: 'postgres',
-      url: process.env.PG_DATABASE_URL,
-      schema: 'core',
-      entities: [
-        'src/engine/core-modules/**/*.entity.ts',
-        'src/engine/metadata-modules/**/*.entity.ts',
-      ],
-      synchronize: false,
-    });
-    await dataSource.initialize();
+    prospectingJobRepository =
+      getCoreRepository<ProspectingJobEntity>(ProspectingJobEntity);
 
-    prospectingJobRepository = dataSource.getRepository(ProspectingJobEntity);
+    // The app comes from jest's global setup with its own module registry, so
+    // the ledger is built from the app's class: its query builders then name
+    // the entity class the app's data source knows. The queue stays mocked.
+    AppProspectingJobLedgerService =
+      getAppProviderByClassName<ProspectingJobLedgerService>(
+        'ProspectingJobLedgerService',
+      ).constructor as typeof ProspectingJobLedgerService;
 
-    const [seedWorkspace] = await dataSource.query(
+    const [seedWorkspace] = await prospectingJobRepository.query(
       `SELECT id FROM "core"."workspace" ORDER BY "createdAt" LIMIT 1`,
     );
 
@@ -85,20 +78,19 @@ describe('ProspectingJobLedgerService (integration)', () => {
   beforeEach(() => {
     campaignId = crypto.randomUUID();
     enqueue = jest.fn().mockResolvedValue(undefined);
-    ledgerService = new ProspectingJobLedgerService(prospectingJobRepository, {
-      add: enqueue,
-    } as unknown as MessageQueueService);
-  });
-
-  afterEach(async () => {
-    await dataSource.query(
-      `DELETE FROM "core"."prospectingJob" WHERE "workspaceId" = $1 AND "campaignId" = $2`,
-      [workspaceId, campaignId],
+    ledgerService = new AppProspectingJobLedgerService(
+      prospectingJobRepository,
+      {
+        add: enqueue,
+      } as unknown as MessageQueueService,
     );
   });
 
-  afterAll(async () => {
-    await dataSource.destroy();
+  afterEach(async () => {
+    await prospectingJobRepository.query(
+      `DELETE FROM "core"."prospectingJob" WHERE "workspaceId" = $1 AND "campaignId" = $2`,
+      [workspaceId, campaignId],
+    );
   });
 
   it('creates one row and one queue message for a repeated idempotency key', async () => {
@@ -294,7 +286,7 @@ describe('ProspectingJobLedgerService (integration)', () => {
   it('re-enqueues a pending job whose queue message was lost', async () => {
     const job = await createSingleJob();
 
-    await dataSource.query(
+    await prospectingJobRepository.query(
       `UPDATE "core"."prospectingJob"
           SET "lastEnqueuedAt" = now() - ($1 * interval '1 millisecond'),
               "nextRunAt" = now() - ($1 * interval '1 millisecond')
@@ -320,7 +312,7 @@ describe('ProspectingJobLedgerService (integration)', () => {
       campaignId,
     });
 
-    await dataSource.query(
+    await prospectingJobRepository.query(
       `UPDATE "core"."prospectingJob"
           SET "lastEnqueuedAt" = now() - ($1 * interval '1 millisecond')
         WHERE "id" = $2`,
