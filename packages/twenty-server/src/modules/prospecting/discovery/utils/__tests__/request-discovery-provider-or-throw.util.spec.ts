@@ -52,4 +52,25 @@ describe('requestDiscoveryProviderOrThrow', () => {
 
     expect(body).toEqual({ ok: true });
   });
+
+  it('treats a status the provider uses for no results as an empty response', async () => {
+    const request = jest.fn().mockRejectedValue(httpError(404));
+    const httpClient = { request } as unknown as AxiosInstance;
+
+    await expect(
+      requestDiscoveryProviderOrThrow({
+        httpClient,
+        providerId: 'test-source',
+        requestConfig: { url: '/' },
+        emptyResponseStatuses: [404],
+      }),
+    ).resolves.toBeNull();
+    await expect(
+      requestDiscoveryProviderOrThrow({
+        httpClient,
+        providerId: 'test-source',
+        requestConfig: { url: '/' },
+      }),
+    ).rejects.toMatchObject({ code: 'PROVIDER_REQUEST_REJECTED' });
+  });
 });

@@ -60,22 +60,25 @@ describe('buildDiscoveryStages', () => {
 });
 
 describe('discover page jobs', () => {
-  const buildJob = (pageIndex: number, icpVersion = 1) =>
+  const buildJob = (pageIndex: number, profileFingerprint = 'profile-a') =>
     buildDiscoverPageJob({
       workspaceId: 'workspace-1',
       campaignId: 'campaign-1',
-      icpVersion,
+      icpVersion: 1,
       stage: { providerId: 'gleif', countryCode: 'SG' },
       cursor: pageIndex === 0 ? null : '0:2',
       pageIndex,
+      profileFingerprint,
     });
 
   it('gives each page of a stage its own idempotency key', () => {
     expect(buildJob(0).idempotencyKey).toBe(
-      'campaign-1:DISCOVER_PAGE:gleif:SG:0:1',
+      'campaign-1:DISCOVER_PAGE:gleif:SG:0:profile-a:1',
     );
     expect(buildJob(1).idempotencyKey).not.toBe(buildJob(0).idempotencyKey);
-    expect(buildJob(0, 2).idempotencyKey).not.toBe(buildJob(0).idempotencyKey);
+    expect(buildJob(0, 'profile-b').idempotencyKey).not.toBe(
+      buildJob(0).idempotencyKey,
+    );
   });
 
   it('reads back the input it wrote', () => {
@@ -84,7 +87,19 @@ describe('discover page jobs', () => {
       countryCode: 'SG',
       cursor: '0:2',
       pageIndex: 1,
+      profileFingerprint: 'profile-a',
     });
+  });
+
+  it('still reads jobs planned before profile fingerprints existed', () => {
+    expect(
+      parseDiscoverPageJobInput({
+        providerId: 'gleif',
+        countryCode: 'SG',
+        cursor: null,
+        pageIndex: 0,
+      }),
+    ).toMatchObject({ providerId: 'gleif', pageIndex: 0 });
   });
 
   it('rejects malformed input', () => {

@@ -435,6 +435,7 @@ describe('prospecting tenant isolation (integration)', () => {
         stage: { providerId: 'fixture', countryCode: 'SG' },
         cursor: null,
         pageIndex: 0,
+        profileFingerprint: 'forged',
       }),
     ]);
 

@@ -22,14 +22,18 @@ const getHttpFailureExceptionCode = (status: number) => {
   return 'PROVIDER_REQUEST_REJECTED';
 };
 
+// Statuses in emptyResponseStatuses resolve to null: some providers answer a
+// search with no results with an error status instead of an empty list.
 export const requestDiscoveryProviderOrThrow = async ({
   httpClient,
   providerId,
   requestConfig,
+  emptyResponseStatuses = [],
 }: {
   httpClient: AxiosInstance;
   providerId: string;
   requestConfig: AxiosRequestConfig;
+  emptyResponseStatuses?: number[];
 }): Promise<unknown> => {
   try {
     const response = await httpClient.request(requestConfig);
@@ -38,6 +42,13 @@ export const requestDiscoveryProviderOrThrow = async ({
   } catch (error) {
     if (!isAxiosError(error)) {
       throw error;
+    }
+
+    if (
+      error.response &&
+      emptyResponseStatuses.includes(error.response.status)
+    ) {
+      return null;
     }
 
     if (error.response) {

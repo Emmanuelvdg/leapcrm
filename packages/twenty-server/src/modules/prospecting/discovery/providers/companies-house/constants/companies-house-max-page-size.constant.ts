@@ -1,0 +1,1 @@
+export const COMPANIES_HOUSE_MAX_PAGE_SIZE = 5000;

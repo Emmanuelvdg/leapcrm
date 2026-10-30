@@ -16,6 +16,7 @@ import { buildCandidateSource } from 'src/modules/prospecting/candidate/utils/bu
 import { DISCOVERY_PAGE_SIZE } from 'src/modules/prospecting/discovery/constants/discovery-page-size.constant';
 import { DiscoveryProviderException } from 'src/modules/prospecting/discovery/exceptions/discovery-provider.exception';
 import { DiscoveryProviderRegistryService } from 'src/modules/prospecting/discovery/services/discovery-provider-registry.service';
+import { buildDiscoveryProfileFingerprint } from 'src/modules/prospecting/discovery/utils/build-discovery-profile-fingerprint.util';
 import {
   buildDiscoveryStages,
   DIRECTORY_DISCOVERY_STAGE_ID,
@@ -102,6 +103,41 @@ export class DiscoveryPageService {
     );
     const remainingCandidateCount =
       targetCandidateCount - campaign.candidatesFound;
+    const profileFingerprint = buildDiscoveryProfileFingerprint({
+      icp,
+      discoverySources,
+      targetCandidateCount,
+    });
+
+    // The profile or sources changed after this job was planned: its cursor
+    // belongs to the old search, so discovery starts over for the new one.
+    if (
+      isDefined(jobInput.profileFingerprint) &&
+      jobInput.profileFingerprint !== profileFingerprint
+    ) {
+      const restartJob =
+        remainingCandidateCount > 0
+          ? buildDiscoverPageJob({
+              workspaceId,
+              campaignId: campaign.id,
+              icpVersion: campaign.icpVersion,
+              stage: stages[0],
+              cursor: null,
+              pageIndex: 0,
+              profileFingerprint,
+            })
+          : null;
+
+      return {
+        result: {
+          providerId: stage.providerId,
+          isSkipped: true,
+          skipReason: 'PROFILE_CHANGED',
+        },
+        followUpJobs: isDefined(restartJob) ? [restartJob] : [],
+        isCampaignFinished: !isDefined(restartJob),
+      };
+    }
 
     // The sources changed while the campaign was paused and this stage no
     // longer exists, or the target was already reached.
@@ -152,6 +188,7 @@ export class DiscoveryPageService {
       jobInput,
       nextCursor: fetchedPage.nextCursor,
       isTargetReached: candidatesFound >= targetCandidateCount,
+      profileFingerprint,
     });
 
     return {
@@ -397,6 +434,7 @@ export class DiscoveryPageService {
     jobInput,
     nextCursor,
     isTargetReached,
+    profileFingerprint,
   }: {
     workspaceId: string;
     campaign: ProspectingCampaignWorkspaceEntity;
@@ -405,6 +443,7 @@ export class DiscoveryPageService {
     jobInput: { pageIndex: number };
     nextCursor: string | null;
     isTargetReached: boolean;
+    profileFingerprint: string;
   }): CreateProspectingJobInput | null {
     if (isTargetReached) {
       return null;
@@ -418,6 +457,7 @@ export class DiscoveryPageService {
         stage: stages[stageIndex],
         cursor: nextCursor,
         pageIndex: jobInput.pageIndex + 1,
+        profileFingerprint,
       });
     }
 
@@ -431,6 +471,7 @@ export class DiscoveryPageService {
           stage: nextStage,
           cursor: null,
           pageIndex: 0,
+          profileFingerprint,
         })
       : null;
   }

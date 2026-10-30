@@ -9,6 +9,8 @@ const discoverPageJobInputSchema = z.object({
   countryCode: z.string().nullable(),
   cursor: z.string().nullable(),
   pageIndex: z.number().int().min(0),
+  // Absent on jobs planned before profile fingerprints existed.
+  profileFingerprint: z.string().min(1).optional(),
 });
 
 export type DiscoverPageJobInput = z.infer<typeof discoverPageJobInputSchema>;
@@ -22,8 +24,8 @@ export const parseDiscoverPageJobInput = (
 };
 
 // The page index rather than the cursor goes into the key: cursors can be
-// long and opaque, while a page index is fixed for a given stage. The ICP
-// version starts a fresh set of keys whenever the ICP changes.
+// long and opaque, while a page index is fixed for a given stage. The profile
+// fingerprint starts a fresh set of keys whenever the search changes.
 export const buildDiscoverPageJob = ({
   workspaceId,
   campaignId,
@@ -31,6 +33,7 @@ export const buildDiscoverPageJob = ({
   stage,
   cursor,
   pageIndex,
+  profileFingerprint,
 }: {
   workspaceId: string;
   campaignId: string;
@@ -38,6 +41,7 @@ export const buildDiscoverPageJob = ({
   stage: DiscoveryStage;
   cursor: string | null;
   pageIndex: number;
+  profileFingerprint: string;
 }): CreateProspectingJobInput => ({
   workspaceId,
   campaignId,
@@ -45,7 +49,7 @@ export const buildDiscoverPageJob = ({
   idempotencyKey: buildProspectingJobIdempotencyKey({
     campaignId,
     operation: 'DISCOVER_PAGE',
-    target: `${stage.providerId}:${stage.countryCode ?? 'ALL'}:${pageIndex}`,
+    target: `${stage.providerId}:${stage.countryCode ?? 'ALL'}:${pageIndex}:${profileFingerprint}`,
     version: icpVersion,
   }),
   input: {
@@ -53,5 +57,6 @@ export const buildDiscoverPageJob = ({
     countryCode: stage.countryCode,
     cursor,
     pageIndex,
+    profileFingerprint,
   },
 });

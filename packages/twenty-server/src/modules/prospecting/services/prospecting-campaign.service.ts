@@ -10,6 +10,7 @@ import {
   buildDiscoveryStages,
   type DiscoveryStage,
 } from 'src/modules/prospecting/discovery/utils/build-discovery-stages.util';
+import { buildDiscoveryProfileFingerprint } from 'src/modules/prospecting/discovery/utils/build-discovery-profile-fingerprint.util';
 import { buildDiscoverPageJob } from 'src/modules/prospecting/discovery/utils/discover-page-job.util';
 import { ProspectingException } from 'src/modules/prospecting/exceptions/prospecting.exception';
 import { ProspectingCampaignWorkspaceEntity } from 'src/modules/prospecting/standard-objects/prospecting-campaign.workspace-entity';
@@ -37,6 +38,7 @@ type CampaignRunPlan = {
   update: CampaignUpdate;
   firstStage: DiscoveryStage;
   icpVersion: number;
+  profileFingerprint: string;
 };
 
 @Injectable()
@@ -99,11 +101,26 @@ export class ProspectingCampaignService {
         campaignId: args.campaignId,
       });
 
-    // Nothing was on hold, for example when the ICP changed and the old jobs
-    // no longer apply: plan again. Pages already done keep their keys and are
-    // not repeated.
+    // Nothing was on hold, so the last chain ended while the campaign was
+    // paused: plan again. Pages already done for the same search keep their
+    // keys and are not repeated, so when nothing new can be planned the
+    // campaign has finished.
     if (releasedJobCount === 0 && isDefined(plan)) {
-      await this.planFirstDiscoveryJob({ ...args, plan });
+      const plannedJobCount = await this.planFirstDiscoveryJob({
+        ...args,
+        plan,
+      });
+
+      if (plannedJobCount === 0) {
+        const { statusChange: completedStatusChange } =
+          await this.transitionStatus({
+            ...args,
+            allowedFromStatuses: ['RUNNING'],
+            toStatus: 'COMPLETED',
+          });
+
+        return completedStatusChange;
+      }
     }
 
     return statusChange;
@@ -130,8 +147,10 @@ export class ProspectingCampaignService {
     workspaceId,
     campaignId,
     plan,
-  }: ProspectingCampaignActionArgs & { plan: CampaignRunPlan }): Promise<void> {
-    await this.prospectingJobLedgerService.createJobs([
+  }: ProspectingCampaignActionArgs & {
+    plan: CampaignRunPlan;
+  }): Promise<number> {
+    const plannedJobs = await this.prospectingJobLedgerService.createJobs([
       buildDiscoverPageJob({
         workspaceId,
         campaignId,
@@ -139,8 +158,11 @@ export class ProspectingCampaignService {
         stage: plan.firstStage,
         cursor: null,
         pageIndex: 0,
+        profileFingerprint: plan.profileFingerprint,
       }),
     ]);
+
+    return plannedJobs.length;
   }
 
   private async transitionStatus({
@@ -242,7 +264,8 @@ export class ProspectingCampaignService {
       );
     }
 
-    const { icp, discoverySources } = startableCampaign.data;
+    const { icp, discoverySources, targetCandidateCount } =
+      startableCampaign.data;
     const unknownProviderIds =
       this.discoveryProviderRegistryService.findUnknownProviderIds(
         discoverySources,
@@ -279,6 +302,11 @@ export class ProspectingCampaignService {
       },
       firstStage,
       icpVersion: campaign.icpVersion,
+      profileFingerprint: buildDiscoveryProfileFingerprint({
+        icp,
+        discoverySources: resolvedDiscoverySources,
+        targetCandidateCount,
+      }),
     };
   }
 

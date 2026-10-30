@@ -1254,6 +1254,17 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    isSensitive: true,
+    isHiddenInAdminPanel: true,
+    description:
+      'Companies House public data API key. The UK registry discovery source is only offered when it is set.',
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  COMPANIES_HOUSE_API_KEY?: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description: 'Page ID for Cal.com booking integration',
     isHiddenInAdminPanel: true,
     type: ConfigVariableType.STRING,

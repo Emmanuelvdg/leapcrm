@@ -6,13 +6,16 @@ import { type ProspectCampaignCandidateCounterService } from 'src/modules/prospe
 import { type ProspectCandidateWriterService } from 'src/modules/prospecting/candidate/services/prospect-candidate-writer.service';
 import { type DiscoveredCompany } from 'src/modules/prospecting/candidate/types/discovered-company.type';
 import { DiscoveryProviderException } from 'src/modules/prospecting/discovery/exceptions/discovery-provider.exception';
+import { CompaniesHouseDiscoveryProvider } from 'src/modules/prospecting/discovery/providers/companies-house/companies-house-discovery-provider.service';
 import { FixtureDiscoveryProvider } from 'src/modules/prospecting/discovery/providers/fixture/fixture-discovery-provider.service';
 import { GleifDiscoveryProvider } from 'src/modules/prospecting/discovery/providers/gleif/gleif-discovery-provider.service';
 import { WikidataDiscoveryProvider } from 'src/modules/prospecting/discovery/providers/wikidata/wikidata-discovery-provider.service';
 import { DiscoveryPageService } from 'src/modules/prospecting/discovery/services/discovery-page.service';
 import { DiscoveryProviderRegistryService } from 'src/modules/prospecting/discovery/services/discovery-provider-registry.service';
+import { buildDiscoveryProfileFingerprint } from 'src/modules/prospecting/discovery/utils/build-discovery-profile-fingerprint.util';
 import { DIRECTORY_DISCOVERY_STAGE_ID } from 'src/modules/prospecting/discovery/utils/build-discovery-stages.util';
 import { type ProspectingCampaignWorkspaceEntity } from 'src/modules/prospecting/standard-objects/prospecting-campaign.workspace-entity';
+import { startableProspectingCampaignSchema } from 'src/modules/prospecting/zod-schemas/startable-prospecting-campaign.zod-schema';
 
 const WORKSPACE_ID = '20202020-0000-4000-8000-000000000001';
 const CAMPAIGN_ID = '20202020-0000-4000-8000-000000000002';
@@ -94,6 +97,10 @@ describe('DiscoveryPageService', () => {
       gleifProvider,
       new WikidataDiscoveryProvider({} as SecureHttpClientService),
       new FixtureDiscoveryProvider(),
+      new CompaniesHouseDiscoveryProvider(
+        {} as SecureHttpClientService,
+        { get: () => undefined } as unknown as TwentyConfigService,
+      ),
     );
     directory = {
       findPublicCompanies: jest.fn().mockResolvedValue([]),
@@ -176,6 +183,7 @@ describe('DiscoveryPageService', () => {
       countryCode: 'SG',
       cursor: null,
       pageIndex: 0,
+      profileFingerprint: expect.any(String),
     });
   });
 
@@ -306,6 +314,65 @@ describe('DiscoveryPageService', () => {
 
     expect(writeDiscoveredCompanies).toHaveBeenCalledTimes(2);
     expect(outcome.result).toMatchObject({ createdCount: 3, mergedCount: 3 });
+  });
+
+  it('starts the search over when the profile changed after the job was planned', async () => {
+    const search = jest.spyOn(gleifProvider, 'search');
+    const campaign = buildCampaign();
+    const { icp, discoverySources, targetCandidateCount } =
+      startableProspectingCampaignSchema.parse(campaign);
+
+    const outcome = await process(
+      {
+        providerId: 'gleif',
+        countryCode: 'SG',
+        cursor: '0:3',
+        pageIndex: 2,
+        profileFingerprint: 'planned-for-an-older-profile',
+      },
+      campaign,
+    );
+
+    expect(search).not.toHaveBeenCalled();
+    expect(writeDiscoveredCompanies).not.toHaveBeenCalled();
+    expect(outcome.result).toMatchObject({ skipReason: 'PROFILE_CHANGED' });
+    expect(outcome.isCampaignFinished).toBe(false);
+    expect(outcome.followUpJobs[0].input).toEqual({
+      providerId: DIRECTORY_DISCOVERY_STAGE_ID,
+      countryCode: 'SG',
+      cursor: null,
+      pageIndex: 0,
+      profileFingerprint: buildDiscoveryProfileFingerprint({
+        icp,
+        discoverySources,
+        targetCandidateCount,
+      }),
+    });
+  });
+
+  it('carries on when the profile is the one the job was planned for', async () => {
+    const campaign = buildCampaign();
+    const { icp, discoverySources, targetCandidateCount } =
+      startableProspectingCampaignSchema.parse(campaign);
+    const profileFingerprint = buildDiscoveryProfileFingerprint({
+      icp,
+      discoverySources,
+      targetCandidateCount,
+    });
+
+    const outcome = await process(
+      {
+        providerId: 'fixture',
+        countryCode: 'SG',
+        cursor: null,
+        pageIndex: 0,
+        profileFingerprint,
+      },
+      campaign,
+    );
+
+    expect(writeDiscoveredCompanies).toHaveBeenCalled();
+    expect(outcome.followUpJobs[0].input).toMatchObject({ profileFingerprint });
   });
 
   it('finishes the campaign after the last stage is exhausted', async () => {

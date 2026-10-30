@@ -5,6 +5,7 @@ import { type SecureHttpClientService } from 'src/engine/core-modules/secure-htt
 import { type TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { type UserRoleService } from 'src/engine/metadata-modules/user-role/user-role.service';
 import { type GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
+import { CompaniesHouseDiscoveryProvider } from 'src/modules/prospecting/discovery/providers/companies-house/companies-house-discovery-provider.service';
 import { FixtureDiscoveryProvider } from 'src/modules/prospecting/discovery/providers/fixture/fixture-discovery-provider.service';
 import { GleifDiscoveryProvider } from 'src/modules/prospecting/discovery/providers/gleif/gleif-discovery-provider.service';
 import { WikidataDiscoveryProvider } from 'src/modules/prospecting/discovery/providers/wikidata/wikidata-discovery-provider.service';
@@ -89,6 +90,10 @@ describe('ProspectingCampaignService', () => {
         new GleifDiscoveryProvider({} as SecureHttpClientService),
         new WikidataDiscoveryProvider({} as SecureHttpClientService),
         new FixtureDiscoveryProvider(),
+        new CompaniesHouseDiscoveryProvider(
+          {} as SecureHttpClientService,
+          { get: () => undefined } as unknown as TwentyConfigService,
+        ),
       ),
     );
   });
@@ -130,6 +135,7 @@ describe('ProspectingCampaignService', () => {
           countryCode: 'SG',
           cursor: null,
           pageIndex: 0,
+          profileFingerprint: expect.any(String),
         },
       }),
     ]);
@@ -137,10 +143,39 @@ describe('ProspectingCampaignService', () => {
 
   it('plans again on resume when no job was on hold', async () => {
     givenCampaign(buildCampaign({ status: 'PAUSED' }));
+    ledgerService.createJobs.mockResolvedValue([{ id: 'job-1' }]);
 
-    await service.resume(actionArgs);
+    const result = await service.resume(actionArgs);
 
     expect(ledgerService.createJobs).toHaveBeenCalledTimes(1);
+    expect(result).toEqual({ campaignId: CAMPAIGN_ID, status: 'RUNNING' });
+  });
+
+  it('completes a resumed campaign when its search has nothing left to plan', async () => {
+    campaignRepository.findOne
+      .mockResolvedValueOnce(buildCampaign({ status: 'PAUSED' }))
+      .mockResolvedValueOnce(buildCampaign({ status: 'RUNNING' }));
+
+    const result = await service.resume(actionArgs);
+
+    expect(result).toEqual({ campaignId: CAMPAIGN_ID, status: 'COMPLETED' });
+    expect(campaignRepository.update).toHaveBeenLastCalledWith(
+      expect.anything(),
+      { status: 'COMPLETED' },
+    );
+  });
+
+  it('plans jobs for the search the campaign has when it starts', async () => {
+    givenCampaign(buildCampaign());
+
+    await service.start(actionArgs);
+
+    const [[[plannedJob]]] = ledgerService.createJobs.mock.calls;
+
+    expect(plannedJob.input.profileFingerprint).toEqual(expect.any(String));
+    expect(plannedJob.idempotencyKey).toContain(
+      plannedJob.input.profileFingerprint,
+    );
   });
 
   it('keeps the discovery sources the user chose', async () => {
@@ -248,6 +283,7 @@ describe('ProspectingCampaignService', () => {
 
   it('resumes a paused campaign and releases its jobs', async () => {
     givenCampaign(buildCampaign({ status: 'PAUSED' }));
+    ledgerService.releaseCampaignJobs.mockResolvedValue(2);
 
     const result = await service.resume(actionArgs);
 
