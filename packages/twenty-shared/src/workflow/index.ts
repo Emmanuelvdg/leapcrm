@@ -96,6 +96,10 @@ export { workflowRunStateStepInfoSchema } from './schemas/workflow-run-state-ste
 export { workflowRunStateStepInfosSchema } from './schemas/workflow-run-state-step-infos-schema';
 export { workflowRunStatusSchema } from './schemas/workflow-run-status-schema';
 export {
+  workflowRunStepErrorPhaseSchema,
+  workflowRunStepErrorDetailsSchema,
+} from './schemas/workflow-run-step-error-details-schema';
+export {
   workflowRunStepLogSchema,
   workflowRunStepLogsSchema,
 } from './schemas/workflow-run-step-log-schema';
@@ -120,12 +124,18 @@ export type {
 } from './types/WorkflowRunStateStepInfos';
 export { StepStatus } from './types/WorkflowRunStateStepInfos';
 export type {
+  WorkflowRunStepErrorPhase,
+  WorkflowRunStepErrorDetails,
+} from './types/WorkflowRunStepErrorDetails';
+export type {
   WorkflowRunStepLog,
   WorkflowRunStepLogs,
   AiAgentStepLogDetails,
   AiToolCallLog,
   McpToolCallStepLogDetails,
 } from './types/WorkflowRunStepLog';
+export type { WorkflowRunTraceEntry } from './types/WorkflowRunTraceEntry';
+export { buildWorkflowRunTrace } from './utils/buildWorkflowRunTrace';
 export { canObjectBeManagedByAutomation } from './utils/canObjectBeManagedByAutomation';
 export { extractRawVariableNamePart } from './utils/extractRawVariableNameParts';
 export { getFunctionInputFromInputSchema } from './utils/getFunctionInputFromInputSchema';

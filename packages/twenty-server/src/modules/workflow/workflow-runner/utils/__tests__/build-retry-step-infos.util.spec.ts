@@ -26,7 +26,22 @@ describe('buildRetryStepInfos', () => {
 
     expect(stepIdsToRetry).toEqual(['step-2']);
     expect(stepInfosToUpdate).toEqual({
-      'step-2': { status: StepStatus.NOT_STARTED },
+      'step-2': { status: StepStatus.NOT_STARTED, attempt: 2 },
+    });
+  });
+
+  it('increments the attempt of a step that was already retried', () => {
+    const steps: WorkflowAction[] = [createMockCodeStep('step-1')];
+
+    const stepInfos: WorkflowRunStepInfos = {
+      'step-1': { status: StepStatus.FAILED, error: 'boom', attempt: 2 },
+    };
+
+    const { stepInfosToUpdate } = buildRetryStepInfos({ steps, stepInfos });
+
+    expect(stepInfosToUpdate['step-1']).toEqual({
+      status: StepStatus.NOT_STARTED,
+      attempt: 3,
     });
   });
 
@@ -87,8 +102,14 @@ describe('buildRetryStepInfos', () => {
         hasProcessedAllItems: false,
       },
       error: undefined,
+      errorDetails: undefined,
+      endedAt: undefined,
+      attempt: 2,
     });
-    expect(stepInfosToUpdate.body).toEqual({ status: StepStatus.NOT_STARTED });
+    expect(stepInfosToUpdate.body).toEqual({
+      status: StepStatus.NOT_STARTED,
+      attempt: 2,
+    });
   });
 
   it('resets the whole loop when the iterator itself failed', () => {
@@ -112,6 +133,7 @@ describe('buildRetryStepInfos', () => {
     expect(stepIdsToRetry).toEqual(['iterator']);
     expect(stepInfosToUpdate.iterator).toEqual({
       status: StepStatus.NOT_STARTED,
+      attempt: 2,
     });
     expect(stepInfosToUpdate.body).toEqual({ status: StepStatus.NOT_STARTED });
   });

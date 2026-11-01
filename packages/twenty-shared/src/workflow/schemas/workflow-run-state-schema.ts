@@ -10,4 +10,5 @@ export const workflowRunStateSchema = z.object({
   }),
   stepInfos: workflowRunStateStepInfosSchema,
   workflowRunError: z.any().optional(),
+  failedStepId: z.string().optional(),
 });

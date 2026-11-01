@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
+import omit from 'lodash.omit';
 import { isDefined } from 'twenty-shared/utils';
 import {
   getWorkflowRunContext,
@@ -26,16 +27,17 @@ import { WorkspaceCacheService } from 'src/engine/workspace-cache/services/works
 import { WorkspaceEventEmitter } from 'src/engine/workspace-event-emitter/workspace-event-emitter';
 import { WorkflowRunStatus } from 'src/modules/workflow/common/standard-objects/workflow-run.workspace-entity';
 import { workflowHasRunningSteps } from 'src/modules/workflow/common/utils/workflow-has-running-steps.util';
-import {
-  WorkflowStepExecutorException,
-  WorkflowStepExecutorExceptionCode,
-} from 'src/modules/workflow/workflow-executor/exceptions/workflow-step-executor.exception';
+import { WorkflowStepAttributedException } from 'src/modules/workflow/workflow-executor/exceptions/workflow-step-attributed.exception';
 import { WorkflowActionFactory } from 'src/modules/workflow/workflow-executor/factories/workflow-action.factory';
 import { type WorkflowActionOutput } from 'src/modules/workflow/workflow-executor/types/workflow-action-output.type';
 import {
   type WorkflowBranchExecutorInput,
   type WorkflowExecutorInput,
 } from 'src/modules/workflow/workflow-executor/types/workflow-executor-input';
+import { buildStepFailureInputSnapshot } from 'src/modules/workflow/workflow-executor/utils/build-step-failure-input-snapshot.util';
+import { buildWorkflowStepErrorDetails } from 'src/modules/workflow/workflow-executor/utils/build-workflow-step-error-details.util';
+import { findFirstFailedStepId } from 'src/modules/workflow/workflow-executor/utils/find-first-failed-step-id.util';
+import { isWorkflowStepUserError } from 'src/modules/workflow/workflow-executor/utils/is-workflow-step-user-error.util';
 import { shouldExecuteStep } from 'src/modules/workflow/workflow-executor/utils/should-execute-step.util';
 import { shouldFailSafely } from 'src/modules/workflow/workflow-executor/utils/should-fail-safely.util';
 import { shouldSkipStepExecution } from 'src/modules/workflow/workflow-executor/utils/should-skip-step-execution.util';
@@ -56,6 +58,8 @@ const MAX_EXECUTED_STEPS_COUNT = 20;
 
 @Injectable()
 export class WorkflowExecutorWorkspaceService {
+  private readonly logger = new Logger(WorkflowExecutorWorkspaceService.name);
+
   constructor(
     private readonly workflowActionFactory: WorkflowActionFactory,
     private readonly workspaceEventEmitter: WorkspaceEventEmitter,
@@ -95,7 +99,23 @@ export class WorkflowExecutorWorkspaceService {
     }
   }
 
-  private async executeFromStep({
+  private async executeFromStep(input: WorkflowBranchExecutorInput) {
+    try {
+      await this.executeStepAndContinue(input);
+    } catch (error) {
+      if (error instanceof WorkflowStepAttributedException) {
+        throw error;
+      }
+
+      throw new WorkflowStepAttributedException({
+        stepId: input.stepId,
+        phase: 'ORCHESTRATION',
+        originalError: error,
+      });
+    }
+  }
+
+  private async executeStepAndContinue({
     stepId,
     workflowRunId,
     workspaceId,
@@ -126,6 +146,7 @@ export class WorkflowExecutorWorkspaceService {
     }
 
     let actionOutput: WorkflowActionOutput;
+    let executionDurationMs: number | undefined;
 
     if (
       shouldExecuteStep({
@@ -135,6 +156,8 @@ export class WorkflowExecutorWorkspaceService {
         workflowRunStatus: workflowRun.status,
       })
     ) {
+      const executionStartTime = Date.now();
+
       actionOutput = await this.executeStep({
         step: stepToExecute,
         steps,
@@ -143,11 +166,35 @@ export class WorkflowExecutorWorkspaceService {
         workspaceId,
       });
 
+      executionDurationMs = Date.now() - executionStartTime;
+
       if (isDefined(actionOutput.error)) {
         const enclosingIterator = findEnclosingIteratorWithContinueOnFailure({
           failedStepId: stepId,
           steps,
         });
+
+        const errorDetails = {
+          ...(actionOutput.errorDetails ??
+            buildWorkflowStepErrorDetails({
+              error: actionOutput.error,
+              phase: 'EXECUTE',
+              isSystemError: false,
+            })),
+          ...buildStepFailureInputSnapshot({
+            step: stepToExecute,
+            context: getWorkflowRunContext(stepInfos),
+          }),
+        };
+
+        // A failure absorbed by the loop can repeat for every item and each one is kept in the run state
+        actionOutput.errorDetails = isDefined(enclosingIterator)
+          ? omit(errorDetails, [
+              'stack',
+              'resolvedInput',
+              'resolvedInputTruncated',
+            ])
+          : errorDetails;
 
         if (isDefined(enclosingIterator)) {
           actionOutput.shouldFailSafely = true;
@@ -190,7 +237,8 @@ export class WorkflowExecutorWorkspaceService {
 
     const { shouldProcessNextSteps } = await this.processStepExecutionResult({
       actionOutput,
-      stepId,
+      step: stepToExecute,
+      executionDurationMs,
       workflowRunId,
       workspaceId,
     });
@@ -304,6 +352,7 @@ export class WorkflowExecutorWorkspaceService {
         workspaceId,
         status: WorkflowRunStatus.FAILED,
         error: 'WorkflowRun failed',
+        failedStepId: findFirstFailedStepId({ steps, stepInfos }),
       });
 
       return;
@@ -360,15 +409,18 @@ export class WorkflowExecutorWorkspaceService {
 
   private async processStepExecutionResult({
     actionOutput,
-    stepId,
+    step,
+    executionDurationMs,
     workflowRunId,
     workspaceId,
   }: {
     actionOutput: WorkflowActionOutput;
-    stepId: string;
+    step: WorkflowAction;
+    executionDurationMs?: number;
     workflowRunId: string;
     workspaceId: string;
   }): Promise<{ shouldProcessNextSteps: boolean }> {
+    const stepId = step.id;
     const isPendingEvent = actionOutput.pendingEvent;
     const isSuccess = isDefined(actionOutput.result);
     const isStopped = actionOutput.shouldEndWorkflowRun ?? false;
@@ -396,6 +448,7 @@ export class WorkflowExecutorWorkspaceService {
       stepInfo = {
         status: StepStatus.FAILED_SAFELY,
         error: actionOutput?.error,
+        errorDetails: actionOutput?.errorDetails,
       };
     } else if (isSuccess) {
       stepInfo = {
@@ -410,12 +463,21 @@ export class WorkflowExecutorWorkspaceService {
       stepInfo = {
         status: StepStatus.FAILED,
         error: actionOutput?.error,
+        errorDetails: actionOutput?.errorDetails,
       };
     }
 
     await this.workflowRunWorkspaceService.updateWorkflowRunStepInfo({
       stepId,
       stepInfo,
+      workflowRunId,
+      workspaceId,
+    });
+
+    this.logStepTransition({
+      step,
+      stepInfo,
+      executionDurationMs,
       workflowRunId,
       workspaceId,
     });
@@ -452,6 +514,7 @@ export class WorkflowExecutorWorkspaceService {
       stepInfo: {
         ...stepInfos[stepId],
         status: StepStatus.RUNNING,
+        errorDetails: undefined,
       },
       workflowRunId,
       workspaceId,
@@ -468,13 +531,9 @@ export class WorkflowExecutorWorkspaceService {
         },
       });
     } catch (error) {
-      const isUserError =
-        error instanceof WorkflowStepExecutorException &&
-        (error.code === WorkflowStepExecutorExceptionCode.INVALID_STEP_TYPE ||
-          error.code === WorkflowStepExecutorExceptionCode.INVALID_STEP_INPUT ||
-          error.code === WorkflowStepExecutorExceptionCode.STEP_NOT_FOUND);
+      const isSystemError = !isWorkflowStepUserError(error);
 
-      if (!isUserError) {
+      if (isSystemError) {
         this.exceptionHandlerService.captureExceptions([error], {
           workspace: { id: workspaceId },
         });
@@ -488,7 +547,40 @@ export class WorkflowExecutorWorkspaceService {
 
       return {
         error: error.message ?? 'Execution result error, no data or error',
+        errorDetails: buildWorkflowStepErrorDetails({
+          error,
+          phase: 'EXECUTE',
+          isSystemError,
+        }),
       };
+    }
+  }
+
+  private logStepTransition({
+    step,
+    stepInfo,
+    executionDurationMs,
+    workflowRunId,
+    workspaceId,
+  }: {
+    step: WorkflowAction;
+    stepInfo: WorkflowRunStepInfo;
+    executionDurationMs?: number;
+    workflowRunId: string;
+    workspaceId: string;
+  }) {
+    const logMessage = `Workflow step ${stepInfo.status}: workflowRun=${workflowRunId} workspace=${workspaceId} step=${step.id} type=${step.type}${
+      isDefined(executionDurationMs) ? ` durationMs=${executionDurationMs}` : ''
+    }${isDefined(stepInfo.error) ? ` error=${JSON.stringify(stepInfo.error)}` : ''}`;
+
+    // Successful steps are high-volume, failures must always reach the logs
+    if (
+      stepInfo.status === StepStatus.FAILED ||
+      stepInfo.status === StepStatus.FAILED_SAFELY
+    ) {
+      this.logger.warn(logMessage);
+    } else {
+      this.logger.debug(logMessage);
     }
   }
 

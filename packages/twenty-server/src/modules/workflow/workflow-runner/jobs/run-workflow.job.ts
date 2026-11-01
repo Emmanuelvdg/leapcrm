@@ -12,6 +12,9 @@ import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system
 import { WorkflowRunStatus } from 'src/modules/workflow/common/standard-objects/workflow-run.workspace-entity';
 import { WorkflowCommonWorkspaceService } from 'src/modules/workflow/common/workspace-services/workflow-common.workspace-service';
 import { CodeStepBuildService } from 'src/modules/workflow/workflow-builder/workflow-version-step/code-step/services/code-step-build.service';
+import { WorkflowStepAttributedException } from 'src/modules/workflow/workflow-executor/exceptions/workflow-step-attributed.exception';
+import { buildWorkflowStepErrorDetails } from 'src/modules/workflow/workflow-executor/utils/build-workflow-step-error-details.util';
+import { type WorkflowAction } from 'src/modules/workflow/workflow-executor/workflow-actions/types/workflow-action.type';
 import { WorkflowExecutorWorkspaceService } from 'src/modules/workflow/workflow-executor/workspace-services/workflow-executor.workspace-service';
 import { RUN_WORKFLOW_JOB_NAME } from 'src/modules/workflow/workflow-runner/constants/run-workflow-job-name';
 import {
@@ -68,15 +71,30 @@ export class RunWorkflowJob {
           });
         }
       } catch (error) {
+        const attributedFailure =
+          error instanceof WorkflowStepAttributedException ? error : undefined;
+
+        const originalError = isDefined(attributedFailure)
+          ? attributedFailure.originalError
+          : error;
+
         await this.workflowRunWorkspaceService.endWorkflowRun({
           workspaceId,
           workflowRunId,
           status: WorkflowRunStatus.FAILED,
           error: error.message,
           isSystemError: true,
+          failedStepId: attributedFailure?.stepId,
+          failedStepErrorDetails: isDefined(attributedFailure)
+            ? buildWorkflowStepErrorDetails({
+                error: originalError,
+                phase: attributedFailure.phase,
+                isSystemError: attributedFailure.phase !== 'PREFLIGHT',
+              })
+            : undefined,
         });
 
-        throw error;
+        throw originalError;
       }
     }, authContext);
   }
@@ -114,7 +132,7 @@ export class RunWorkflowJob {
       );
     }
 
-    await this.codeStepBuildService.buildCodeStepsFromSourceForSteps({
+    await this.buildCodeSteps({
       workspaceId,
       steps: workflowVersion.steps,
     });
@@ -136,6 +154,30 @@ export class RunWorkflowJob {
       workflowRunId,
       workspaceId,
     });
+  }
+
+  // Built one step at a time so a build failure can name the step that caused it
+  private async buildCodeSteps({
+    workspaceId,
+    steps,
+  }: {
+    workspaceId: string;
+    steps: WorkflowAction[];
+  }): Promise<void> {
+    for (const step of steps) {
+      try {
+        await this.codeStepBuildService.buildCodeStepsFromSourceForSteps({
+          workspaceId,
+          steps: [step],
+        });
+      } catch (error) {
+        throw new WorkflowStepAttributedException({
+          stepId: step.id,
+          phase: 'PREFLIGHT',
+          originalError: error,
+        });
+      }
+    }
   }
 
   private async retryWorkflowExecution({

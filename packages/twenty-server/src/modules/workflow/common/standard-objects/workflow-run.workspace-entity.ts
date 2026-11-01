@@ -51,6 +51,7 @@ export type WorkflowRunState = {
   };
   stepInfos: WorkflowRunStepInfos;
   workflowRunError?: string;
+  failedStepId?: string;
 };
 
 export class WorkflowRunWorkspaceEntity extends BaseWorkspaceEntity {

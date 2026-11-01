@@ -7,6 +7,7 @@ import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { RecordPositionModule } from 'src/engine/core-modules/record-position/record-position.module';
 import { WorkflowCommonModule } from 'src/modules/workflow/common/workflow-common.module';
 import { DeleteWorkflowRunsCommand } from 'src/modules/workflow/workflow-runner/workflow-run/command/delete-workflow-runs.command';
+import { TraceWorkflowRunCommand } from 'src/modules/workflow/workflow-runner/workflow-run/command/trace-workflow-run.command';
 import { WorkflowRunStepLogWorkspaceService } from 'src/modules/workflow/workflow-runner/workflow-run/workflow-run-step-log.workspace-service';
 import { WorkflowRunWorkspaceService } from 'src/modules/workflow/workflow-runner/workflow-run/workflow-run.workspace-service';
 
@@ -23,11 +24,13 @@ import { WorkflowRunWorkspaceService } from 'src/modules/workflow/workflow-runne
     WorkflowRunWorkspaceService,
     WorkflowRunStepLogWorkspaceService,
     DeleteWorkflowRunsCommand,
+    TraceWorkflowRunCommand,
   ],
   exports: [
     WorkflowRunWorkspaceService,
     WorkflowRunStepLogWorkspaceService,
     DeleteWorkflowRunsCommand,
+    TraceWorkflowRunCommand,
   ],
 })
 export class WorkflowRunModule {}

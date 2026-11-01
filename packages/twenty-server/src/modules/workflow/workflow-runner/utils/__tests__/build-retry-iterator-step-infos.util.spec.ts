@@ -50,6 +50,9 @@ describe('buildRetryIteratorStepInfos', () => {
           hasProcessedAllItems: false,
         },
         error: undefined,
+        errorDetails: undefined,
+        endedAt: undefined,
+        attempt: 2,
       },
     });
   });
@@ -69,7 +72,7 @@ describe('buildRetryIteratorStepInfos', () => {
     expect(stepIdsToRetry).toEqual(['iterator']);
     expect(stepInfosToUpdate).toEqual({
       body: { status: StepStatus.NOT_STARTED },
-      iterator: { status: StepStatus.NOT_STARTED },
+      iterator: { status: StepStatus.NOT_STARTED, attempt: 2 },
     });
   });
 });

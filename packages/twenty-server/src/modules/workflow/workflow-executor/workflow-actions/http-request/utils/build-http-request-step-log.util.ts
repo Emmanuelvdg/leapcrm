@@ -1,11 +1,14 @@
 import { type WorkflowRunStepLog } from 'twenty-shared/workflow';
 
 import { type ToolOutput } from 'src/engine/core-modules/tool/types/tool-output.type';
+import {
+  REDACTION_SENTINEL,
+  redactSensitiveKeysDeep,
+} from 'src/modules/workflow/workflow-executor/utils/redact-sensitive-keys-deep.util';
 import { type WorkflowHttpRequestActionInput } from 'src/modules/workflow/workflow-executor/workflow-actions/http-request/types/workflow-http-request-action-input.type';
 import { truncateStringToUtf8ByteBudget } from 'src/utils/truncate-string-to-utf8-byte-budget.util';
 
 const MAX_BODY_BYTES = 32_000;
-const REDACTION_SENTINEL = '[redacted]';
 
 const SENSITIVE_HEADER_NAMES = new Set([
   'authorization',
@@ -42,17 +45,11 @@ const SENSITIVE_URL_PARAM_NAMES = new Set([
   'pwd',
 ]);
 
-const SENSITIVE_BODY_KEY_REGEX =
-  /^(password|passwd|pwd|.*_?token|.*_?secret|authorization|api[_-]?key|private[_-]?key|client[_-]?secret|x-?api-?key|x-?auth-?token|access[_-]?key)$/i;
-
 const isSensitiveHeader = (name: string): boolean =>
   SENSITIVE_HEADER_NAMES.has(name.toLowerCase());
 
 const isSensitiveUrlParam = (name: string): boolean =>
   SENSITIVE_URL_PARAM_NAMES.has(name.toLowerCase());
-
-const isSensitiveBodyKey = (name: string): boolean =>
-  SENSITIVE_BODY_KEY_REGEX.test(name);
 
 const redactHeaders = (
   headers: Record<string, unknown> | undefined,
@@ -116,29 +113,6 @@ const redactUrl = (rawUrl: string): string => {
   return didRedact ? parsed.toString() : rawUrl;
 };
 
-const redactSensitiveBodyKeysDeep = (value: unknown): unknown => {
-  if (Array.isArray(value)) {
-    return value.map(redactSensitiveBodyKeysDeep);
-  }
-
-  if (value !== null && typeof value === 'object') {
-    const redacted: Record<string, unknown> = {};
-
-    for (const [key, nested] of Object.entries(value)) {
-      if (isSensitiveBodyKey(key)) {
-        redacted[key] = REDACTION_SENTINEL;
-        continue;
-      }
-
-      redacted[key] = redactSensitiveBodyKeysDeep(nested);
-    }
-
-    return redacted;
-  }
-
-  return value;
-};
-
 const redactJsonBodyString = (body: string): string => {
   if (body.length === 0) {
     return body;
@@ -156,7 +130,7 @@ const redactJsonBodyString = (body: string): string => {
     return body;
   }
 
-  const redactedTree = redactSensitiveBodyKeysDeep(parsed);
+  const redactedTree = redactSensitiveKeysDeep(parsed);
 
   try {
     return JSON.stringify(redactedTree);
@@ -175,7 +149,7 @@ const redactErrorValue = (error: unknown): string | undefined => {
   }
 
   try {
-    return JSON.stringify(redactSensitiveBodyKeysDeep(error));
+    return JSON.stringify(redactSensitiveKeysDeep(error));
   } catch {
     return String(error);
   }
@@ -192,7 +166,7 @@ const stringifyBody = (body: unknown): string | undefined => {
 
   if (typeof body === 'object') {
     try {
-      const redactedTree = redactSensitiveBodyKeysDeep(body);
+      const redactedTree = redactSensitiveKeysDeep(body);
 
       return JSON.stringify(redactedTree);
     } catch {

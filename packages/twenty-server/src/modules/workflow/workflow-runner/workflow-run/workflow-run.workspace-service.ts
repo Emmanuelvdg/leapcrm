@@ -1,8 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import { type ActorMetadata } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
-import { StepStatus, type WorkflowRunStepInfo } from 'twenty-shared/workflow';
+import {
+  StepStatus,
+  type WorkflowRunStepErrorDetails,
+  type WorkflowRunStepInfo,
+  type WorkflowRunStepInfos,
+} from 'twenty-shared/workflow';
 import { type QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { v4 } from 'uuid';
 
@@ -24,9 +29,13 @@ import {
   WorkflowRunException,
   WorkflowRunExceptionCode,
 } from 'src/modules/workflow/workflow-runner/exceptions/workflow-run.exception';
+import { buildWorkflowRunFailureMessage } from 'src/modules/workflow/workflow-runner/utils/build-workflow-run-failure-message.util';
+import { computeStepInfoTiming } from 'src/modules/workflow/workflow-runner/utils/compute-step-info-timing.util';
 
 @Injectable()
 export class WorkflowRunWorkspaceService {
+  private readonly logger = new Logger(WorkflowRunWorkspaceService.name);
+
   constructor(
     private readonly globalWorkspaceOrmManager: GlobalWorkspaceOrmManager,
     private readonly workflowCommonWorkspaceService: WorkflowCommonWorkspaceService,
@@ -188,35 +197,68 @@ export class WorkflowRunWorkspaceService {
     status,
     error,
     isSystemError,
+    failedStepId,
+    failedStepErrorDetails,
   }: {
     workflowRunId: string;
     workspaceId: string;
     status: Extract<WorkflowRunStatus, 'COMPLETED' | 'FAILED' | 'STOPPED'>;
     error?: string;
     isSystemError?: boolean;
+    failedStepId?: string;
+    failedStepErrorDetails?: WorkflowRunStepErrorDetails;
   }) {
     const workflowRunToUpdate = await this.getWorkflowRunOrFail({
       workflowRunId,
       workspaceId,
     });
 
-    let updatedStepInfos = {};
+    const endedAt = new Date().toISOString();
 
-    updatedStepInfos = this.markRunningStepsAsFailed({
+    const updatedStepInfos = this.markRunningStepsAsFailed({
       stepInfosToUpdate: workflowRunToUpdate.state?.stepInfos ?? {},
+      endedAt,
+      failedStepId,
+      failedStepErrorDetails,
     });
+
+    const failedStep = isDefined(failedStepId)
+      ? workflowRunToUpdate.state?.flow?.steps?.find(
+          (step) => step.id === failedStepId,
+        )
+      : undefined;
+
+    const workflowRunError = isDefined(failedStep)
+      ? this.buildFailedStepRunError({
+          failedStep,
+          failedStepInfo: updatedStepInfos[failedStep.id],
+          failedStepErrorDetails,
+          fallbackError: error,
+        })
+      : error;
 
     const partialUpdate = {
       status,
-      endedAt: new Date().toISOString(),
+      endedAt,
       state: {
         ...workflowRunToUpdate.state,
-        workflowRunError: error,
+        workflowRunError,
+        failedStepId: failedStep?.id,
         stepInfos: updatedStepInfos,
       },
     };
 
     await this.updateWorkflowRun({ workflowRunId, workspaceId, partialUpdate });
+
+    const endLogMessage = `Workflow run ended: workflowRun=${workflowRunId} workspace=${workspaceId} status=${status}${
+      isDefined(failedStep) ? ` failedStep=${failedStep.id}` : ''
+    }${isDefined(workflowRunError) ? ` error=${JSON.stringify(workflowRunError)}` : ''}`;
+
+    if (status === WorkflowRunStatus.FAILED) {
+      this.logger.warn(endLogMessage);
+    } else {
+      this.logger.log(endLogMessage);
+    }
 
     const metricKey =
       status === WorkflowRunStatus.COMPLETED
@@ -256,16 +298,24 @@ export class WorkflowRunWorkspaceService {
       workspaceId,
     });
 
+    const previousStepInfo = workflowRunToUpdate.state?.stepInfos[stepId];
+
     const partialUpdate = {
       state: {
         ...workflowRunToUpdate.state,
         stepInfos: {
           ...workflowRunToUpdate.state?.stepInfos,
           [stepId]: {
-            ...workflowRunToUpdate.state?.stepInfos[stepId],
+            ...previousStepInfo,
             result: stepInfo?.result,
             error: stepInfo?.error,
+            errorDetails: stepInfo?.errorDetails,
             status: stepInfo.status,
+            ...computeStepInfoTiming({
+              previousStepInfo,
+              nextStatus: stepInfo.status,
+              now: new Date().toISOString(),
+            }),
           },
         },
       },
@@ -474,22 +524,73 @@ export class WorkflowRunWorkspaceService {
     };
   }
 
+  private buildFailedStepRunError({
+    failedStep,
+    failedStepInfo,
+    failedStepErrorDetails,
+    fallbackError,
+  }: {
+    failedStep: WorkflowAction;
+    failedStepInfo: WorkflowRunStepInfo | undefined;
+    failedStepErrorDetails?: WorkflowRunStepErrorDetails;
+    fallbackError?: string;
+  }) {
+    const errorDetails = failedStepErrorDetails ?? failedStepInfo?.errorDetails;
+
+    const stepError =
+      typeof failedStepInfo?.error === 'string'
+        ? failedStepInfo.error
+        : undefined;
+
+    return buildWorkflowRunFailureMessage({
+      step: failedStep,
+      errorMessage:
+        errorDetails?.message ?? stepError ?? fallbackError ?? 'Unknown error',
+      phase: errorDetails?.phase ?? 'EXECUTE',
+    });
+  }
+
   private markRunningStepsAsFailed({
     stepInfosToUpdate,
+    endedAt,
+    failedStepId,
+    failedStepErrorDetails,
   }: {
-    stepInfosToUpdate: Record<string, WorkflowRunStepInfo>;
-  }) {
+    stepInfosToUpdate: WorkflowRunStepInfos;
+    endedAt: string;
+    failedStepId?: string;
+    failedStepErrorDetails?: WorkflowRunStepErrorDetails;
+  }): WorkflowRunStepInfos {
     return Object.entries(stepInfosToUpdate ?? {})
       .map(([stepId, step]) => {
-        if (
+        const isUnfinished =
           step.status === StepStatus.RUNNING ||
-          step.status === StepStatus.PENDING
-        ) {
+          step.status === StepStatus.PENDING;
+
+        const isAttributedFailure =
+          stepId === failedStepId &&
+          isDefined(failedStepErrorDetails) &&
+          (isUnfinished || step.status === StepStatus.NOT_STARTED);
+
+        if (isAttributedFailure) {
+          return {
+            [stepId]: {
+              ...step,
+              status: StepStatus.FAILED,
+              error: failedStepErrorDetails.message,
+              errorDetails: failedStepErrorDetails,
+              endedAt,
+            },
+          };
+        }
+
+        if (isUnfinished) {
           return {
             [stepId]: {
               ...step,
               status: StepStatus.FAILED,
               error: 'Workflow has been ended before this step was completed',
+              endedAt,
             },
           };
         }

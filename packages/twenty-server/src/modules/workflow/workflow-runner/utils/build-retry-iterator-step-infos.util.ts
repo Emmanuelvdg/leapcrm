@@ -30,6 +30,8 @@ export const buildRetryIteratorStepInfos = ({
   const failedMidLoop =
     isDefined(iteratorResult) && iteratorResult.hasProcessedAllItems === false;
 
+  const attempt = (iteratorStepInfo.attempt ?? 1) + 1;
+
   if (failedMidLoop) {
     return {
       stepInfosToUpdate: {
@@ -37,6 +39,9 @@ export const buildRetryIteratorStepInfos = ({
           ...iteratorStepInfo,
           status: StepStatus.RUNNING,
           error: undefined,
+          errorDetails: undefined,
+          endedAt: undefined,
+          attempt,
         },
       },
       stepIdsToRetry: [],
@@ -55,7 +60,10 @@ export const buildRetryIteratorStepInfos = ({
     stepInfosToUpdate[loopStepId] = { status: StepStatus.NOT_STARTED };
   }
 
-  stepInfosToUpdate[iteratorStep.id] = { status: StepStatus.NOT_STARTED };
+  stepInfosToUpdate[iteratorStep.id] = {
+    status: StepStatus.NOT_STARTED,
+    attempt,
+  };
 
   return {
     stepInfosToUpdate,

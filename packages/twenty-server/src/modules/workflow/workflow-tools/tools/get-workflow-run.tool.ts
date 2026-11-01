@@ -31,7 +31,7 @@ export const createGetWorkflowRunTool = (
 ) => ({
   name: 'get_workflow_run' as const,
   description:
-    'Get the details of a single workflow run for troubleshooting. Returns the overall status, the run-level error, the status and error of each step, and the execution logs of the steps that failed. Use this to diagnose why a workflow run failed or behaved unexpectedly.',
+    'Get the details of a single workflow run for troubleshooting. Returns the overall status, the run-level error and the id of the step that caused the failure, the status, timing and error of each step (including the error phase, the input the step received and any variables that resolved to empty), and the execution logs of the steps that failed. Use this to diagnose why a workflow run failed or behaved unexpectedly.',
   inputSchema: getWorkflowRunSchema,
   execute: async (parameters: GetWorkflowRunInput) => {
     try {
@@ -68,6 +68,10 @@ export const createGetWorkflowRunTool = (
               type: step.type,
               status: stepInfo?.status,
               error: stepInfo?.error,
+              errorDetails: stepInfo?.errorDetails,
+              startedAt: stepInfo?.startedAt,
+              endedAt: stepInfo?.endedAt,
+              attempt: stepInfo?.attempt,
             };
           });
 
@@ -90,6 +94,7 @@ export const createGetWorkflowRunTool = (
               name: workflowRun.name,
               status: workflowRun.status,
               error: workflowRun.state?.workflowRunError,
+              failedStepId: workflowRun.state?.failedStepId,
               startedAt: workflowRun.startedAt,
               endedAt: workflowRun.endedAt,
               enqueuedAt: workflowRun.enqueuedAt,
