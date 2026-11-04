@@ -24,6 +24,7 @@ import { SidePanelSearchRecordsPage } from '@/side-panel/pages/search/components
 import { SidePanelWorkflowCreateStep } from '@/side-panel/pages/workflow/step/create/components/SidePanelWorkflowCreateStep';
 import { SidePanelWorkflowEditStep } from '@/side-panel/pages/workflow/step/edit/components/SidePanelWorkflowEditStep';
 import { SidePanelWorkflowEditStepType } from '@/side-panel/pages/workflow/step/edit/components/SidePanelWorkflowEditStepType';
+import { SidePanelWorkflowRunTrace } from '@/side-panel/pages/workflow/run-trace/components/SidePanelWorkflowRunTrace';
 import { SidePanelWorkflowRunViewStep } from '@/side-panel/pages/workflow/step/view-run/components/SidePanelWorkflowRunViewStep';
 import { SidePanelWorkflowViewStep } from '@/side-panel/pages/workflow/step/view/components/SidePanelWorkflowViewStep';
 import { SidePanelWorkflowSelectTriggerType } from '@/side-panel/pages/workflow/trigger-type/components/SidePanelWorkflowSelectTriggerType';
@@ -49,6 +50,7 @@ export const SIDE_PANEL_PAGES_CONFIG = new Map<SidePanelPages, React.ReactNode>(
     [SidePanelPages.WorkflowStepEdit, <SidePanelWorkflowEditStep />],
     [SidePanelPages.WorkflowStepView, <SidePanelWorkflowViewStep />],
     [SidePanelPages.WorkflowRunStepView, <SidePanelWorkflowRunViewStep />],
+    [SidePanelPages.WorkflowRunTrace, <SidePanelWorkflowRunTrace />],
     [SidePanelPages.SearchRecords, <SidePanelSearchRecordsPage />],
     [SidePanelPages.AskAI, <SidePanelAskAiPage />],
     [

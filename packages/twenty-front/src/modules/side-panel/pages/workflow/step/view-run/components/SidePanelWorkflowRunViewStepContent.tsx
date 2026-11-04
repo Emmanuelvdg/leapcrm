@@ -2,6 +2,7 @@ import { SidePanelWorkflowRunStepContentComponentInstanceContext } from '@/side-
 import { getIsInputTabDisabled } from '@/side-panel/pages/workflow/step/view-run/utils/getIsInputTabDisabled';
 import { getIsOutputTabDisabled } from '@/side-panel/pages/workflow/step/view-run/utils/getIsOutputTabDisabled';
 import { getShouldFocusNodeTab } from '@/side-panel/pages/workflow/step/view-run/utils/getShouldFocusNodeTab';
+import { getSidePanelWorkflowRunStepContentInstanceId } from '@/side-panel/pages/workflow/step/view-run/utils/getSidePanelWorkflowRunStepContentInstanceId';
 import { SidePanelPageComponentInstanceContext } from '@/side-panel/states/contexts/SidePanelPageComponentInstanceContext';
 import { TabList } from '@/ui/layout/tab-list/components/TabList';
 import { activeTabIdComponentState } from '@/ui/layout/tab-list/states/activeTabIdComponentState';
@@ -129,7 +130,10 @@ export const SidePanelWorkflowRunViewStepContent = () => {
   return (
     <SidePanelWorkflowRunStepContentComponentInstanceContext.Provider
       value={{
-        instanceId: `${workflowRunId}_${workflowSelectedNode}`,
+        instanceId: getSidePanelWorkflowRunStepContentInstanceId({
+          workflowRunId,
+          stepId: workflowSelectedNode,
+        }),
       }}
     >
       <StyledContainer>

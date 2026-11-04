@@ -1,6 +1,7 @@
 import { useWorkflowRun } from '@/workflow/hooks/useWorkflowRun';
 import { useWorkflowRunIdOrThrow } from '@/workflow/hooks/useWorkflowRunIdOrThrow';
 import { getStepDefinitionOrThrow } from '@/workflow/utils/getStepDefinitionOrThrow';
+import { WorkflowRunStepErrorHints } from '@/workflow/workflow-run-trace/components/WorkflowRunStepErrorHints';
 import { WorkflowRunStepJsonContainer } from '@/workflow/workflow-steps/components/WorkflowRunStepJsonContainer';
 import { useWorkflowRunStepInfo } from '@/workflow/workflow-steps/hooks/useWorkflowRunStepInfo';
 import { getWorkflowRunStepInfoToDisplayAsOutput } from '@/workflow/workflow-steps/utils/getWorkflowRunStepInfoToDisplayAsOutput';
@@ -50,21 +51,26 @@ export const WorkflowRunStepOutputDetail = ({ stepId }: { stepId: string }) => {
   return (
     <>
       <WorkflowRunStepJsonContainer>
-        <JsonTree
-          value={stepInfoToDisplay ?? t`No output available`}
-          shouldExpandNodeInitially={isTwoFirstDepths}
-          emptyArrayLabel={t`Empty Array`}
-          emptyObjectLabel={t`Empty Object`}
-          emptyStringLabel={t`[empty string]`}
-          arrowButtonCollapsedLabel={t`Expand`}
-          arrowButtonExpandedLabel={t`Collapse`}
-          getNodeHighlighting={
-            isDefined(stepInfo?.error)
-              ? setRedHighlightingForEveryNode
-              : undefined
-          }
-          onNodeValueClick={copyToClipboard}
-        />
+        <div>
+          {isDefined(stepInfo.errorDetails) && (
+            <WorkflowRunStepErrorHints errorDetails={stepInfo.errorDetails} />
+          )}
+          <JsonTree
+            value={stepInfoToDisplay ?? t`No output available`}
+            shouldExpandNodeInitially={isTwoFirstDepths}
+            emptyArrayLabel={t`Empty Array`}
+            emptyObjectLabel={t`Empty Object`}
+            emptyStringLabel={t`[empty string]`}
+            arrowButtonCollapsedLabel={t`Expand`}
+            arrowButtonExpandedLabel={t`Collapse`}
+            getNodeHighlighting={
+              isDefined(stepInfo?.error)
+                ? setRedHighlightingForEveryNode
+                : undefined
+            }
+            onNodeValueClick={copyToClipboard}
+          />
+        </div>
       </WorkflowRunStepJsonContainer>
     </>
   );

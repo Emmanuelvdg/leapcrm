@@ -2,7 +2,7 @@ import { Command, Option } from 'nest-commander';
 import { isDefined } from 'twenty-shared/utils';
 import {
   buildWorkflowRunTrace,
-  type WorkflowRunTraceEntry,
+  formatWorkflowRunTraceLines,
 } from 'twenty-shared/workflow';
 
 import {
@@ -120,83 +120,22 @@ export class TraceWorkflowRunCommand extends ProvisionedWorkspaceCommandRunner<T
       }
 
       const lines = [
-        `Workflow run ${workflowRun.name ?? ''} (${workflowRun.id}) in workspace ${workspaceId}`,
-        `Status: ${workflowRun.status}  started: ${workflowRun.startedAt ?? '-'}  ended: ${workflowRun.endedAt ?? '-'}`,
-        ...(isDefined(workflowRun.state?.workflowRunError)
-          ? [`Error: ${workflowRun.state.workflowRunError}`]
-          : []),
-        ...(isDefined(workflowRun.state?.failedStepId)
-          ? [`Failed step: ${workflowRun.state.failedStepId}`]
-          : []),
-        '',
-        ...trace.flatMap((entry, index) =>
-          this.formatTraceEntry(entry, index + 1),
-        ),
+        `Workspace: ${workspaceId}`,
+        ...formatWorkflowRunTraceLines({
+          workflowRun: {
+            id: workflowRun.id,
+            name: workflowRun.name,
+            status: workflowRun.status,
+            startedAt: workflowRun.startedAt,
+            endedAt: workflowRun.endedAt,
+            error: workflowRun.state?.workflowRunError,
+            failedStepId: workflowRun.state?.failedStepId,
+          },
+          trace,
+        }),
       ];
 
       lines.forEach((line) => this.logger.log(line));
     }, authContext);
-  }
-
-  private formatTraceEntry(
-    entry: WorkflowRunTraceEntry,
-    position: number,
-  ): string[] {
-    const iterationLabel = isDefined(entry.iteration)
-      ? ` [iteration ${entry.iteration}]`
-      : '';
-    const attemptLabel =
-      isDefined(entry.attempt) && entry.attempt > 1
-        ? ` [attempt ${entry.attempt}]`
-        : '';
-    const durationLabel = isDefined(entry.durationMs)
-      ? `${entry.durationMs}ms`
-      : '-';
-    const branchLabel = isDefined(entry.matchingBranchId)
-      ? ` -> branch ${entry.matchingBranchId}`
-      : '';
-
-    const lines = [
-      `${position}. ${entry.status.padEnd(13)} ${entry.startedAt ?? '-'}  ${durationLabel.padStart(8)}  "${entry.stepName}" (${entry.stepType}) ${entry.stepId}${iterationLabel}${attemptLabel}${branchLabel}`,
-    ];
-
-    const errorDetails = entry.errorDetails;
-
-    if (!isDefined(errorDetails)) {
-      if (isDefined(entry.error)) {
-        lines.push(`     error: ${entry.error}`);
-      }
-
-      return lines;
-    }
-
-    lines.push(`     error: ${errorDetails.message}`);
-    lines.push(
-      `     phase: ${errorDetails.phase}  system error: ${errorDetails.isSystemError}${
-        isDefined(errorDetails.type) ? `  type: ${errorDetails.type}` : ''
-      }${isDefined(errorDetails.code) ? `  code: ${errorDetails.code}` : ''}`,
-    );
-
-    if (isDefined(errorDetails.emptyVariables)) {
-      lines.push(
-        `     empty variables: ${errorDetails.emptyVariables.join(', ')}`,
-      );
-    }
-
-    if (isDefined(errorDetails.resolvedInput)) {
-      lines.push(
-        `     input${errorDetails.resolvedInputTruncated ? ' (truncated)' : ''}: ${
-          typeof errorDetails.resolvedInput === 'string'
-            ? errorDetails.resolvedInput
-            : JSON.stringify(errorDetails.resolvedInput)
-        }`,
-      );
-    }
-
-    if (isDefined(errorDetails.stack)) {
-      lines.push(`     stack: ${errorDetails.stack}`);
-    }
-
-    return lines;
   }
 }

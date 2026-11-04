@@ -88,6 +88,9 @@ const StyledResetReactflowStyles = styled.div`
 `;
 
 const StyledStatusTagContainer = styled.div`
+  align-items: center;
+  display: flex;
+  gap: ${themeCssVariables.spacing[2]};
   left: 0;
   padding: ${themeCssVariables.spacing[4]};
   position: absolute;
@@ -106,6 +109,7 @@ export const WorkflowDiagramCanvasBase = ({
   tagContainerTestId,
   tagColor,
   tagText,
+  tagAccessory,
   onInit,
   onConnect,
   onDeleteEdge,
@@ -144,6 +148,7 @@ export const WorkflowDiagramCanvasBase = ({
   tagContainerTestId: string;
   tagColor: TagColor;
   tagText: string;
+  tagAccessory?: React.ReactNode;
   onInit?: () => void;
   onConnect?: (params: WorkflowConnection) => void;
   onDeleteEdge?: (edge: WorkflowDiagramEdge) => void;
@@ -637,6 +642,7 @@ export const WorkflowDiagramCanvasBase = ({
 
       <StyledStatusTagContainer data-testid={tagContainerTestId}>
         <Tag color={tagColor} text={tagText} />
+        {tagAccessory}
       </StyledStatusTagContainer>
     </StyledResetReactflowStyles>
   );

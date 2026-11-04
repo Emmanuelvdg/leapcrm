@@ -138,6 +138,7 @@ export type { WorkflowRunTraceEntry } from './types/WorkflowRunTraceEntry';
 export { buildWorkflowRunTrace } from './utils/buildWorkflowRunTrace';
 export { canObjectBeManagedByAutomation } from './utils/canObjectBeManagedByAutomation';
 export { extractRawVariableNamePart } from './utils/extractRawVariableNameParts';
+export { formatWorkflowRunTraceLines } from './utils/formatWorkflowRunTraceLines';
 export { getFunctionInputFromInputSchema } from './utils/getFunctionInputFromInputSchema';
 export { getWorkflowRunContext } from './utils/getWorkflowRunContext';
 export { isStandaloneVariableString } from './utils/isStandaloneVariableString';

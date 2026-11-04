@@ -1,5 +1,6 @@
 import { type WorkflowRunStatus } from '@/workflow/types/Workflow';
 import { WorkflowDiagramCanvasBase } from '@/workflow/workflow-diagram/components/WorkflowDiagramCanvasBase';
+import { WorkflowRunTraceButton } from '@/workflow/workflow-diagram/components/WorkflowRunTraceButton';
 
 import { getWorkflowRunStatusTagProps } from '@/workflow/workflow-diagram/utils/getWorkflowRunStatusTagProps';
 import { WorkflowDiagramDefaultEdgeReadonly } from '@/workflow/workflow-diagram/workflow-edges/components/WorkflowDiagramDefaultEdgeReadonly';
@@ -27,6 +28,7 @@ export const WorkflowRunDiagramCanvas = ({
         tagContainerTestId="workflow-run-status"
         tagColor={tagProps.color}
         tagText={tagProps.text}
+        tagAccessory={<WorkflowRunTraceButton />}
       />
     </ReactFlowProvider>
   );
