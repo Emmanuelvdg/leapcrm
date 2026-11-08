@@ -199,6 +199,19 @@ export const computeStandardOpportunityViewFields = (
         viewFieldGroupName: 'deal',
       },
     }),
+    opportunityRecordPageFieldsLostReason: createStandardViewFieldFlatMetadata({
+      ...args,
+      objectName: 'opportunity',
+      context: {
+        viewName: 'opportunityRecordPageFields',
+        viewFieldName: 'lostReason',
+        fieldName: 'lostReason',
+        position: 3,
+        isVisible: true,
+        size: 150,
+        viewFieldGroupName: 'deal',
+      },
+    }),
     opportunityRecordPageFieldsTaskTargets: createStandardViewFieldFlatMetadata(
       {
         ...args,

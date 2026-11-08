@@ -264,6 +264,94 @@ export const buildOpportunityStandardFlatFieldMetadatas = ({
           position: 4,
           color: 'yellow',
         },
+        {
+          id: '04fb2ebc-7a6a-4329-bf38-970963e19302',
+          value: 'LOST',
+          label: i18nLabel(
+            msg({ message: `Lost`, context: 'fieldMetadata.label' }),
+          ),
+          position: 5,
+          color: 'gray',
+        },
+      ],
+    },
+    standardObjectMetadataRelatedEntityIds,
+    dependencyFlatEntityMaps,
+    twentyStandardApplicationId,
+    now,
+  }),
+  lostReason: createStandardFieldFlatMetadata({
+    objectName,
+    workspaceId,
+    context: {
+      fieldName: 'lostReason',
+      type: FieldMetadataType.SELECT,
+      label: i18nLabel(
+        msg({ message: `Lost reason`, context: 'fieldMetadata.label' }),
+      ),
+      description: i18nLabel(
+        msg({
+          message: `Why the opportunity was lost`,
+          context: 'fieldMetadata.description',
+        }),
+      ),
+      icon: 'IconCircleX',
+      isNullable: true,
+      options: [
+        {
+          id: 'f63d1c45-80ad-4012-b65d-5357a4a0ad56',
+          value: 'PRICE',
+          label: i18nLabel(
+            msg({ message: `Price`, context: 'fieldMetadata.label' }),
+          ),
+          position: 0,
+          color: 'red',
+        },
+        {
+          id: '967199a6-1918-481d-8f7d-13033b2b62da',
+          value: 'COMPETITOR',
+          label: i18nLabel(
+            msg({ message: `Competitor`, context: 'fieldMetadata.label' }),
+          ),
+          position: 1,
+          color: 'orange',
+        },
+        {
+          id: '62ece62f-a152-4bb5-afea-51659da9f2b0',
+          value: 'NO_DECISION',
+          label: i18nLabel(
+            msg({ message: `No decision`, context: 'fieldMetadata.label' }),
+          ),
+          position: 2,
+          color: 'gray',
+        },
+        {
+          id: 'fddc7297-26be-428b-8a76-c72bf5c8502a',
+          value: 'TIMING',
+          label: i18nLabel(
+            msg({ message: `Timing`, context: 'fieldMetadata.label' }),
+          ),
+          position: 3,
+          color: 'sky',
+        },
+        {
+          id: '4d8def44-cfd6-4a3b-b96e-e1986f87a0c1',
+          value: 'BAD_FIT',
+          label: i18nLabel(
+            msg({ message: `Bad fit`, context: 'fieldMetadata.label' }),
+          ),
+          position: 4,
+          color: 'purple',
+        },
+        {
+          id: 'b8f885a5-52ec-453f-822a-cf0d2d38ae67',
+          value: 'OTHER',
+          label: i18nLabel(
+            msg({ message: `Other`, context: 'fieldMetadata.label' }),
+          ),
+          position: 5,
+          color: 'blue',
+        },
       ],
     },
     standardObjectMetadataRelatedEntityIds,

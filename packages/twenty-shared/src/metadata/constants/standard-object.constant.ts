@@ -840,6 +840,9 @@ export const STANDARD_OBJECTS = {
           customer: {
             universalIdentifier: '20202020-af14-4a04-8a04-0aa0b2ca2bf5',
           },
+          lost: {
+            universalIdentifier: '939b372d-f266-4eea-9c71-2f9af52fa37b',
+          },
         },
       },
       opportunityRecordPageFields: buildStandardObjectRecordPageFieldsView({
@@ -850,6 +853,7 @@ export const STANDARD_OBJECTS = {
           'amount',
           'closeDate',
           'stage',
+          'lostReason',
           'company',
           'pointOfContact',
           'owner',

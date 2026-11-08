@@ -257,6 +257,7 @@ describe('WorkspaceEntityManager', () => {
         IS_NATIVE_CALL_RECORDING_TABS_ENABLED: false,
         IS_ORM_V2_READ_PATH_ENABLED: false,
         IS_PROSPECTING_ENABLED: false,
+        IS_ICP_ANALYSIS_ENABLED: false,
       },
       userWorkspaceRoleMap: {},
       apiKeyRoleMap: {},

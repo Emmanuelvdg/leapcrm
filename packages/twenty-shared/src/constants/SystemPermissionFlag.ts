@@ -29,4 +29,5 @@ export const SystemPermissionFlag = {
   PROFILE_INFORMATION: '7c13f23f-78d8-5e7d-8963-a7c8772fb4e8',
   MCP_SERVERS: '1422eef4-5d6b-488c-a9fe-425a5a5eb5c6',
   PROSPECTING: '73a9a074-1e5d-47ab-b5ce-368b2215e41e',
+  ICP_ANALYSIS: '60af155d-58cf-41ed-8d1b-dc49d4880764',
 } as const satisfies Record<PermissionFlagType, string>;

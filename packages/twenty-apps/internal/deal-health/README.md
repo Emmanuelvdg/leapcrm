@@ -20,7 +20,7 @@
 - **At risk**: the close date has passed, or the deal is stalled and has no open task.
 - **Watch**: any other signal.
 - **Healthy**: no signals.
-- Deals in a stage listed in `CLOSED_STAGES` (default `CUSTOMER`) are not scored.
+- Deals in a stage listed in `CLOSED_STAGES` (default `CUSTOMER,LOST`) are not scored.
 
 Deals are rescored when they are created, when their stage or close date changes, and every night at 05:00 UTC. Completing or adding a task is picked up by the nightly run.
 

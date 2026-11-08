@@ -800,6 +800,9 @@ export const STANDARD_OBJECT_FIELDS = {
       universalIdentifier: '20202020-527e-44d6-b1ac-c4158d307b97',
     },
     stage: { universalIdentifier: '20202020-6f76-477d-8551-28cd65b2b4b9' },
+    lostReason: {
+      universalIdentifier: '6bf1c434-8f54-47d7-bacf-dd5b301cae59',
+    },
     pointOfContact: {
       universalIdentifier: '20202020-8dfb-42fc-92b6-01afb759ed16',
     },

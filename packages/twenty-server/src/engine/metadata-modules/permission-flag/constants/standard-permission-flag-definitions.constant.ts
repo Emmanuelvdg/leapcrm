@@ -164,6 +164,11 @@ const STANDARD_PERMISSION_FLAG_METADATA: Record<
     description: 'Run prospecting campaigns to discover new companies',
     icon: 'IconTargetArrow',
   },
+  [PermissionFlagType.ICP_ANALYSIS]: {
+    label: 'ICP Analysis',
+    description: 'Build and activate ideal customer profile scoring models',
+    icon: 'IconTarget',
+  },
 };
 
 export const STANDARD_PERMISSION_FLAG_DEFINITIONS: StandardPermissionFlagDefinition[] =

@@ -63,5 +63,16 @@ export const computeStandardOpportunityViewGroups = (
         position: 4,
       },
     }),
+    byStageLost: createStandardViewGroupFlatMetadata({
+      ...args,
+      objectName: 'opportunity',
+      context: {
+        viewName: 'byStage',
+        viewGroupName: 'lost',
+        isVisible: true,
+        fieldValue: 'LOST',
+        position: 5,
+      },
+    }),
   };
 };
