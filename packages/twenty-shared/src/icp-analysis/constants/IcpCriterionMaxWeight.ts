@@ -1,0 +1,1 @@
+export const ICP_CRITERION_MAX_WEIGHT = 35;

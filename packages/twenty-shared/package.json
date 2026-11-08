@@ -93,6 +93,11 @@
       "import": "./dist/i18n.mjs",
       "require": "./dist/i18n.cjs"
     },
+    "./icp-analysis": {
+      "types": "./dist/icp-analysis/index.d.ts",
+      "import": "./dist/icp-analysis.mjs",
+      "require": "./dist/icp-analysis.cjs"
+    },
     "./logic-function": {
       "types": "./dist/logic-function/index.d.ts",
       "import": "./dist/logic-function.mjs",
@@ -151,6 +156,7 @@
     "constants",
     "database-events",
     "i18n",
+    "icp-analysis",
     "logic-function",
     "metadata",
     "testing",
@@ -178,6 +184,9 @@
       ],
       "i18n": [
         "dist/i18n/index.d.ts"
+      ],
+      "icp-analysis": [
+        "dist/icp-analysis/index.d.ts"
       ],
       "logic-function": [
         "dist/logic-function/index.d.ts"

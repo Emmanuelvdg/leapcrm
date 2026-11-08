@@ -1,0 +1,1 @@
+export const ICP_HOLDOUT_MIN_DATASET_SIZE = 40;

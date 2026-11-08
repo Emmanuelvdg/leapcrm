@@ -1,0 +1,1 @@
+export const ICP_MAX_NUMERIC_BAND_COUNT = 5;

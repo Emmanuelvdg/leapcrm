@@ -1,0 +1,6 @@
+export const ICP_ATTRIBUTE_CATEGORIES = [
+  'FIRMOGRAPHIC',
+  'INTENT',
+  'TECHNOGRAPHIC',
+  'TRIGGER',
+] as const;

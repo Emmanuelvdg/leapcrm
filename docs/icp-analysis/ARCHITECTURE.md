@@ -144,12 +144,19 @@ For every attribute bucket, `computeIcpAttributePatterns` returns won, lost, win
 type IcpCriterion = {
   id: string;
   attributeKey: string;
-  match: IcpCriterionMatch; // equals, in, between, before or within N days, is true
-  weight: number;           // -30 to +35; negative penalises
-  isHardExclusion: boolean; // matches force EXCLUDED regardless of score
+  attributeLabel: string;   // for "Industry unknown" style reasons
+  label: string;            // for example "Industry: Fintech"
   category: 'FIRMOGRAPHIC' | 'INTENT' | 'TECHNOGRAPHIC' | 'TRIGGER';
+  match:
+    | { type: 'IN'; values: string[] }                    // select, multi-select, country
+    | { type: 'BETWEEN'; min: number | null; max: number | null } // min <= value < max
+    | { type: 'IS'; value: boolean };
+  weight: number;           // integer, -30 to +35; negative penalises
+  isHardExclusion: boolean; // matches force EXCLUDED regardless of score; weight <= 0
 };
 ```
+
+Dates reach the scoring core as numbers: days before the reference date (deal creation for history, today for live scoring). "Funded in the 180 days before the deal" is `BETWEEN 0 and 180` on that number.
 
 ### 6.2 Suggested weights
 
@@ -157,19 +164,19 @@ type IcpCriterion = {
 
 - Strength per bucket is the smoothed log odds ratio against the baseline, shrunk towards zero by `n / (n + 10)` so small buckets carry less.
 - Positive buckets are scaled within each category's cap, matching the guide's starter split: firmographic 35, intent 30, technographic 20, trigger 20. Weights are rounded to multiples of 5.
-- Negative buckets get -10 to -30. The user can mark any of them as a hard exclusion (wrong vertical, wrong market).
-- At most one criterion per attribute bucket; the strongest buckets per attribute are kept so the model stays readable (default limit 15 criteria).
+- Negative buckets get -10 to -30; weaker negative signals are left out. The user can mark any negative criterion as a hard exclusion (wrong vertical, wrong market).
+- At most one criterion per attribute bucket and three per attribute, keeping the strongest, with a default limit of 15 criteria so the model stays readable.
 
 ### 6.3 Score and tiers
 
 `computeIcpScore(criteria, values, thresholds)`:
 
 - `maxScore` is the sum of the best positive weight per attribute.
-- `raw` is the sum of matched weights (positive and negative). Multi-select values match each criterion at most once.
+- `raw` adds, per attribute, the best matched positive weight and the worst matched negative weight, so overlapping bands or several multi-select values cannot stack points.
 - `score = clamp(round(100 * raw / maxScore), 0, 100)`.
 - Tier: any matched hard exclusion gives `EXCLUDED`; otherwise `PRIORITY` at `>= 80`, `TARGET` at `>= 60`, `NURTURE` at `>= 40`, `EXCLUDED` below.
 - Unknown values add nothing and lower `icpCoverage`. They are never treated as a match or a miss.
-- Reasons list matched criteria by absolute weight, then up to two unknown attributes with the largest weights ("Industry unknown").
+- Reasons are structured: hard exclusions first, then matched criteria by absolute weight, then up to two unknown attributes with the largest weights. The server turns them into the `icpScoreReasons` text when it writes scores (M6).
 
 ## 7. Step 4: back-test
 

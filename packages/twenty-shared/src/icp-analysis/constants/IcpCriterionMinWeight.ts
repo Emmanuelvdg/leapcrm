@@ -1,0 +1,1 @@
+export const ICP_CRITERION_MIN_WEIGHT = -30;

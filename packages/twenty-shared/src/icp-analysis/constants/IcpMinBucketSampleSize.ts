@@ -1,0 +1,1 @@
+export const ICP_MIN_BUCKET_SAMPLE_SIZE = 5;

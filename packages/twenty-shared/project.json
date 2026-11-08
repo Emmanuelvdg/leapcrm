@@ -22,6 +22,8 @@
         "{projectRoot}/database-events/dist",
         "{projectRoot}/i18n/package.json",
         "{projectRoot}/i18n/dist",
+        "{projectRoot}/icp-analysis/package.json",
+        "{projectRoot}/icp-analysis/dist",
         "{projectRoot}/logic-function/package.json",
         "{projectRoot}/logic-function/dist",
         "{projectRoot}/metadata/package.json",
