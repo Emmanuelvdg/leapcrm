@@ -108,21 +108,23 @@ Analysis and scoring are idempotent recomputations over workspace data, so they 
 
 `IcpEvidenceService` builds the dataset for a model:
 
-1. Load opportunities whose stage is in `wonStages` or `lostStages` and whose last stage change falls in the dataset window, with their company. Opportunities without a company are counted and excluded.
-2. For each, extract attribute values through the attribute catalogue (5.2). Time-relative attributes (funding recency, custom date fields) are evaluated against the opportunity's `createdAt`, so "funded in the 6 months before the deal" means before the deal, not before today.
-3. Return rows `{ opportunityId, companyId, outcome: WON | LOST, closedAt, amount, lostReason, values }` plus coverage per attribute.
+1. Load opportunities whose stage is in `wonStages` or `lostStages`, using the caller's role, so the analysis only covers deals and companies the user can read. A deal closes on its close date, or on its last update when no close date is set. Deals closing inside the window are kept: from `datasetStartDate` (default 24 months ago) to `datasetEndDate` (default none, since won deals often keep a close date in the future). At most the newest 5,000 are kept, and the snapshot says when deals were left out.
+2. Load their companies in batches. Deals without a company, or whose company the user cannot read, are counted and excluded.
+3. For each deal, extract attribute values through the attribute catalogue (5.2). Date fields become days before the deal's `createdAt`, so "funded in the 6 months before the deal" means before the deal, not before today.
+4. Return rows `{ id, outcome: WON | LOST, closedAt, lostReason, values }` and the attribute definitions, with quantile bands for numeric attributes computed from these rows.
 
-The dataset is computed on demand and stored only as aggregates in `analysis`, not as a copy of deal data.
+`analyzeIcpModel` stores the attribute definitions, the deal window, the excluded count and the pattern analysis in `analysis`. Deal rows go back to the browser for the back-test and are not stored.
 
 Known limitation: static firmographics use the company's current values. A company enriched or grown since the deal can make history look cleaner than it was. The coverage report shows when each company was last enriched.
 
 ### 5.2 Attribute catalogue
 
-An attribute is `{ key, label, category, valueType, extract(record, referenceDate) }`.
+The catalogue is built from Company field metadata, so standard fields, People Data Labs fields (when the app is installed) and custom fields are handled the same way. An attribute is `{ key, label, category, valueType }` plus the field it reads.
 
-- **Built in**: country, annual revenue band, PDL industry, employee count band, size range, company age, latest funding stage, funded within 90/180/365 days, NAICS and SIC prefix. Each maps to the matching candidate field where one exists (country, industry, industry code, employee count) so candidates can be scored with the same model.
-- **Custom**: every active Company field of type `SELECT`, `MULTI_SELECT`, `BOOLEAN`, `NUMBER`, `CURRENCY`, `RATING`, `DATE` or `DATE_TIME`, read from object metadata, excluding system fields and the ICP score fields themselves.
-- **Category** (firmographic, intent, technographic, trigger) is set for built-in attributes and chosen by the user for custom ones. It drives the weight caps in 6.2.
+- **Eligible fields**: every active, non-system Company field of type `SELECT`, `MULTI_SELECT`, `ARRAY`, `BOOLEAN`, `NUMBER`, `CURRENCY`, `RATING`, `DATE`, `DATE_TIME` or `ADDRESS` (country only). Record bookkeeping dates and the standard ICP score fields are left out. With PDL installed this covers industry, size range, employee count, founded year, funding stage, last funding date, total funding and tags. NAICS and SIC are raw JSON in the PDL app and are not used yet.
+- **Values**: select and address country as categories, multi-select and arrays as lists, currency in whole units, ratings as 1 to 5, dates as days before the reference date.
+- **Category** is guessed from the field name and type: tech stack, tool or integration names are technographic; visit, demo, trial or engagement names are intent; other dates are triggers; everything else is firmographic. The user can change a criterion's category in the editor. It drives the weight caps in 6.2.
+- **Candidates** are scored in M6 from the matched company when there is one, and otherwise from the candidate fields that map to a catalogue attribute (country, employee count).
 - Numbers, currency and dates are bucketed into quantile bands (at most five) computed from the dataset, so a criterion reads "51-200 employees" rather than an arbitrary threshold. Users can edit band edges.
 
 ### 5.3 Pattern analysis

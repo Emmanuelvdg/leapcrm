@@ -1,3 +1,7 @@
+import {
+  type IcpCriterion,
+  type IcpTierThresholds,
+} from 'twenty-shared/icp-analysis';
 import { type ActorMetadata, type RichTextMetadata } from 'twenty-shared/types';
 
 import { BaseWorkspaceEntity } from 'src/engine/twenty-orm/base.workspace-entity';
@@ -12,8 +16,8 @@ export class IcpModelWorkspaceEntity extends BaseWorkspaceEntity {
   lostStages: string[] | null;
   datasetStartDate: Date | null;
   datasetEndDate: Date | null;
-  criteria: unknown[] | null;
-  tierThresholds: Record<string, unknown> | null;
+  criteria: IcpCriterion[] | null;
+  tierThresholds: IcpTierThresholds | null;
   analysis: Record<string, unknown> | null;
   backtest: Record<string, unknown> | null;
   insights: RichTextMetadata | null;

@@ -2,7 +2,7 @@
 
 Read with `ARCHITECTURE.md`.
 
-Status: approved. M1 and M2 done, M3 in progress.
+Status: approved. M1 to M3 done, M4 in progress.
 
 ## 1. Decisions
 

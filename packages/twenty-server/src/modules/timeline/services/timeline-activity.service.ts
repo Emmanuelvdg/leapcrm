@@ -14,7 +14,7 @@ import { GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspac
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
 import { WorkspaceEventBatch } from 'src/engine/workspace-event-emitter/types/workspace-event-batch.type';
 import { parseEventNameOrThrow } from 'src/engine/workspace-event-emitter/utils/parse-event-name';
-import { ICP_SCORE_FIELD_UNIVERSAL_IDENTIFIERS } from 'src/modules/icp-analysis/constants/icp-score-field-universal-identifiers.constant';
+import { ICP_TIMELINE_UNTRACKED_FIELD_UNIVERSAL_IDENTIFIERS } from 'src/modules/icp-analysis/constants/icp-timeline-untracked-field-universal-identifiers.constant';
 import { NoteWorkspaceEntity } from 'src/modules/note/standard-objects/note.workspace-entity';
 import { TaskWorkspaceEntity } from 'src/modules/task/standard-objects/task.workspace-entity';
 import { TimelineActivityRepository } from 'src/modules/timeline/repositories/timeline-activity.repository';
@@ -99,7 +99,7 @@ export class TimelineActivityService {
 
   // Position changes reach other consumers (SSE, webhooks, workflows) but render
   // blank in the timeline, so exclude them to avoid empty activity rows. ICP
-  // scores are recomputed by a job, often nightly, and would bury real activity.
+  // scores and model snapshots are rewritten by jobs and would bury real activity.
   private async excludeUntrackedFieldsFromEventsDiff({
     events,
     objectMetadata,
@@ -130,7 +130,7 @@ export class TimelineActivityService {
         .filter(
           (field) =>
             field.type === FieldMetadataType.POSITION ||
-            ICP_SCORE_FIELD_UNIVERSAL_IDENTIFIERS.has(
+            ICP_TIMELINE_UNTRACKED_FIELD_UNIVERSAL_IDENTIFIERS.has(
               field.universalIdentifier,
             ),
         )
