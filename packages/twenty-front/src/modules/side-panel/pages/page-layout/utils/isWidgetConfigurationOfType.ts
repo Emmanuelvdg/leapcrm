@@ -19,6 +19,7 @@ import {
   type NotesConfiguration,
   type PieChartConfiguration,
   type ProspectingDiscoveryStatusConfiguration,
+  type IcpAnalysisConfiguration,
   type RecordTableConfiguration,
   type StandaloneRichTextConfiguration,
   type TasksConfiguration,
@@ -94,6 +95,12 @@ type WidgetConfigurationTypenameMap = {
     'configurationType'
   > & {
     configurationType: WidgetConfigurationType.PROSPECTING_DISCOVERY_STATUS;
+  };
+  IcpAnalysisConfiguration: Omit<
+    IcpAnalysisConfiguration,
+    'configurationType'
+  > & {
+    configurationType: WidgetConfigurationType.ICP_ANALYSIS;
   };
   FieldConfiguration: Omit<FieldConfiguration, 'configurationType'> & {
     configurationType: WidgetConfigurationType.FIELD;

@@ -217,6 +217,7 @@ export type {
   EmailsConfiguration,
   ConversationsConfiguration,
   ProspectingDiscoveryStatusConfiguration,
+  IcpAnalysisConfiguration,
   EmailThreadConfiguration,
   MessageCampaignBodyConfiguration,
   MessageCampaignDetailsConfiguration,

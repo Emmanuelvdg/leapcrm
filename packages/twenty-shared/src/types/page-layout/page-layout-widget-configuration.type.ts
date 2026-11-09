@@ -163,6 +163,10 @@ export type ProspectingDiscoveryStatusConfiguration = {
   configurationType: 'PROSPECTING_DISCOVERY_STATUS';
 };
 
+export type IcpAnalysisConfiguration = {
+  configurationType: 'ICP_ANALYSIS';
+};
+
 export type EmailThreadConfiguration = {
   configurationType: 'EMAIL_THREAD';
 };
@@ -219,6 +223,7 @@ export type PageLayoutWidgetConfiguration =
   | EmailsConfiguration
   | ConversationsConfiguration
   | ProspectingDiscoveryStatusConfiguration
+  | IcpAnalysisConfiguration
   | CalendarConfiguration
   | WorkflowConfiguration
   | WorkflowVersionConfiguration

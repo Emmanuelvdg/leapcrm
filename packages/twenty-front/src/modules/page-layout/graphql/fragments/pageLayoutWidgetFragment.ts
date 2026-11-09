@@ -161,6 +161,9 @@ export const PAGE_LAYOUT_WIDGET_FRAGMENT = gql`
       ... on ProspectingDiscoveryStatusConfiguration {
         configurationType
       }
+      ... on IcpAnalysisConfiguration {
+        configurationType
+      }
       ... on EmailThreadConfiguration {
         configurationType
       }

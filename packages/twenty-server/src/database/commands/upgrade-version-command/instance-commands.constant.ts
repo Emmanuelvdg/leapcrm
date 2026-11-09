@@ -159,6 +159,7 @@ import { CreateMcpServerConnectionTableFastInstanceCommand } from 'src/database/
 import { CreateProspectingJobTableFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-instance-command-fast-1792299657221-create-prospecting-job-table';
 import { CreateGlobalCompanyDirectoryTablesFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-instance-command-fast-1792465446643-create-global-company-directory-tables';
 import { AddProspectingDiscoveryStatusWidgetTypeFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-instance-command-fast-1792488887030-add-prospecting-discovery-status-widget-type';
+import { AddIcpAnalysisWidgetTypeFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-instance-command-fast-1794196878174-add-icp-analysis-widget-type';
 
 export const INSTANCE_COMMANDS = [
   AddViewFieldGroupIdIndexOnViewFieldFastInstanceCommand,
@@ -320,4 +321,5 @@ export const INSTANCE_COMMANDS = [
   CreateProspectingJobTableFastInstanceCommand,
   CreateGlobalCompanyDirectoryTablesFastInstanceCommand,
   AddProspectingDiscoveryStatusWidgetTypeFastInstanceCommand,
+  AddIcpAnalysisWidgetTypeFastInstanceCommand,
 ];

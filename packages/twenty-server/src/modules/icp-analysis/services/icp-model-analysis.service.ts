@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import {
   computeIcpAttributePatterns,
+  type IcpAttributeDefinition,
   type IcpCriterion,
   type IcpDatasetRow,
   suggestIcpCriterionWeights,
@@ -60,6 +61,20 @@ export class IcpModelAnalysisService {
       await repository.update({ id: model.id }, { analysis, analyzedAt });
 
       return { analysis, rows: evidence.rows };
+    });
+  }
+
+  async getEvidence(
+    args: IcpModelActionArgs,
+  ): Promise<{ attributes: IcpAttributeDefinition[]; rows: IcpDatasetRow[] }> {
+    return this.withModel(args, async ({ model, permissions }) => {
+      const { attributes, rows } = await this.icpEvidenceService.buildEvidence({
+        workspaceId: args.workspaceId,
+        model,
+        readPermissions: permissions,
+      });
+
+      return { attributes, rows };
     });
   }
 

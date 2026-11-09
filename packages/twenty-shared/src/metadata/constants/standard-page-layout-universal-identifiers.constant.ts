@@ -538,6 +538,29 @@ export const STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS = {
       },
     },
   }),
+  icpModelRecordPage: buildStandardObjectRecordPageLayout({
+    objectUniversalIdentifier: STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.icpModel,
+    tabs: {
+      home: {
+        title: 'Home',
+        widgets: {
+          fields: 'Fields',
+        },
+      },
+      analysis: {
+        title: 'Analysis',
+        widgets: {
+          analysis: 'ICP analysis',
+        },
+      },
+      insights: {
+        title: 'Insights',
+        widgets: {
+          insights: 'Insights',
+        },
+      },
+    },
+  }),
   messageCampaignRecordPage: buildStandardObjectRecordPageLayout({
     objectUniversalIdentifier:
       STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.messageCampaign,

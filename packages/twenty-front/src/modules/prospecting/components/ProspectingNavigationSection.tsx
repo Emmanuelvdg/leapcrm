@@ -1,7 +1,9 @@
 import { useLingui } from '@lingui/react/macro';
+import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { AnimatedExpandableContainer } from 'twenty-ui/layout';
 
+import { useIsIcpAnalysisAvailable } from '@/icp-analysis/hooks/useIsIcpAnalysisAvailable';
 import { NavigationDrawerItemForObjectMetadataItem } from '@/navigation-menu-item/display/object/components/NavigationDrawerItemForObjectMetadataItem';
 import { useFilteredObjectMetadataItems } from '@/object-metadata/hooks/useFilteredObjectMetadataItems';
 import { PROSPECTING_OBJECT_NAME_SINGULARS } from '@/prospecting/constants/ProspectingObjectNameSingulars';
@@ -20,6 +22,7 @@ const PROSPECTING_NAVIGATION_SECTION_ID = 'Prospecting';
 export const ProspectingNavigationSection = () => {
   const { t } = useLingui();
   const isProspectingAvailable = useIsProspectingAvailable();
+  const isIcpAnalysisAvailable = useIsIcpAnalysisAvailable();
   const { activeObjectMetadataItems } = useFilteredObjectMetadataItems();
 
   const { toggleNavigationSection } = useNavigationSection(
@@ -30,15 +33,21 @@ export const ProspectingNavigationSection = () => {
     PROSPECTING_NAVIGATION_SECTION_ID,
   );
 
-  const prospectingObjectMetadataItems = PROSPECTING_OBJECT_NAME_SINGULARS.map(
-    (nameSingular) =>
+  const visibleObjectNameSingulars = [
+    ...(isProspectingAvailable ? PROSPECTING_OBJECT_NAME_SINGULARS : []),
+    ...(isIcpAnalysisAvailable ? [CoreObjectNameSingular.IcpModel] : []),
+  ];
+
+  const prospectingObjectMetadataItems = visibleObjectNameSingulars
+    .map((nameSingular) =>
       activeObjectMetadataItems.find(
         (objectMetadataItem) =>
           objectMetadataItem.nameSingular === nameSingular,
       ),
-  ).filter(isDefined);
+    )
+    .filter(isDefined);
 
-  if (!isProspectingAvailable || prospectingObjectMetadataItems.length === 0) {
+  if (prospectingObjectMetadataItems.length === 0) {
     return null;
   }
 

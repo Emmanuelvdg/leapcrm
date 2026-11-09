@@ -27,7 +27,14 @@ export const evaluateIcpModel = ({
       thresholds,
     });
 
-    return { id: row.id, outcome: row.outcome, score, tier, coverage };
+    return {
+      id: row.id,
+      name: row.name,
+      outcome: row.outcome,
+      score,
+      tier,
+      coverage,
+    };
   });
 
   const wonCount = scoredRows.filter(({ outcome }) => outcome === 'WON').length;

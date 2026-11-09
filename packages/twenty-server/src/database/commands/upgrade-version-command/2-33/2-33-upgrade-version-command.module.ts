@@ -12,6 +12,7 @@ import { AddProspectingRecordPagesAndActionsCommand } from 'src/database/command
 import { BackfillIcpAnalysisPermissionFlagCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1794106415335-backfill-icp-analysis-permission-flag.command';
 import { AddOpportunityLostStageAndReasonCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1794106645494-add-opportunity-lost-stage-and-reason.command';
 import { SyncIcpAnalysisStandardMetadataCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1794128904820-sync-icp-analysis-standard-metadata.command';
+import { AddIcpModelRecordPageCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1794197120125-add-icp-model-record-page.command';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
 import { FieldMetadataEntity } from 'src/engine/metadata-modules/field-metadata/field-metadata.entity';
 import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache.module';
@@ -38,6 +39,7 @@ import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace
     BackfillIcpAnalysisPermissionFlagCommand,
     AddOpportunityLostStageAndReasonCommand,
     SyncIcpAnalysisStandardMetadataCommand,
+    AddIcpModelRecordPageCommand,
   ],
 })
 export class V2_33_UpgradeVersionCommandModule {}

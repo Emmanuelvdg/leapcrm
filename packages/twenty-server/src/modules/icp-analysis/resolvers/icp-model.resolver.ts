@@ -1,5 +1,5 @@
 import { UseGuards, UseInterceptors, UsePipes } from '@nestjs/common';
-import { Args, Mutation } from '@nestjs/graphql';
+import { Args, Mutation, Query } from '@nestjs/graphql';
 
 import { PermissionFlagType } from 'twenty-shared/constants';
 import { FeatureFlagKey } from 'twenty-shared/types';
@@ -17,6 +17,7 @@ import { SettingsPermissionGuard } from 'src/engine/guards/settings-permission.g
 import { WorkspaceAuthGuard } from 'src/engine/guards/workspace-auth.guard';
 import { DuplicatedIcpModelDTO } from 'src/modules/icp-analysis/dtos/duplicated-icp-model.dto';
 import { IcpModelAnalysisDTO } from 'src/modules/icp-analysis/dtos/icp-model-analysis.dto';
+import { IcpModelEvidenceDTO } from 'src/modules/icp-analysis/dtos/icp-model-evidence.dto';
 import { IcpModelIdInput } from 'src/modules/icp-analysis/dtos/icp-model-id.input';
 import { IcpSuggestedCriteriaDTO } from 'src/modules/icp-analysis/dtos/icp-suggested-criteria.dto';
 import { IcpAnalysisGraphqlApiExceptionInterceptor } from 'src/modules/icp-analysis/interceptors/icp-analysis-graphql-api-exception.interceptor';
@@ -49,6 +50,24 @@ export class IcpModelResolver {
     });
 
     return { modelId: input.modelId, analysis, rows };
+  }
+
+  @Query(() => IcpModelEvidenceDTO)
+  @RequireFeatureFlag(FeatureFlagKey.IS_ICP_ANALYSIS_ENABLED)
+  async icpModelEvidence(
+    @Args('input') input: IcpModelIdInput,
+    @AuthWorkspace() currentWorkspace: WorkspaceEntity,
+    @AuthUserWorkspaceId() userWorkspaceId: string,
+  ): Promise<IcpModelEvidenceDTO> {
+    const { attributes, rows } = await this.icpModelAnalysisService.getEvidence(
+      {
+        workspaceId: currentWorkspace.id,
+        userWorkspaceId,
+        modelId: input.modelId,
+      },
+    );
+
+    return { modelId: input.modelId, attributes, rows };
   }
 
   @Mutation(() => IcpSuggestedCriteriaDTO)

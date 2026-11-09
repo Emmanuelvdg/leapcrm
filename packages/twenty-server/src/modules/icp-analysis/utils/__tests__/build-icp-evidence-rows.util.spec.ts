@@ -45,9 +45,14 @@ describe('buildIcpEvidenceRows', () => {
   it('turns won and lost deals into rows with their company attributes', () => {
     const evidence = buildIcpEvidenceRows({
       opportunities: [
-        buildOpportunity({ id: 'won', stage: 'CUSTOMER' }),
+        buildOpportunity({
+          id: 'won',
+          name: 'Acme expansion',
+          stage: 'CUSTOMER',
+        }),
         buildOpportunity({
           id: 'lost',
+          name: 'Globex rollout',
           stage: 'LOST',
           companyId: 'globex',
           lostReason: 'PRICE',
@@ -63,6 +68,7 @@ describe('buildIcpEvidenceRows', () => {
     expect(evidence.rows).toEqual([
       {
         id: 'lost',
+        name: 'Globex rollout',
         outcome: 'LOST',
         closedAt: '2026-04-01T00:00:00.000Z',
         lostReason: 'PRICE',
@@ -70,6 +76,7 @@ describe('buildIcpEvidenceRows', () => {
       },
       {
         id: 'won',
+        name: 'Acme expansion',
         outcome: 'WON',
         closedAt: '2026-03-01T00:00:00.000Z',
         lostReason: null,

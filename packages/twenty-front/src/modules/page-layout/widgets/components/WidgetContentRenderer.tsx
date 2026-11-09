@@ -4,6 +4,7 @@ import { CallRecordingSummaryWidget } from '@/page-layout/widgets/call-recording
 import { CallRecordingTranscriptWidget } from '@/page-layout/widgets/call-recording-transcript/components/CallRecordingTranscriptWidget';
 import { ConversationsWidget } from '@/page-layout/widgets/conversations/components/ConversationsWidget';
 import { ProspectingDiscoveryStatusWidget } from '@/prospecting/widgets/ProspectingDiscoveryStatusWidget';
+import { IcpAnalysisWidget } from '@/icp-analysis/components/IcpAnalysisWidget';
 import { EmailThreadWidget } from '@/page-layout/widgets/email-thread/components/EmailThreadWidget';
 import { EmailWidget } from '@/page-layout/widgets/emails/components/EmailWidget';
 import { FieldRichTextWidgetRenderer } from '@/page-layout/widgets/field-rich-text/components/FieldRichTextWidgetRenderer';
@@ -66,6 +67,8 @@ export const WidgetContentRenderer = ({
       return <ConversationsWidget widget={widget} />;
     case WidgetType.PROSPECTING_DISCOVERY_STATUS:
       return <ProspectingDiscoveryStatusWidget widget={widget} />;
+    case WidgetType.ICP_ANALYSIS:
+      return <IcpAnalysisWidget widget={widget} />;
 
     case WidgetType.CALENDAR:
       return <CalendarWidget widget={widget} />;

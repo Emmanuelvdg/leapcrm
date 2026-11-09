@@ -15,6 +15,7 @@ import { extractIcpAttributeValues } from 'src/modules/icp-analysis/utils/extrac
 
 export type IcpEvidenceOpportunity = {
   id: string;
+  name?: string | null;
   stage: string;
   companyId: string | null;
   closeDate: Date | string | null;
@@ -96,6 +97,7 @@ export const buildIcpEvidenceRows = ({
       return [
         {
           id: opportunity.id,
+          name: opportunity.name ?? null,
           outcome: wonStages.includes(opportunity.stage) ? 'WON' : 'LOST',
           closedAt: closedAt.toISOString(),
           lostReason: opportunity.lostReason ?? null,

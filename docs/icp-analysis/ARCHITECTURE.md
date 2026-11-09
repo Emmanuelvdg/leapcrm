@@ -55,8 +55,9 @@ packages/twenty-server/src/modules/icp-analysis/
   constants/ types/ utils/ exceptions/
 
 packages/twenty-front/src/modules/icp-analysis/
-  widgets/                              # one ICP analysis widget, four sections
-  components/ hooks/ graphql/           # criteria editor, back-test table, actions
+  components/                           # ICP analysis widget, its four sections, criteria editor, tables
+  hooks/ graphql/                       # model actions and evidence query
+  constants/ types/ utils/
 ```
 
 Folder and file naming follow the adjacent code in each area.
@@ -203,12 +204,12 @@ The editor recomputes the back-test in the browser on every weight change, using
 ## 9. User interface
 
 - Navigation: "ICP analysis" in the Prospecting section, shown when the flag and permission allow it, opening the `icpModel` list.
-- `icpModel` record page with tabs **Evidence**, **Patterns**, **Model**, **Back-test** and **Insights**. The first four are one new widget type, `ICP_ANALYSIS`, with a `section` setting, following `ProspectingDiscoveryStatusWidget`. Insights is the rich text field.
-  - Evidence: deal counts, baseline win rate, coverage bar per attribute, link to companies in the dataset missing PDL data.
-  - Patterns: green pattern and negative ICP tables, lost reasons.
-  - Model: criteria editor grouped by category, weight sliders, hard exclusion toggle, tier thresholds, live back-test summary.
-  - Back-test: tier table, AUC, holdout comparison, misses.
-- Command menu actions on a model: Run analysis, Suggest weights, Activate, Duplicate as new version.
+- `icpModel` record page with tabs **Home** (the fields card), **Analysis** and **Insights** (the rich text field). Analysis holds one new widget type, `ICP_ANALYSIS`, following `ProspectingDiscoveryStatusWidget`, with a switcher for four sections. It gets its own tab because on a full record page the Home tab is the narrow left column, too small for the pattern and back-test tables.
+  - Evidence: deal counts, baseline win rate, coverage bar per attribute.
+  - Patterns: green pattern and negative ICP tables with observed win rate and lift, an add button per value, lost reasons.
+  - Model: criteria editor grouped by category, weights, hard exclusion toggle, tier thresholds, live back-test summary computed in the browser.
+  - Back-test: tier table, AUC, holdout comparison, misses linked to the deals by name.
+- Actions are buttons in the widget: Run analysis, Suggest weights, Save, Duplicate as new version, and Activate from M6.
 - Company and candidate record pages show score, tier, coverage and reasons in the fields card.
 
 ## 10. API

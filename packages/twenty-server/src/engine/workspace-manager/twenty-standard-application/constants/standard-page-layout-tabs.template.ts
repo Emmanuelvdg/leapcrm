@@ -214,6 +214,12 @@ export const WIDGET_PROPS = {
     gridPosition: GRID_POSITIONS.FULL_WIDTH,
     position: VERTICAL_LIST_LAYOUT_POSITIONS.FIRST,
   },
+  icpAnalysis: {
+    title: 'ICP analysis',
+    type: WidgetType.ICP_ANALYSIS,
+    gridPosition: GRID_POSITIONS.FULL_WIDTH,
+    position: VERTICAL_LIST_LAYOUT_POSITIONS.FIRST,
+  },
   calendar: {
     title: 'Calendar',
     type: WidgetType.CALENDAR,

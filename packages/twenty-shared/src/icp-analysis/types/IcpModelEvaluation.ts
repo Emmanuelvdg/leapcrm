@@ -3,6 +3,7 @@ import { type IcpTier } from '@/icp-analysis/types/IcpTier';
 
 export type IcpScoredRow = {
   id: string;
+  name?: string | null;
   outcome: IcpOutcome;
   score: number;
   tier: IcpTier;
