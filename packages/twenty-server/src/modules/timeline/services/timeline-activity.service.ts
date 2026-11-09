@@ -14,6 +14,7 @@ import { GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspac
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
 import { WorkspaceEventBatch } from 'src/engine/workspace-event-emitter/types/workspace-event-batch.type';
 import { parseEventNameOrThrow } from 'src/engine/workspace-event-emitter/utils/parse-event-name';
+import { ICP_SCORE_FIELD_UNIVERSAL_IDENTIFIERS } from 'src/modules/icp-analysis/constants/icp-score-field-universal-identifiers.constant';
 import { NoteWorkspaceEntity } from 'src/modules/note/standard-objects/note.workspace-entity';
 import { TaskWorkspaceEntity } from 'src/modules/task/standard-objects/task.workspace-entity';
 import { TimelineActivityRepository } from 'src/modules/timeline/repositories/timeline-activity.repository';
@@ -50,8 +51,8 @@ export class TimelineActivityService {
 
     const { objectSingularName } = parseEventNameOrThrow(name);
 
-    const eventsWithoutPositionDiff =
-      await this.excludePositionFieldsFromEventsDiff({
+    const eventsWithoutUntrackedDiff =
+      await this.excludeUntrackedFieldsFromEventsDiff({
         events,
         objectMetadata,
         workspaceId,
@@ -59,7 +60,7 @@ export class TimelineActivityService {
 
     const timelineActivitiesPayloads =
       await this.transformEventsToTimelineActivityPayloads({
-        events: eventsWithoutPositionDiff,
+        events: eventsWithoutUntrackedDiff,
         objectMetadata,
         workspaceId,
         name,
@@ -97,8 +98,9 @@ export class TimelineActivityService {
   }
 
   // Position changes reach other consumers (SSE, webhooks, workflows) but render
-  // blank in the timeline, so exclude them to avoid empty activity rows.
-  private async excludePositionFieldsFromEventsDiff({
+  // blank in the timeline, so exclude them to avoid empty activity rows. ICP
+  // scores are recomputed by a job, often nightly, and would bury real activity.
+  private async excludeUntrackedFieldsFromEventsDiff({
     events,
     objectMetadata,
     workspaceId,
@@ -123,13 +125,19 @@ export class TimelineActivityService {
         },
       );
 
-    const positionFieldNames = new Set(
+    const untrackedFieldNames = new Set(
       getFlatFieldsFromFlatObjectMetadata(objectMetadata, flatFieldMetadataMaps)
-        .filter((field) => field.type === FieldMetadataType.POSITION)
+        .filter(
+          (field) =>
+            field.type === FieldMetadataType.POSITION ||
+            ICP_SCORE_FIELD_UNIVERSAL_IDENTIFIERS.has(
+              field.universalIdentifier,
+            ),
+        )
         .map((field) => field.name),
     );
 
-    if (positionFieldNames.size === 0) {
+    if (untrackedFieldNames.size === 0) {
       return events;
     }
 
@@ -140,15 +148,15 @@ export class TimelineActivityService {
         return event;
       }
 
-      const diffWithoutPositionFields = Object.fromEntries(
+      const diffWithoutUntrackedFields = Object.fromEntries(
         Object.entries(diff).filter(
-          ([fieldName]) => !positionFieldNames.has(fieldName),
+          ([fieldName]) => !untrackedFieldNames.has(fieldName),
         ),
       );
 
       return {
         ...event,
-        properties: { ...event.properties, diff: diffWithoutPositionFields },
+        properties: { ...event.properties, diff: diffWithoutUntrackedFields },
       };
     });
   }

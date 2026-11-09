@@ -11,6 +11,7 @@ import { computeStandardCalendarEventViewFields } from 'src/engine/workspace-man
 import { computeStandardCallRecordingViewFields } from 'src/engine/workspace-manager/twenty-standard-application/utils/view-field/compute-standard-call-recording-view-fields.util';
 import { computeStandardCompanyViewFields } from 'src/engine/workspace-manager/twenty-standard-application/utils/view-field/compute-standard-company-view-fields.util';
 import { computeStandardConversationViewFields } from 'src/engine/workspace-manager/twenty-standard-application/utils/view-field/compute-standard-conversation-view-fields.util';
+import { computeStandardIcpModelViewFields } from 'src/engine/workspace-manager/twenty-standard-application/utils/view-field/compute-standard-icp-model-view-fields.util';
 import { computeStandardProspectCandidateViewFields } from 'src/engine/workspace-manager/twenty-standard-application/utils/view-field/compute-standard-prospect-candidate-view-fields.util';
 import { computeStandardProspectingCampaignViewFields } from 'src/engine/workspace-manager/twenty-standard-application/utils/view-field/compute-standard-prospecting-campaign-view-fields.util';
 import { computeStandardDashboardViewFields } from 'src/engine/workspace-manager/twenty-standard-application/utils/view-field/compute-standard-dashboard-view-fields.util';
@@ -51,6 +52,7 @@ const STANDARD_FLAT_VIEW_FIELD_METADATA_BUILDERS_BY_OBJECT_NAME = {
   conversation: computeStandardConversationViewFields,
   prospectCandidate: computeStandardProspectCandidateViewFields,
   prospectingCampaign: computeStandardProspectingCampaignViewFields,
+  icpModel: computeStandardIcpModelViewFields,
   dashboard: computeStandardDashboardViewFields,
   message: computeStandardMessageViewFields,
   messageCampaign: computeStandardMessageCampaignViewFields,

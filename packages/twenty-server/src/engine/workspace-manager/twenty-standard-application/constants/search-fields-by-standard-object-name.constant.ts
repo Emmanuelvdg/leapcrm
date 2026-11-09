@@ -53,6 +53,7 @@ export const SEARCH_FIELDS_BY_STANDARD_OBJECT_NAME = {
     { name: 'registrationNumber', type: FieldMetadataType.TEXT },
   ],
   prospectingCampaign: [{ name: 'name', type: FieldMetadataType.TEXT }],
+  icpModel: [{ name: 'name', type: FieldMetadataType.TEXT }],
   task: [
     { name: 'title', type: FieldMetadataType.TEXT },
     { name: 'bodyV2', type: FieldMetadataType.RICH_TEXT },

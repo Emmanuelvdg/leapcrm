@@ -450,6 +450,20 @@ export const STANDARD_OBJECT_FIELDS = {
     prospectCandidates: {
       universalIdentifier: '73171e21-90a5-4f48-86ca-4718e92629ed',
     },
+    icpScore: { universalIdentifier: '7116f0bd-3416-482b-88e0-051330058e8c' },
+    icpTier: { universalIdentifier: 'bcac25a3-ab2a-47a5-ab14-8b74faa26c60' },
+    icpScoreReasons: {
+      universalIdentifier: 'deb7329e-5685-4d34-9bc9-49b8b473113f',
+    },
+    icpCoverage: {
+      universalIdentifier: 'c7a80084-1a0f-4323-9029-0e3f218de103',
+    },
+    icpModelVersion: {
+      universalIdentifier: 'edb1128a-c3e1-4828-8081-e5422a0b2247',
+    },
+    icpScoredAt: {
+      universalIdentifier: 'b12d0ae7-dbd9-4954-b394-5320439c638e',
+    },
   },
   prospectingCampaign: {
     ...buildStandardObjectSystemFields(
@@ -511,6 +525,49 @@ export const STANDARD_OBJECT_FIELDS = {
     campaign: { universalIdentifier: '152b8585-60e4-47e8-96b3-2e13c94493c0' },
     matchedCompany: {
       universalIdentifier: 'c2b0614d-2c1d-45ac-9096-32c12435ef86',
+    },
+    icpScore: { universalIdentifier: 'd588fe26-67cd-4493-8d38-873b16f9f0d4' },
+    icpTier: { universalIdentifier: '0615685f-e04b-4403-8230-838f9340ea34' },
+    icpScoreReasons: {
+      universalIdentifier: 'a9516d53-1751-4fb1-b9f1-04fceb2eb764',
+    },
+    icpCoverage: {
+      universalIdentifier: '25a731ff-ec19-4724-a636-2e33a14ad3cf',
+    },
+    icpModelVersion: {
+      universalIdentifier: '8a0c224a-504c-4c1a-905a-3c2815fbaa52',
+    },
+    icpScoredAt: {
+      universalIdentifier: '1502054a-1867-43bc-ba9a-0e6a30522100',
+    },
+  },
+  icpModel: {
+    ...buildStandardObjectSystemFields(
+      STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.icpModel,
+    ),
+    name: { universalIdentifier: 'cb21852b-a06b-4cbb-8bb3-3f89f141a16d' },
+    status: { universalIdentifier: 'a42c3e97-1559-4c48-8d0d-a58554ffdc9a' },
+    version: { universalIdentifier: '4898dbf1-51c6-447f-9a65-2b5646054169' },
+    wonStages: { universalIdentifier: '1591c35d-08c3-4c99-951a-19ceee1a705a' },
+    lostStages: { universalIdentifier: '2c7d38de-e3d4-4d6f-8f49-8fc00c9da588' },
+    datasetStartDate: {
+      universalIdentifier: '9fc7ee3d-d21a-4535-a4e9-6b1244e1a546',
+    },
+    datasetEndDate: {
+      universalIdentifier: '21269130-9df5-466e-bc62-d01d0cc2dfef',
+    },
+    criteria: { universalIdentifier: 'b958222e-2aac-4ba7-ba9c-5e0562178ae9' },
+    tierThresholds: {
+      universalIdentifier: '83d3408a-a51b-400f-9f3f-ff5e5ba1f578',
+    },
+    analysis: { universalIdentifier: 'f1bb1cab-60cd-4630-bd1b-aac5cc7033b6' },
+    backtest: { universalIdentifier: '8f2eee3a-29f7-4cda-bb61-b606903374b0' },
+    insights: { universalIdentifier: '5ac897e5-865a-4798-96c1-eca6813c914d' },
+    analyzedAt: {
+      universalIdentifier: '4db730e2-51fd-4a67-bb17-a956cc76914b',
+    },
+    activatedAt: {
+      universalIdentifier: 'e9524dd8-c96d-41f6-9d99-939df9303185',
     },
   },
   dashboard: {

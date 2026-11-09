@@ -4,6 +4,7 @@ import {
   type CurrencyMetadata,
   type LinksMetadata,
 } from 'twenty-shared/types';
+import { type IcpTier } from 'twenty-shared/icp-analysis';
 
 import { type EntityRelation } from 'src/engine/workspace-manager/workspace-migration/types/entity-relation.interface';
 import { type AttachmentWorkspaceEntity } from 'src/modules/attachment/standard-objects/attachment.workspace-entity';
@@ -33,6 +34,12 @@ export class CompanyWorkspaceEntity {
   /** @deprecated Use `address` field instead */
   addressOld: string | null;
   searchVector: string;
+  icpScore: number | null;
+  icpTier: IcpTier | null;
+  icpScoreReasons: string | null;
+  icpCoverage: number | null;
+  icpModelVersion: number | null;
+  icpScoredAt: Date | null;
 
   people: EntityRelation<PersonWorkspaceEntity[]>;
   accountOwner: EntityRelation<WorkspaceMemberWorkspaceEntity> | null;

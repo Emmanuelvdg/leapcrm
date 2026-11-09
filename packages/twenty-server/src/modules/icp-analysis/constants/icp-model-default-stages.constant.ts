@@ -1,0 +1,3 @@
+export const ICP_MODEL_DEFAULT_WON_STAGES = ['CUSTOMER'];
+
+export const ICP_MODEL_DEFAULT_LOST_STAGES = ['LOST'];

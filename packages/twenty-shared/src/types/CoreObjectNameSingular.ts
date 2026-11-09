@@ -24,6 +24,7 @@ export enum CoreObjectNameSingular {
   Person = 'person',
   ProspectCandidate = 'prospectCandidate',
   ProspectingCampaign = 'prospectingCampaign',
+  IcpModel = 'icpModel',
   Task = 'task',
   TaskTarget = 'taskTarget',
   Webhook = 'webhook',

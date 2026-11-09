@@ -1,3 +1,4 @@
+import { type IcpTier } from 'twenty-shared/icp-analysis';
 import { type ActorMetadata, type LinksMetadata } from 'twenty-shared/types';
 
 import { BaseWorkspaceEntity } from 'src/engine/twenty-orm/base.workspace-entity';
@@ -28,6 +29,12 @@ export class ProspectCandidateWorkspaceEntity extends BaseWorkspaceEntity {
   createdBy: ActorMetadata;
   updatedBy: ActorMetadata;
   searchVector: string;
+  icpScore: number | null;
+  icpTier: IcpTier | null;
+  icpScoreReasons: string | null;
+  icpCoverage: number | null;
+  icpModelVersion: number | null;
+  icpScoredAt: Date | null;
   campaign: EntityRelation<ProspectingCampaignWorkspaceEntity> | null;
   campaignId: string | null;
   matchedCompany: EntityRelation<CompanyWorkspaceEntity> | null;

@@ -757,6 +757,24 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
       "domainName": {
         "universalIdentifier": "20202020-0c28-43d8-8ba5-3659924d3489",
       },
+      "icpCoverage": {
+        "universalIdentifier": "c7a80084-1a0f-4323-9029-0e3f218de103",
+      },
+      "icpModelVersion": {
+        "universalIdentifier": "edb1128a-c3e1-4828-8081-e5422a0b2247",
+      },
+      "icpScore": {
+        "universalIdentifier": "7116f0bd-3416-482b-88e0-051330058e8c",
+      },
+      "icpScoreReasons": {
+        "universalIdentifier": "deb7329e-5685-4d34-9bc9-49b8b473113f",
+      },
+      "icpScoredAt": {
+        "universalIdentifier": "b12d0ae7-dbd9-4954-b394-5320439c638e",
+      },
+      "icpTier": {
+        "universalIdentifier": "bcac25a3-ab2a-47a5-ab14-8b74faa26c60",
+      },
       "id": {
         "universalIdentifier": "ca0547a7-a55a-51f7-b5d7-f3a03e266c39",
       },
@@ -1206,6 +1224,110 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
           },
           "updatedAt": {
             "universalIdentifier": "d37846b6-01a9-54f9-ab44-43a39375974d",
+          },
+        },
+      },
+    },
+  },
+  "icpModel": {
+    "fields": {
+      "activatedAt": {
+        "universalIdentifier": "e9524dd8-c96d-41f6-9d99-939df9303185",
+      },
+      "analysis": {
+        "universalIdentifier": "f1bb1cab-60cd-4630-bd1b-aac5cc7033b6",
+      },
+      "analyzedAt": {
+        "universalIdentifier": "4db730e2-51fd-4a67-bb17-a956cc76914b",
+      },
+      "backtest": {
+        "universalIdentifier": "8f2eee3a-29f7-4cda-bb61-b606903374b0",
+      },
+      "createdAt": {
+        "universalIdentifier": "c105b19e-b767-5040-889f-1fd9c71fb16e",
+      },
+      "createdBy": {
+        "universalIdentifier": "49adef7a-dcc3-5468-bd23-437b61357f77",
+      },
+      "criteria": {
+        "universalIdentifier": "b958222e-2aac-4ba7-ba9c-5e0562178ae9",
+      },
+      "datasetEndDate": {
+        "universalIdentifier": "21269130-9df5-466e-bc62-d01d0cc2dfef",
+      },
+      "datasetStartDate": {
+        "universalIdentifier": "9fc7ee3d-d21a-4535-a4e9-6b1244e1a546",
+      },
+      "deletedAt": {
+        "universalIdentifier": "4fb13340-b3a4-50bb-8d9e-cf0853b48aa5",
+      },
+      "id": {
+        "universalIdentifier": "722f3e14-a55d-5732-a3c5-51f95e41b890",
+      },
+      "insights": {
+        "universalIdentifier": "5ac897e5-865a-4798-96c1-eca6813c914d",
+      },
+      "lostStages": {
+        "universalIdentifier": "2c7d38de-e3d4-4d6f-8f49-8fc00c9da588",
+      },
+      "name": {
+        "universalIdentifier": "cb21852b-a06b-4cbb-8bb3-3f89f141a16d",
+      },
+      "position": {
+        "universalIdentifier": "08f7fda5-fbb8-500f-a3e0-b6da3087bf73",
+      },
+      "searchVector": {
+        "universalIdentifier": "61dcc2c6-6032-5b31-8cf7-8d1d4c93c841",
+      },
+      "status": {
+        "universalIdentifier": "a42c3e97-1559-4c48-8d0d-a58554ffdc9a",
+      },
+      "tierThresholds": {
+        "universalIdentifier": "83d3408a-a51b-400f-9f3f-ff5e5ba1f578",
+      },
+      "updatedAt": {
+        "universalIdentifier": "67d14738-fffb-56e7-8485-40148cb653ff",
+      },
+      "updatedBy": {
+        "universalIdentifier": "fa4aaae1-fdbd-5a8f-ac90-49f59d10b194",
+      },
+      "version": {
+        "universalIdentifier": "4898dbf1-51c6-447f-9a65-2b5646054169",
+      },
+      "wonStages": {
+        "universalIdentifier": "1591c35d-08c3-4c99-951a-19ceee1a705a",
+      },
+    },
+    "indexes": {
+      "searchVectorGinIndex": {
+        "universalIdentifier": "cce03e86-6ef0-4c85-8399-d5c39dbf46d5",
+      },
+    },
+    "universalIdentifier": "df0b9b5a-57ce-4a69-b4a3-c851b0a0c903",
+    "views": {
+      "allIcpModels": {
+        "universalIdentifier": "c27b3c2d-feb8-5fef-a48c-15a0f4ac88ac",
+        "viewFields": {
+          "activatedAt": {
+            "universalIdentifier": "0c20dad3-7ff0-5053-a63b-4e497903280c",
+          },
+          "analyzedAt": {
+            "universalIdentifier": "14776363-e5a8-5417-8d43-8fd052809a46",
+          },
+          "createdAt": {
+            "universalIdentifier": "c7efc17f-1c1c-5b03-a03d-d447cd780242",
+          },
+          "createdBy": {
+            "universalIdentifier": "3a677916-1f0a-5211-9bfc-269ce437a429",
+          },
+          "name": {
+            "universalIdentifier": "7d5d7d69-a98a-5e96-95e6-f638ccc9f617",
+          },
+          "status": {
+            "universalIdentifier": "c836a76a-8239-5c3b-9049-b93ace55d0a7",
+          },
+          "version": {
+            "universalIdentifier": "01eab3d5-627b-55f5-aa88-f673bce46304",
           },
         },
       },
@@ -2174,6 +2296,9 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
       "id": {
         "universalIdentifier": "2fa92d57-b39d-5ee8-ac9e-b39bc65b9ee9",
       },
+      "lostReason": {
+        "universalIdentifier": "6bf1c434-8f54-47d7-bacf-dd5b301cae59",
+      },
       "name": {
         "universalIdentifier": "20202020-8609-4f65-a2d9-44009eb422b5",
       },
@@ -2273,6 +2398,9 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
           "customer": {
             "universalIdentifier": "20202020-af14-4a04-8a04-0aa0b2ca2bf5",
           },
+          "lost": {
+            "universalIdentifier": "939b372d-f266-4eea-9c71-2f9af52fa37b",
+          },
           "meeting": {
             "universalIdentifier": "20202020-af14-4a04-8a04-0aa0b2ca2bf3",
           },
@@ -2318,6 +2446,9 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
           },
           "createdBy": {
             "universalIdentifier": "11bc1e10-def4-549a-bb50-ec5c49cc3c79",
+          },
+          "lostReason": {
+            "universalIdentifier": "1056f983-2a31-50e4-8a5b-3d0548249bc4",
           },
           "noteTargets": {
             "universalIdentifier": "2f6dc99d-bd0b-58c3-8748-3c1b30dbafbb",
@@ -2573,6 +2704,24 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
       },
       "employeeCount": {
         "universalIdentifier": "4671c7aa-e849-456c-bf7f-6c713aed2296",
+      },
+      "icpCoverage": {
+        "universalIdentifier": "25a731ff-ec19-4724-a636-2e33a14ad3cf",
+      },
+      "icpModelVersion": {
+        "universalIdentifier": "8a0c224a-504c-4c1a-905a-3c2815fbaa52",
+      },
+      "icpScore": {
+        "universalIdentifier": "d588fe26-67cd-4493-8d38-873b16f9f0d4",
+      },
+      "icpScoreReasons": {
+        "universalIdentifier": "a9516d53-1751-4fb1-b9f1-04fceb2eb764",
+      },
+      "icpScoredAt": {
+        "universalIdentifier": "1502054a-1867-43bc-ba9a-0e6a30522100",
+      },
+      "icpTier": {
+        "universalIdentifier": "0615685f-e04b-4403-8230-838f9340ea34",
       },
       "id": {
         "universalIdentifier": "60a0e75c-5dd8-5b2b-9405-44e52516de66",

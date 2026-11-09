@@ -938,6 +938,31 @@ export const STANDARD_OBJECTS = {
       }),
     },
   },
+  icpModel: {
+    universalIdentifier: STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.icpModel,
+    fields: STANDARD_OBJECT_FIELDS.icpModel,
+    indexes: {
+      searchVectorGinIndex: {
+        universalIdentifier: 'cce03e86-6ef0-4c85-8399-d5c39dbf46d5',
+      },
+    },
+    views: {
+      allIcpModels: buildStandardObjectIndexView({
+        objectUniversalIdentifier:
+          STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.icpModel,
+        fields: STANDARD_OBJECT_FIELDS.icpModel,
+        viewFieldNames: [
+          'name',
+          'status',
+          'version',
+          'analyzedAt',
+          'activatedAt',
+          'createdBy',
+          'createdAt',
+        ],
+      }),
+    },
+  },
   person: {
     universalIdentifier: STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.person,
     fields: STANDARD_OBJECT_FIELDS.person,

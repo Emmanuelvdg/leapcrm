@@ -11,6 +11,7 @@ import { computeStandardCalendarEventViews } from 'src/engine/workspace-manager/
 import { computeStandardCallRecordingViews } from 'src/engine/workspace-manager/twenty-standard-application/utils/view/compute-standard-call-recording-views.util';
 import { computeStandardCompanyViews } from 'src/engine/workspace-manager/twenty-standard-application/utils/view/compute-standard-company-views.util';
 import { computeStandardConversationViews } from 'src/engine/workspace-manager/twenty-standard-application/utils/view/compute-standard-conversation-views.util';
+import { computeStandardIcpModelViews } from 'src/engine/workspace-manager/twenty-standard-application/utils/view/compute-standard-icp-model-views.util';
 import { computeStandardProspectCandidateViews } from 'src/engine/workspace-manager/twenty-standard-application/utils/view/compute-standard-prospect-candidate-views.util';
 import { computeStandardProspectingCampaignViews } from 'src/engine/workspace-manager/twenty-standard-application/utils/view/compute-standard-prospecting-campaign-views.util';
 import { computeStandardDashboardViews } from 'src/engine/workspace-manager/twenty-standard-application/utils/view/compute-standard-dashboard-views.util';
@@ -51,6 +52,7 @@ const STANDARD_FLAT_VIEW_METADATA_BUILDERS_BY_OBJECT_NAME = {
   conversation: computeStandardConversationViews,
   prospectCandidate: computeStandardProspectCandidateViews,
   prospectingCampaign: computeStandardProspectingCampaignViews,
+  icpModel: computeStandardIcpModelViews,
   dashboard: computeStandardDashboardViews,
   message: computeStandardMessageViews,
   messageCampaign: computeStandardMessageCampaignViews,

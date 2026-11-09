@@ -9,6 +9,7 @@ import {
 
 import { STANDARD_RELATION_FIELD_PROPERTIES_BY_RELATION_OBJECT } from 'src/engine/metadata-modules/object-metadata/constants/standard-relation-field-properties.constant';
 import { type FlatFieldMetadata } from 'src/engine/metadata-modules/flat-field-metadata/types/flat-field-metadata.type';
+import { buildIcpScoreStandardFlatFieldMetadatas } from 'src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/build-icp-score-standard-flat-field-metadatas.util';
 import { type AllStandardObjectFieldName } from 'src/engine/workspace-manager/twenty-standard-application/types/all-standard-object-field-name.type';
 import {
   type CreateStandardFieldArgs,
@@ -634,5 +635,19 @@ export const buildCompanyStandardFlatFieldMetadatas = ({
     dependencyFlatEntityMaps,
     twentyStandardApplicationId,
     now,
+  }),
+  ...buildIcpScoreStandardFlatFieldMetadatas({
+    objectName,
+    workspaceId,
+    standardObjectMetadataRelatedEntityIds,
+    dependencyFlatEntityMaps,
+    twentyStandardApplicationId,
+    now,
+    tierOptionIds: {
+      PRIORITY: '23d4d9f8-17eb-441e-9114-0c68628250b6',
+      TARGET: '103129a4-5715-4f8a-96f4-67bd3dc74ea3',
+      NURTURE: 'ad23f14d-572e-44ff-ad70-c6b2bdc5784e',
+      EXCLUDED: '30482ab0-1ca6-409b-857c-f8324bfc8a34',
+    },
   }),
 });

@@ -8,6 +8,7 @@ import {
 } from 'twenty-shared/types';
 
 import { type FlatFieldMetadata } from 'src/engine/metadata-modules/flat-field-metadata/types/flat-field-metadata.type';
+import { buildIcpScoreStandardFlatFieldMetadatas } from 'src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/build-icp-score-standard-flat-field-metadatas.util';
 import { type AllStandardObjectFieldName } from 'src/engine/workspace-manager/twenty-standard-application/types/all-standard-object-field-name.type';
 import {
   type CreateStandardFieldArgs,
@@ -794,6 +795,15 @@ export const buildProspectCandidateStandardFlatFieldMetadatas = ({
           onDelete: RelationOnDeleteAction.SET_NULL,
           joinColumnName: 'matchedCompanyId',
         },
+      },
+    }),
+    ...buildIcpScoreStandardFlatFieldMetadatas({
+      ...base,
+      tierOptionIds: {
+        PRIORITY: '612a099c-fe4b-40fa-8c0a-c26e1e51ba8a',
+        TARGET: '0bdfc372-59f8-499b-9b83-15c8041cac66',
+        NURTURE: 'f512b448-23bb-4086-b352-86eee7dc2b1f',
+        EXCLUDED: '3e5e59c9-992d-47b9-9c81-585476525e0b',
       },
     }),
   };

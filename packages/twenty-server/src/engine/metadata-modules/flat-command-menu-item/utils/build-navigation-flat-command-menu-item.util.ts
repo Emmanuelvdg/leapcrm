@@ -37,6 +37,8 @@ const NAVIGATION_FEATURE_FLAG_GATE_BY_OBJECT_UNIVERSAL_IDENTIFIER: Partial<
     FeatureFlagKey.IS_PROSPECTING_ENABLED,
   [STANDARD_OBJECTS.prospectCandidate.universalIdentifier]:
     FeatureFlagKey.IS_PROSPECTING_ENABLED,
+  [STANDARD_OBJECTS.icpModel.universalIdentifier]:
+    FeatureFlagKey.IS_ICP_ANALYSIS_ENABLED,
 };
 
 export const buildNavigationConditionalAvailabilityExpression = ({

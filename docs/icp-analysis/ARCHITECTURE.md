@@ -70,17 +70,16 @@ Folder and file naming follow the adjacent code in each area.
 | name | text | |
 | status | select | `DRAFT`, `ACTIVE`, `ARCHIVED` |
 | version | number | Incremented when duplicated for retraining |
-| wonStages, lostStages | array | Opportunity stage values; default `CUSTOMER` and `LOST` |
-| datasetStartDate, datasetEndDate | date | Window on the opportunity's last stage change; default the last 24 months |
+| wonStages, lostStages | raw JSON | Lists of opportunity stage values; default `CUSTOMER` and `LOST` |
+| datasetStartDate, datasetEndDate | date time | Window of closed deals; default the last 24 months |
 | criteria | raw JSON | Validated by the shared zod schema (section 6.1) |
 | tierThresholds | raw JSON | Default `{ priority: 80, target: 60, nurture: 40 }` |
 | analysis | raw JSON | Snapshot from the last run: dataset counts, coverage per attribute, pattern table (section 5) |
 | backtest | raw JSON | Snapshot of the back-test for the saved criteria (section 7) |
 | insights | rich text | Findings from customer interviews: "what was happening right before you reached out?" |
 | analyzedAt, activatedAt | date time | |
-| parentModel | relation | Many-to-one to the model it was duplicated from |
 
-Models are workspace records, so they get the generic record page, views, object permissions and the timeline for free.
+Models are workspace records, so they get the generic record page, views, object permissions and the timeline for free. Status, version, analysis, back-test and the two timestamps are not editable in the UI; actions change them. A duplicated model keeps the name and gets `version + 1`, which is enough lineage, so there is no relation back to the model it came from.
 
 ### 4.2 Score fields on `company` and `prospectCandidate`
 
@@ -217,9 +216,9 @@ Custom mutations on the core GraphQL API, all behind `WorkspaceAuthGuard`, `Sett
 - `analyzeIcpModel(id)`: builds the evidence, stores `analysis` and returns the dataset rows for the browser back-test.
 - `suggestIcpModelCriteria(id)`: returns suggested criteria without saving them.
 - `activateIcpModel(id)`: validates criteria, stores the back-test snapshot, activates and enqueues scoring.
-- `duplicateIcpModel(id)`: new `DRAFT` with `version + 1` and `parentModel`.
+- `duplicateIcpModel(id)`: new `DRAFT` copy with `version + 1`.
 
-Criteria and thresholds are saved through the normal record update API and validated by a pre-update hook with the shared zod schema.
+Criteria and thresholds are saved through the normal record API. Pre-query hooks on create and update (one and many) validate them with the shared zod schemas, fill in default stages, criteria and thresholds on create, refuse upserts and refuse setting a model to `ACTIVE` (only `activateIcpModel` does that). Criteria, thresholds, stages and the deal window of an active or archived model cannot change; retraining duplicates the model.
 
 ## 11. Security and tenancy
 
