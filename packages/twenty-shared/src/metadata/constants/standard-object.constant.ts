@@ -961,6 +961,33 @@ export const STANDARD_OBJECTS = {
           'createdAt',
         ],
       }),
+      icpModelRecordPageFields: buildStandardObjectRecordPageFieldsView({
+        objectUniversalIdentifier:
+          STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.icpModel,
+        fields: STANDARD_OBJECT_FIELDS.icpModel,
+        viewFieldNames: [
+          'status',
+          'version',
+          'wonStages',
+          'lostStages',
+          'datasetStartDate',
+          'datasetEndDate',
+          'analyzedAt',
+          'activatedAt',
+          'criteria',
+          'tierThresholds',
+          'analysis',
+          'backtest',
+          'createdAt',
+          'createdBy',
+          'updatedAt',
+          'updatedBy',
+        ],
+        viewFieldGroupNames: {
+          model: 'Model',
+          system: 'System',
+        },
+      }),
     },
   },
   person: {

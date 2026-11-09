@@ -204,7 +204,7 @@ The editor recomputes the back-test in the browser on every weight change, using
 ## 9. User interface
 
 - Navigation: "ICP analysis" in the Prospecting section, shown when the flag and permission allow it, opening the `icpModel` list.
-- `icpModel` record page with tabs **Home** (the fields card), **Analysis** and **Insights** (the rich text field). Analysis holds one new widget type, `ICP_ANALYSIS`, following `ProspectingDiscoveryStatusWidget`, with a switcher for four sections. It gets its own tab because on a full record page the Home tab is the narrow left column, too small for the pattern and back-test tables.
+- `icpModel` record page with tabs **Home** (the fields card), **Analysis** and **Insights** (the rich text field). The fields card has its own view showing the model settings and system fields; criteria, tier thresholds, analysis and back-test are JSON the widget presents, so the view hides them. Analysis holds one new widget type, `ICP_ANALYSIS`, following `ProspectingDiscoveryStatusWidget`, with a switcher for four sections. It gets its own tab because on a full record page the Home tab is the narrow left column, too small for the pattern and back-test tables.
   - Evidence: deal counts, baseline win rate, coverage bar per attribute.
   - Patterns: green pattern and negative ICP tables with observed win rate and lift, an add button per value, lost reasons.
   - Model: criteria editor grouped by category, weights, hard exclusion toggle, tier thresholds, live back-test summary computed in the browser.

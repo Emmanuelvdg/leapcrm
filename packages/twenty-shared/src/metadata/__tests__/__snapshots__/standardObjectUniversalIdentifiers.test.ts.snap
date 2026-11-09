@@ -1331,6 +1331,67 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
           },
         },
       },
+      "icpModelRecordPageFields": {
+        "universalIdentifier": "7d582912-3fad-5077-8af8-58dffc2a24b9",
+        "viewFieldGroups": {
+          "model": {
+            "universalIdentifier": "88551758-6b75-5485-9d9e-a8ce15c5e9ab",
+          },
+          "system": {
+            "universalIdentifier": "eaf63609-39f2-506f-99dc-48f73853c4b0",
+          },
+        },
+        "viewFields": {
+          "activatedAt": {
+            "universalIdentifier": "f27a9847-30cd-58d6-bd07-e3abbac24ca9",
+          },
+          "analysis": {
+            "universalIdentifier": "4e5c036e-3611-576e-8edd-3a5795f6bd45",
+          },
+          "analyzedAt": {
+            "universalIdentifier": "653eb2ce-9f5c-53ae-abfa-cb308cbf8a0c",
+          },
+          "backtest": {
+            "universalIdentifier": "ca179013-18d7-5dd5-a1f5-ad57dbe50c4c",
+          },
+          "createdAt": {
+            "universalIdentifier": "9acd5551-8f72-5c96-bed9-18f3885a91d0",
+          },
+          "createdBy": {
+            "universalIdentifier": "e9530d3e-5fbd-55f4-a026-d7287b5973c8",
+          },
+          "criteria": {
+            "universalIdentifier": "b5a7ba61-3140-5fba-b53b-2d37e63887af",
+          },
+          "datasetEndDate": {
+            "universalIdentifier": "20f35254-7a5d-5ceb-b9ec-36e871bbbd10",
+          },
+          "datasetStartDate": {
+            "universalIdentifier": "463b3718-a8d3-5089-8b25-b7d8cad78b70",
+          },
+          "lostStages": {
+            "universalIdentifier": "566804e3-1866-500b-9ebc-ec80738aecc1",
+          },
+          "status": {
+            "universalIdentifier": "f391a4f4-66ac-5df7-849d-631d0c01c1de",
+          },
+          "tierThresholds": {
+            "universalIdentifier": "aa2b7d93-6dbd-5fd8-a52d-26ad682a8b86",
+          },
+          "updatedAt": {
+            "universalIdentifier": "58172648-6f66-5f69-b99e-a05062ef7a65",
+          },
+          "updatedBy": {
+            "universalIdentifier": "3d6049ac-304c-5b6b-8d87-a8be5d7299f0",
+          },
+          "version": {
+            "universalIdentifier": "cb449b23-e6c3-5398-b574-fc5052076569",
+          },
+          "wonStages": {
+            "universalIdentifier": "78da4f53-3d06-565f-953f-19e2cb550019",
+          },
+        },
+      },
     },
   },
   "message": {

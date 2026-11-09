@@ -24,5 +24,17 @@ export const computeStandardIcpModelViews = (
         icon: 'IconList',
       },
     }),
+    icpModelRecordPageFields: createStandardViewFlatMetadata({
+      ...args,
+      objectName: 'icpModel',
+      context: {
+        viewName: 'icpModelRecordPageFields',
+        name: 'ICP Model Record Page Fields',
+        type: ViewType.FIELDS_WIDGET,
+        key: null,
+        position: 0,
+        icon: 'IconList',
+      },
+    }),
   };
 };

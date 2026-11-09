@@ -16,11 +16,15 @@ import { type FlatObjectMetadata } from 'src/engine/metadata-modules/flat-object
 import { type FlatPageLayoutTab } from 'src/engine/metadata-modules/flat-page-layout-tab/types/flat-page-layout-tab.type';
 import { type FlatPageLayoutWidget } from 'src/engine/metadata-modules/flat-page-layout-widget/types/flat-page-layout-widget.type';
 import { type FlatPageLayout } from 'src/engine/metadata-modules/flat-page-layout/types/flat-page-layout.type';
+import { type FlatViewFieldGroup } from 'src/engine/metadata-modules/flat-view-field-group/types/flat-view-field-group.type';
+import { type FlatViewField } from 'src/engine/metadata-modules/flat-view-field/types/flat-view-field.type';
+import { type FlatView } from 'src/engine/metadata-modules/flat-view/types/flat-view.type';
 import { WorkspaceCacheService } from 'src/engine/workspace-cache/services/workspace-cache.service';
 import { computeTwentyStandardApplicationAllFlatEntityMaps } from 'src/engine/workspace-manager/twenty-standard-application/utils/twenty-standard-application-all-flat-entity-maps.constant';
 import { WorkspaceMigrationValidateBuildAndRunService } from 'src/engine/workspace-manager/workspace-migration/services/workspace-migration-validate-build-and-run-service';
 
 const { icpModelRecordPage } = STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS;
+const { icpModelRecordPageFields } = STANDARD_OBJECTS.icpModel.views;
 
 const ICP_MODEL_PAGE_LAYOUT_TAB_UNIVERSAL_IDENTIFIERS = Object.values(
   icpModelRecordPage.tabs,
@@ -32,6 +36,14 @@ const ICP_MODEL_PAGE_LAYOUT_WIDGET_UNIVERSAL_IDENTIFIERS = Object.values(
   Object.values(widgets).map(({ universalIdentifier }) => universalIdentifier),
 );
 
+const ICP_MODEL_FIELDS_VIEW_FIELD_UNIVERSAL_IDENTIFIERS = Object.values(
+  icpModelRecordPageFields.viewFields,
+).map(({ universalIdentifier }) => universalIdentifier);
+
+const ICP_MODEL_FIELDS_VIEW_FIELD_GROUP_UNIVERSAL_IDENTIFIERS = Object.values(
+  icpModelRecordPageFields.viewFieldGroups,
+).map(({ universalIdentifier }) => universalIdentifier);
+
 // Runs after the ICP analysis metadata sync, which created the object this
 // page belongs to, and needs the ICP_ANALYSIS widget type from the 2.33
 // instance command.
@@ -39,7 +51,7 @@ const ICP_MODEL_PAGE_LAYOUT_WIDGET_UNIVERSAL_IDENTIFIERS = Object.values(
 @Command({
   name: 'upgrade:2-33:add-icp-model-record-page',
   description:
-    'Adds the ICP model record page with the ICP analysis widget to existing workspaces',
+    'Adds the ICP model record page, its fields view and the ICP analysis widget to existing workspaces',
 })
 export class AddIcpModelRecordPageCommand extends ProvisionedWorkspaceCommandRunner {
   constructor(
@@ -62,11 +74,17 @@ export class AddIcpModelRecordPageCommand extends ProvisionedWorkspaceCommandRun
       flatPageLayoutMaps,
       flatPageLayoutTabMaps,
       flatPageLayoutWidgetMaps,
+      flatViewMaps,
+      flatViewFieldMaps,
+      flatViewFieldGroupMaps,
     } = await this.workspaceCacheService.getOrRecompute(workspaceId, [
       'flatObjectMetadataMaps',
       'flatPageLayoutMaps',
       'flatPageLayoutTabMaps',
       'flatPageLayoutWidgetMaps',
+      'flatViewMaps',
+      'flatViewFieldMaps',
+      'flatViewFieldGroupMaps',
     ]);
 
     const icpModelObjectMetadata =
@@ -95,7 +113,42 @@ export class AddIcpModelRecordPageCommand extends ProvisionedWorkspaceCommandRun
         twentyStandardApplicationId: twentyStandardFlatApplication.id,
       });
 
+    // The fields widget points at the fields view, so both are created in
+    // the same migration.
     const allFlatEntityOperationByMetadataName = {
+      view: {
+        flatEntityToCreate: getStandardFlatEntitiesToCreateOrThrow<FlatView>({
+          standardFlatEntityMaps: standardAllFlatEntityMaps.flatViewMaps,
+          existingFlatEntityMaps: flatViewMaps,
+          universalIdentifiers: [icpModelRecordPageFields.universalIdentifier],
+        }),
+        flatEntityToDelete: [],
+        flatEntityToUpdate: [],
+      },
+      viewFieldGroup: {
+        flatEntityToCreate:
+          getStandardFlatEntitiesToCreateOrThrow<FlatViewFieldGroup>({
+            standardFlatEntityMaps:
+              standardAllFlatEntityMaps.flatViewFieldGroupMaps,
+            existingFlatEntityMaps: flatViewFieldGroupMaps,
+            universalIdentifiers:
+              ICP_MODEL_FIELDS_VIEW_FIELD_GROUP_UNIVERSAL_IDENTIFIERS,
+          }),
+        flatEntityToDelete: [],
+        flatEntityToUpdate: [],
+      },
+      viewField: {
+        flatEntityToCreate: getStandardFlatEntitiesToCreateOrThrow<FlatViewField>(
+          {
+            standardFlatEntityMaps: standardAllFlatEntityMaps.flatViewFieldMaps,
+            existingFlatEntityMaps: flatViewFieldMaps,
+            universalIdentifiers:
+              ICP_MODEL_FIELDS_VIEW_FIELD_UNIVERSAL_IDENTIFIERS,
+          },
+        ),
+        flatEntityToDelete: [],
+        flatEntityToUpdate: [],
+      },
       pageLayout: {
         flatEntityToCreate:
           getStandardFlatEntitiesToCreateOrThrow<FlatPageLayout>({
