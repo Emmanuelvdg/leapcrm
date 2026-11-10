@@ -47,6 +47,17 @@ const ICP_MODEL_PAGE_TABS = {
       },
     },
   },
+  timeline: {
+    universalIdentifier: icpModelRecordPage.tabs.timeline.universalIdentifier,
+    ...TAB_PROPS.timeline,
+    widgets: {
+      timeline: {
+        universalIdentifier:
+          icpModelRecordPage.tabs.timeline.widgets.timeline.universalIdentifier,
+        ...WIDGET_PROPS.timeline,
+      },
+    },
+  },
   insights: {
     universalIdentifier: icpModelRecordPage.tabs.insights.universalIdentifier,
     title: 'Insights',

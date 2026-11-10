@@ -553,6 +553,12 @@ export const STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS = {
           analysis: 'ICP analysis',
         },
       },
+      timeline: {
+        title: 'Timeline',
+        widgets: {
+          timeline: 'Timeline',
+        },
+      },
       insights: {
         title: 'Insights',
         widgets: {

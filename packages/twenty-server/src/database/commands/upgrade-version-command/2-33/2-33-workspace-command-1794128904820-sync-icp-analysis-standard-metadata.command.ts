@@ -133,6 +133,8 @@ export class SyncIcpAnalysisStandardMetadataCommand extends ProvisionedWorkspace
             existingFlatEntityMaps: flatFieldMetadataMaps,
             universalIdentifiers: [
               ...getUniversalIdentifiers(STANDARD_OBJECTS.icpModel.fields),
+              STANDARD_OBJECTS.timelineActivity.fields.targetIcpModel
+                .universalIdentifier,
               ...scoreFieldUniversalIdentifiers,
             ],
           }),

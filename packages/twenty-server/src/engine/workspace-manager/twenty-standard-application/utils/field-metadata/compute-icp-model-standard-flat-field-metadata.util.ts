@@ -1,6 +1,10 @@
 import { msg } from '@lingui/core/macro';
 import { i18nLabel } from 'src/engine/workspace-manager/twenty-standard-application/utils/i18n-label.util';
-import { DateDisplayFormat, FieldMetadataType } from 'twenty-shared/types';
+import {
+  DateDisplayFormat,
+  FieldMetadataType,
+  RelationType,
+} from 'twenty-shared/types';
 
 import { type FlatFieldMetadata } from 'src/engine/metadata-modules/flat-field-metadata/types/flat-field-metadata.type';
 import { type AllStandardObjectFieldName } from 'src/engine/workspace-manager/twenty-standard-application/types/all-standard-object-field-name.type';
@@ -8,6 +12,7 @@ import {
   type CreateStandardFieldArgs,
   createStandardFieldFlatMetadata,
 } from 'src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/create-standard-field-flat-metadata.util';
+import { createStandardRelationFieldFlatMetadata } from 'src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/create-standard-relation-field-flat-metadata.util';
 export const buildIcpModelStandardFlatFieldMetadatas = ({
   now,
   objectName,
@@ -493,6 +498,31 @@ export const buildIcpModelStandardFlatFieldMetadatas = ({
         isNullable: true,
         isUIEditable: false,
         settings: { displayFormat: DateDisplayFormat.RELATIVE },
+      },
+    }),
+    timelineActivities: createStandardRelationFieldFlatMetadata({
+      ...base,
+      context: {
+        type: FieldMetadataType.RELATION,
+        morphId: null,
+        fieldName: 'timelineActivities',
+        isSystemSideEffect: true,
+        label: i18nLabel(
+          msg({ message: `Events`, context: 'fieldMetadata.label' }),
+        ),
+        description: i18nLabel(
+          msg({
+            message: `Events linked to the ICP model`,
+            context: 'fieldMetadata.description',
+          }),
+        ),
+        icon: 'IconTimelineEvent',
+        isNullable: true,
+        targetObjectName: 'timelineActivity',
+        targetFieldName: 'targetIcpModel',
+        settings: {
+          relationType: RelationType.ONE_TO_MANY,
+        },
       },
     }),
   };

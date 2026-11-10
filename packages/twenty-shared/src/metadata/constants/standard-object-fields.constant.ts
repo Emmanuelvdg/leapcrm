@@ -144,6 +144,16 @@ export const STANDARD_OBJECT_FIELDS = {
           STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.messageCampaign,
       }),
     },
+    targetIcpModel: {
+      universalIdentifier: getSystemRelationFieldUniversalIdentifier({
+        applicationUniversalIdentifier:
+          TWENTY_STANDARD_APPLICATION_UNIVERSAL_IDENTIFIER,
+        objectUniversalIdentifier:
+          STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.timelineActivity,
+        relationTargetObjectUniversalIdentifier:
+          STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.icpModel,
+      }),
+    },
     linkedRecordCachedName: {
       universalIdentifier: '20202020-cfdb-4bef-bbce-a29f41230934',
     },
@@ -568,6 +578,16 @@ export const STANDARD_OBJECT_FIELDS = {
     },
     activatedAt: {
       universalIdentifier: 'e9524dd8-c96d-41f6-9d99-939df9303185',
+    },
+    timelineActivities: {
+      universalIdentifier: getSystemRelationFieldUniversalIdentifier({
+        applicationUniversalIdentifier:
+          TWENTY_STANDARD_APPLICATION_UNIVERSAL_IDENTIFIER,
+        objectUniversalIdentifier:
+          STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.icpModel,
+        relationTargetObjectUniversalIdentifier:
+          STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.timelineActivity,
+      }),
     },
   },
   dashboard: {

@@ -1285,6 +1285,9 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
       "tierThresholds": {
         "universalIdentifier": "83d3408a-a51b-400f-9f3f-ff5e5ba1f578",
       },
+      "timelineActivities": {
+        "universalIdentifier": "b5964f97-b49a-5990-a0c9-3be6aca70c57",
+      },
       "updatedAt": {
         "universalIdentifier": "67d14738-fffb-56e7-8485-40148cb653ff",
       },
@@ -3320,6 +3323,9 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
       },
       "targetDashboard": {
         "universalIdentifier": "0a1c0f53-5cbe-5ae8-8dde-e0dd7a7d136f",
+      },
+      "targetIcpModel": {
+        "universalIdentifier": "21ba16ef-1c0f-57f2-a091-b805c5613168",
       },
       "targetMessageCampaign": {
         "universalIdentifier": "22194f8d-a9f3-5f13-ae0f-eb23c6338cea",

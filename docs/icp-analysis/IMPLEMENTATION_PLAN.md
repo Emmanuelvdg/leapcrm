@@ -55,7 +55,7 @@ Upgrade commands go in the `2-33` folder with epoch-ms timestamps greater than `
 ### M5 Model page and editor
 
 - Instance command adding the `ICP_ANALYSIS` widget type, following `2-33-instance-command-fast-1792488887030-add-prospecting-discovery-status-widget-type.ts`.
-- Widget sections Evidence, Patterns, Model and Back-test on an Analysis tab; record page layout with Home, Analysis and Insights tabs (workspace command for existing workspaces, as in `add-prospecting-record-pages-and-actions`); navigation entry; `icpModelEvidence` query so the editor can back-test after a reload.
+- Widget sections Evidence, Patterns, Model and Back-test on an Analysis tab; record page layout with Home, Analysis, Timeline and Insights tabs (workspace command for existing workspaces, as in `add-prospecting-record-pages-and-actions`); navigation entry; `icpModelEvidence` query so the editor can back-test after a reload.
 - Run analysis, Suggest weights, Save and Duplicate are buttons in the widget rather than command menu items, so they sit next to the results they change. Activate moves to M6.
 - The Model section recomputes the back-test in the browser on every change.
 - Acceptance: a user can go from a new model to an edited, back-tested model without leaving the record page; strings use Lingui; layouts fit their widget size without inner scroll.
