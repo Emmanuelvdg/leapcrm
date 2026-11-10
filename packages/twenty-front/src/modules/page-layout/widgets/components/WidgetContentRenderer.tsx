@@ -68,7 +68,7 @@ export const WidgetContentRenderer = ({
     case WidgetType.PROSPECTING_DISCOVERY_STATUS:
       return <ProspectingDiscoveryStatusWidget widget={widget} />;
     case WidgetType.ICP_ANALYSIS:
-      return <IcpAnalysisWidget widget={widget} />;
+      return <IcpAnalysisWidget />;
 
     case WidgetType.CALENDAR:
       return <CalendarWidget widget={widget} />;
