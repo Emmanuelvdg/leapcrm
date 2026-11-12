@@ -128,5 +128,29 @@ export const computeStandardProspectCandidateViewFields = (
         size: 150,
       },
     }),
+    allProspectCandidatesIcpTier: createStandardViewFieldFlatMetadata({
+      ...args,
+      objectName: 'prospectCandidate',
+      context: {
+        viewName: 'allProspectCandidates',
+        viewFieldName: 'icpTier',
+        fieldName: 'icpTier',
+        position: 0.5,
+        isVisible: true,
+        size: 120,
+      },
+    }),
+    allProspectCandidatesIcpScore: createStandardViewFieldFlatMetadata({
+      ...args,
+      objectName: 'prospectCandidate',
+      context: {
+        viewName: 'allProspectCandidates',
+        viewFieldName: 'icpScore',
+        fieldName: 'icpScore',
+        position: 0.6,
+        isVisible: true,
+        size: 100,
+      },
+    }),
   };
 };

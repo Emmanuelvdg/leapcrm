@@ -14,6 +14,8 @@ export const icpAnalysisGraphqlApiExceptionHandler = (error: Error) => {
       case 'MODEL_NOT_FOUND':
         throw new NotFoundError(error);
       case 'MODEL_NOT_ANALYZED':
+      case 'MODEL_ALREADY_ACTIVE':
+      case 'MODEL_HAS_NO_CRITERIA':
         throw new UserInputError(error);
       default:
         return assertUnreachable(code);

@@ -866,6 +866,9 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
           "general": {
             "universalIdentifier": "86a2ae09-5c4c-5164-85a1-f29a8c088ab3",
           },
+          "icpFit": {
+            "universalIdentifier": "fb8a20b3-bb63-5436-a611-cc76b13bac21",
+          },
           "system": {
             "universalIdentifier": "ad572e0b-e463-5717-b8e5-1709d1ad0c31",
           },
@@ -892,6 +895,24 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
           "domainName": {
             "universalIdentifier": "6b6e3983-d7b4-51a8-b314-4feb20465761",
           },
+          "icpCoverage": {
+            "universalIdentifier": "65815989-f49a-5cc5-a1af-8e345657c68d",
+          },
+          "icpModelVersion": {
+            "universalIdentifier": "6ce85383-4669-5b3e-8de6-f9910a37e2dd",
+          },
+          "icpScore": {
+            "universalIdentifier": "f362e277-fc3c-5928-9df0-6a3e0f0dd241",
+          },
+          "icpScoreReasons": {
+            "universalIdentifier": "d9a97a6f-9b32-58cc-9af0-77066665c96a",
+          },
+          "icpScoredAt": {
+            "universalIdentifier": "80a26b48-d384-5b63-a862-86b3fce91293",
+          },
+          "icpTier": {
+            "universalIdentifier": "4dc8df41-4bff-574c-a64e-58d12c641a19",
+          },
           "linkedinLink": {
             "universalIdentifier": "51702655-5b87-50c4-bb7a-8906b528a1eb",
           },
@@ -915,6 +936,37 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
           },
           "updatedBy": {
             "universalIdentifier": "1a1f9704-9097-5998-810c-595011efbe38",
+          },
+        },
+      },
+      "priorityAccounts": {
+        "universalIdentifier": "4e502c49-109d-4348-905b-37a829ac8d07",
+        "viewFields": {
+          "accountOwner": {
+            "universalIdentifier": "940559a3-dd7f-4fd6-b966-33695e871972",
+          },
+          "domainName": {
+            "universalIdentifier": "135431af-8afc-4fba-a2ea-58075ba03db5",
+          },
+          "icpCoverage": {
+            "universalIdentifier": "35544ef0-09a8-4896-9929-6d13e92962ed",
+          },
+          "icpScore": {
+            "universalIdentifier": "a94159de-607d-4e54-a5d8-83558e26ce89",
+          },
+          "icpScoreReasons": {
+            "universalIdentifier": "a97622fd-deeb-4e58-8d0a-14fb5919b146",
+          },
+          "icpTier": {
+            "universalIdentifier": "7aae6cb6-fa97-417d-8fd9-3bfc4e8bb232",
+          },
+          "name": {
+            "universalIdentifier": "006e43a7-482d-410d-93cf-7dff4c24c94b",
+          },
+        },
+        "viewFilters": {
+          "icpTierIsPriority": {
+            "universalIdentifier": "ceaff472-b447-453e-ba91-64d320da5beb",
           },
         },
       },
@@ -2869,6 +2921,12 @@ exports[`STANDARD_OBJECTS universal identifiers should never change without an e
           },
           "employeeCount": {
             "universalIdentifier": "f6fa65b9-bbf8-5eb4-8c29-859c3ea6a936",
+          },
+          "icpScore": {
+            "universalIdentifier": "87dbd976-fdc9-5e79-a996-1149cd753f54",
+          },
+          "icpTier": {
+            "universalIdentifier": "c46b3bfe-731f-5171-b51b-9ed3abf0772c",
           },
           "industry": {
             "universalIdentifier": "c3d11f4e-78ae-5e58-a11d-b6fd0386297f",

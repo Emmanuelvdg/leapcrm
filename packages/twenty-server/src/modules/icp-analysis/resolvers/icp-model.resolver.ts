@@ -15,6 +15,7 @@ import {
 } from 'src/engine/guards/feature-flag.guard';
 import { SettingsPermissionGuard } from 'src/engine/guards/settings-permission.guard';
 import { WorkspaceAuthGuard } from 'src/engine/guards/workspace-auth.guard';
+import { ActivatedIcpModelDTO } from 'src/modules/icp-analysis/dtos/activated-icp-model.dto';
 import { DuplicatedIcpModelDTO } from 'src/modules/icp-analysis/dtos/duplicated-icp-model.dto';
 import { IcpModelAnalysisDTO } from 'src/modules/icp-analysis/dtos/icp-model-analysis.dto';
 import { IcpModelEvidenceDTO } from 'src/modules/icp-analysis/dtos/icp-model-evidence.dto';
@@ -94,6 +95,20 @@ export class IcpModelResolver {
     @AuthUserWorkspaceId() userWorkspaceId: string,
   ): Promise<DuplicatedIcpModelDTO> {
     return this.icpModelAnalysisService.duplicate({
+      workspaceId: currentWorkspace.id,
+      userWorkspaceId,
+      modelId: input.modelId,
+    });
+  }
+
+  @Mutation(() => ActivatedIcpModelDTO)
+  @RequireFeatureFlag(FeatureFlagKey.IS_ICP_ANALYSIS_ENABLED)
+  async activateIcpModel(
+    @Args('input') input: IcpModelIdInput,
+    @AuthWorkspace() currentWorkspace: WorkspaceEntity,
+    @AuthUserWorkspaceId() userWorkspaceId: string,
+  ): Promise<ActivatedIcpModelDTO> {
+    return this.icpModelAnalysisService.activate({
       workspaceId: currentWorkspace.id,
       userWorkspaceId,
       modelId: input.modelId,

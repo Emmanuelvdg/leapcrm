@@ -2,22 +2,34 @@ import { Injectable } from '@nestjs/common';
 
 import {
   computeIcpAttributePatterns,
+  DEFAULT_ICP_TIER_THRESHOLDS,
   type IcpAttributeDefinition,
   type IcpCriterion,
   type IcpDatasetRow,
+  runIcpBacktest,
   suggestIcpCriterionWeights,
 } from 'twenty-shared/icp-analysis';
-import { isDefined } from 'twenty-shared/utils';
+import { isDefined, isNonEmptyArray } from 'twenty-shared/utils';
+import { Not } from 'typeorm';
 import { v4 } from 'uuid';
+
+import { InjectMessageQueue } from 'src/engine/core-modules/message-queue/decorators/message-queue.decorator';
+import { MessageQueue } from 'src/engine/core-modules/message-queue/message-queue.constants';
+import { MessageQueueService } from 'src/engine/core-modules/message-queue/services/message-queue.service';
 
 import { UserRoleService } from 'src/engine/metadata-modules/user-role/user-role.service';
 import { GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
 import { type WorkspaceRepository } from 'src/engine/twenty-orm/repository/workspace.repository';
 import { type RolePermissionConfig } from 'src/engine/twenty-orm/types/role-permission-config';
 import { IcpAnalysisException } from 'src/modules/icp-analysis/exceptions/icp-analysis.exception';
+import {
+  IcpScoreAllJob,
+  type IcpScoreAllJobData,
+} from 'src/modules/icp-analysis/scoring/jobs/icp-score-all.job';
 import { IcpEvidenceService } from 'src/modules/icp-analysis/services/icp-evidence.service';
 import { IcpModelWorkspaceEntity } from 'src/modules/icp-analysis/standard-objects/icp-model.workspace-entity';
 import { type IcpModelAnalysisSnapshot } from 'src/modules/icp-analysis/types/icp-model-analysis-snapshot.type';
+import { buildIcpModelBacktestSnapshot } from 'src/modules/icp-analysis/utils/build-icp-model-backtest-snapshot.util';
 import { isIcpModelAnalysisSnapshot } from 'src/modules/icp-analysis/utils/is-icp-model-analysis-snapshot.util';
 
 type IcpModelActionArgs = {
@@ -32,6 +44,8 @@ export class IcpModelAnalysisService {
     private readonly globalWorkspaceOrmManager: GlobalWorkspaceOrmManager,
     private readonly userRoleService: UserRoleService,
     private readonly icpEvidenceService: IcpEvidenceService,
+    @InjectMessageQueue(MessageQueue.workspaceQueue)
+    private readonly messageQueueService: MessageQueueService,
   ) {}
 
   async analyze(
@@ -117,6 +131,77 @@ export class IcpModelAnalysisService {
       });
 
       return { modelId, version };
+    });
+  }
+
+  // The back-test is stored as it stood when the model went live, so later
+  // deals cannot change what the activation was based on.
+  async activate(
+    args: IcpModelActionArgs,
+  ): Promise<{ modelId: string; version: number; archivedModelCount: number }> {
+    return this.withModel(args, async ({ model, repository, permissions }) => {
+      if (model.status === 'ACTIVE') {
+        throw new IcpAnalysisException(
+          `ICP model ${model.id} is already active`,
+          'MODEL_ALREADY_ACTIVE',
+        );
+      }
+
+      const criteria = model.criteria ?? [];
+
+      if (!isNonEmptyArray(criteria)) {
+        throw new IcpAnalysisException(
+          `ICP model ${model.id} has no criteria to score with`,
+          'MODEL_HAS_NO_CRITERIA',
+        );
+      }
+
+      const evidence = await this.icpEvidenceService.buildEvidence({
+        workspaceId: args.workspaceId,
+        model,
+        readPermissions: permissions,
+      });
+
+      const activatedAt = new Date();
+
+      const backtest = buildIcpModelBacktestSnapshot({
+        backtest: runIcpBacktest({
+          criteria,
+          thresholds: model.tierThresholds ?? DEFAULT_ICP_TIER_THRESHOLDS,
+          rows: evidence.rows,
+          attributes: evidence.attributes,
+        }),
+        computedAt: activatedAt,
+      });
+
+      // Activated before the others are archived: if archiving fails, scoring
+      // still picks the most recently activated model.
+      await repository.update(
+        { id: model.id },
+        { status: 'ACTIVE', activatedAt, backtest },
+      );
+
+      const previouslyActiveModels = await repository.find({
+        where: { status: 'ACTIVE', id: Not(model.id) },
+      });
+
+      for (const previouslyActiveModel of previouslyActiveModels) {
+        await repository.update(
+          { id: previouslyActiveModel.id },
+          { status: 'ARCHIVED' },
+        );
+      }
+
+      await this.messageQueueService.add<IcpScoreAllJobData>(
+        IcpScoreAllJob.name,
+        { workspaceId: args.workspaceId },
+      );
+
+      return {
+        modelId: model.id,
+        version: model.version,
+        archivedModelCount: previouslyActiveModels.length,
+      };
     });
   }
 

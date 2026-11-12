@@ -1,0 +1,1 @@
+export const ICP_SCORING_BATCH_SIZE = 200;

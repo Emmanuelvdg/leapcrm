@@ -16,6 +16,7 @@ import { IconCopy, IconPlayerPlay } from 'twenty-ui/icon';
 import { Button, SegmentedControl } from 'twenty-ui/input';
 import { themeCssVariables } from 'twenty-ui/theme-constants';
 
+import { IcpActivateModelButton } from '@/icp-analysis/components/IcpActivateModelButton';
 import { IcpBacktestSection } from '@/icp-analysis/components/IcpBacktestSection';
 import { IcpEvidenceSection } from '@/icp-analysis/components/IcpEvidenceSection';
 import { IcpModelSection } from '@/icp-analysis/components/IcpModelSection';
@@ -67,20 +68,26 @@ const StyledHeaderInfo = styled.div`
 
 const StyledHeaderActions = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: ${themeCssVariables.spacing[2]};
 `;
 
 const NO_CRITERIA: IcpCriterion[] = [];
 
-type PendingAction = 'analyze' | 'suggest' | 'save' | 'duplicate';
+type PendingAction = 'analyze' | 'suggest' | 'save' | 'duplicate' | 'activate';
 
 export const IcpAnalysisWidgetContent = () => {
   const { t } = useLingui();
   const targetRecord = useTargetRecord();
   const { enqueueErrorSnackBar } = useSnackBar();
   const { updateOneRecord } = useUpdateOneRecord();
-  const { analyzeModel, suggestCriteria, loadEvidence, duplicateModel } =
-    useIcpModelActions();
+  const {
+    analyzeModel,
+    suggestCriteria,
+    loadEvidence,
+    duplicateModel,
+    activateModel,
+  } = useIcpModelActions();
 
   const { record: model, refetch } = useFindOneRecord<IcpModelRecord>({
     objectNameSingular: CoreObjectNameSingular.IcpModel,
@@ -212,6 +219,15 @@ export const IcpAnalysisWidgetContent = () => {
       }
     });
 
+  const handleActivate = () =>
+    runPendingAction('activate', async () => {
+      const activatedModel = await activateModel(model.id);
+
+      if (isDefined(activatedModel)) {
+        await refetch();
+      }
+    });
+
   const handleDiscard = () => {
     setDraftCriteria(null);
     setDraftThresholds(null);
@@ -258,6 +274,19 @@ export const IcpAnalysisWidgetContent = () => {
             disabled={isDefined(pendingAction)}
             onClick={handleRunAnalysis}
           />
+          {model.status !== 'ACTIVE' && (
+            <IcpActivateModelButton
+              modelId={model.id}
+              version={model.version}
+              backtest={backtest}
+              isLoading={pendingAction === 'activate' || isLoadingEvidence}
+              isDisabled={
+                isDefined(pendingAction) || isDirty || criteria.length === 0
+              }
+              onBeforeOpen={fetchEvidence}
+              onConfirm={handleActivate}
+            />
+          )}
           <Button
             Icon={IconCopy}
             size="small"

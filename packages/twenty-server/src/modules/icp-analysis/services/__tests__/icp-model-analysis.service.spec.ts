@@ -1,5 +1,6 @@
 import { type IcpCriterion } from 'twenty-shared/icp-analysis';
 
+import { type MessageQueueService } from 'src/engine/core-modules/message-queue/services/message-queue.service';
 import { type UserRoleService } from 'src/engine/metadata-modules/user-role/user-role.service';
 import { type GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
 import { IcpAnalysisException } from 'src/modules/icp-analysis/exceptions/icp-analysis.exception';
@@ -49,11 +50,15 @@ const EVIDENCE: IcpEvidence = {
   isTruncated: false,
 };
 
-const buildService = (model: Partial<IcpModelWorkspaceEntity> | null) => {
+const buildService = (
+  model: Partial<IcpModelWorkspaceEntity> | null,
+  otherActiveModels: Partial<IcpModelWorkspaceEntity>[] = [],
+) => {
   const repository = {
     findOne: jest
       .fn()
       .mockResolvedValue(model === null ? null : { id: MODEL_ID, ...model }),
+    find: jest.fn().mockResolvedValue(otherActiveModels),
     update: jest.fn().mockResolvedValue({ affected: 1 }),
     insert: jest.fn().mockResolvedValue({}),
   };
@@ -66,6 +71,7 @@ const buildService = (model: Partial<IcpModelWorkspaceEntity> | null) => {
   } as unknown as GlobalWorkspaceOrmManager;
 
   const buildEvidence = jest.fn().mockResolvedValue(EVIDENCE);
+  const addJob = jest.fn().mockResolvedValue(undefined);
 
   const service = new IcpModelAnalysisService(
     globalWorkspaceOrmManager,
@@ -73,9 +79,16 @@ const buildService = (model: Partial<IcpModelWorkspaceEntity> | null) => {
       getRoleIdForUserWorkspace: jest.fn().mockResolvedValue(ROLE_ID),
     } as unknown as UserRoleService,
     { buildEvidence } as unknown as IcpEvidenceService,
+    { add: addJob } as unknown as MessageQueueService,
   );
 
-  return { service, repository, buildEvidence, globalWorkspaceOrmManager };
+  return {
+    service,
+    repository,
+    buildEvidence,
+    addJob,
+    globalWorkspaceOrmManager,
+  };
 };
 
 describe('IcpModelAnalysisService', () => {
@@ -176,6 +189,64 @@ describe('IcpModelAnalysisService', () => {
       });
       expect(insertedModel).not.toHaveProperty('analysis');
       expect(insertedModel).not.toHaveProperty('activatedAt');
+    });
+  });
+
+  describe('activate', () => {
+    it('activates the model, archives the one it replaces and scores the workspace', async () => {
+      const { service, repository, addJob } = buildService(
+        { status: 'DRAFT', version: 2, criteria: [FINTECH_CRITERION] },
+        [{ id: 'previous-model', status: 'ACTIVE' }],
+      );
+
+      const result = await service.activate(ACTION_ARGS);
+
+      expect(result).toEqual({
+        modelId: MODEL_ID,
+        version: 2,
+        archivedModelCount: 1,
+      });
+      expect(repository.update).toHaveBeenCalledWith(
+        { id: MODEL_ID },
+        expect.objectContaining({
+          status: 'ACTIVE',
+          activatedAt: expect.any(Date),
+          backtest: expect.objectContaining({
+            inSample: expect.objectContaining({ totalCount: 20, wonCount: 11 }),
+          }),
+        }),
+      );
+      expect(repository.update).toHaveBeenCalledWith(
+        { id: 'previous-model' },
+        { status: 'ARCHIVED' },
+      );
+      expect(addJob).toHaveBeenCalledWith('IcpScoreAllJob', {
+        workspaceId: WORKSPACE_ID,
+      });
+    });
+
+    it('refuses a model that is already active', async () => {
+      const { service, addJob } = buildService({
+        status: 'ACTIVE',
+        criteria: [FINTECH_CRITERION],
+      });
+
+      await expect(service.activate(ACTION_ARGS)).rejects.toMatchObject({
+        code: 'MODEL_ALREADY_ACTIVE',
+      });
+      expect(addJob).not.toHaveBeenCalled();
+    });
+
+    it('refuses a model without criteria', async () => {
+      const { service, repository } = buildService({
+        status: 'DRAFT',
+        criteria: [],
+      });
+
+      await expect(service.activate(ACTION_ARGS)).rejects.toMatchObject({
+        code: 'MODEL_HAS_NO_CRITERIA',
+      });
+      expect(repository.update).not.toHaveBeenCalled();
     });
   });
 });

@@ -27,3 +27,13 @@ export const DUPLICATE_ICP_MODEL = gql`
     }
   }
 `;
+
+export const ACTIVATE_ICP_MODEL = gql`
+  mutation ActivateIcpModel($input: IcpModelIdInput!) {
+    activateIcpModel(input: $input) {
+      modelId
+      version
+      archivedModelCount
+    }
+  }
+`;

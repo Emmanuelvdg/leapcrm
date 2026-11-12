@@ -5,12 +5,14 @@ import { WorkspaceManyOrAllFlatEntityMapsCacheModule } from 'src/engine/metadata
 import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permissions.module';
 import { UserRoleModule } from 'src/engine/metadata-modules/user-role/user-role.module';
 import { IcpModelResolver } from 'src/modules/icp-analysis/resolvers/icp-model.resolver';
+import { IcpScoringModule } from 'src/modules/icp-analysis/scoring/icp-scoring.module';
 import { IcpEvidenceService } from 'src/modules/icp-analysis/services/icp-evidence.service';
 import { IcpModelAnalysisService } from 'src/modules/icp-analysis/services/icp-model-analysis.service';
 
 @Module({
   imports: [
     FeatureFlagModule,
+    IcpScoringModule,
     PermissionsModule,
     UserRoleModule,
     WorkspaceManyOrAllFlatEntityMapsCacheModule,

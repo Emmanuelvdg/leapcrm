@@ -23,6 +23,19 @@ export const computeStandardCompanyViewFieldGroups = (
         isVisible: true,
       },
     }),
+    companyRecordPageFieldsIcpFit: createStandardViewFieldGroupFlatMetadata({
+      ...args,
+      objectName: 'company',
+      context: {
+        viewName: 'companyRecordPageFields',
+        viewFieldGroupName: 'icpFit',
+        name: i18nLabel(
+          msg({ message: `ICP fit`, context: 'viewFieldGroup.name' }),
+        ),
+        position: 0.5,
+        isVisible: true,
+      },
+    }),
     companyRecordPageFieldsBusiness: createStandardViewFieldGroupFlatMetadata({
       ...args,
       objectName: 'company',

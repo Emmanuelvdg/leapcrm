@@ -31,6 +31,7 @@ import { EventLogIngestionModule } from 'src/engine/core-modules/event-logs/inge
 import { FeatureFlagModule } from 'src/engine/core-modules/feature-flag/feature-flag.module';
 import { ProspectingJobModule } from 'src/engine/core-modules/prospecting-job/prospecting-job.module';
 import { ProspectingModule } from 'src/modules/prospecting/prospecting.module';
+import { IcpScoringModule } from 'src/modules/icp-analysis/scoring/icp-scoring.module';
 import { GenerateSdkClientJob } from 'src/engine/core-modules/sdk-client/jobs/generate-sdk-client.job';
 import { SdkClientModule } from 'src/engine/core-modules/sdk-client/sdk-client.module';
 import { UserWorkspaceModule } from 'src/engine/core-modules/user-workspace/user-workspace.module';
@@ -104,6 +105,7 @@ import { WorkflowModule } from 'src/modules/workflow/workflow.module';
     BillingReminderModule,
     ProspectingJobModule,
     ProspectingModule,
+    IcpScoringModule,
   ],
   providers: [
     BillingReminderCronJob,

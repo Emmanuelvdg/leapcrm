@@ -13,6 +13,10 @@ const getIcpAnalysisExceptionUserFriendlyMessage = (
       return msg`ICP model not found.`;
     case 'MODEL_NOT_ANALYZED':
       return msg`Run the analysis before suggesting weights.`;
+    case 'MODEL_ALREADY_ACTIVE':
+      return msg`This ICP model is already active.`;
+    case 'MODEL_HAS_NO_CRITERIA':
+      return msg`Add at least one criterion before activating the model.`;
     default:
       return assertUnreachable(code);
   }

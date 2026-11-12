@@ -312,6 +312,35 @@ export const STANDARD_OBJECTS = {
           'address',
         ],
       }),
+      priorityAccounts: {
+        universalIdentifier: '4e502c49-109d-4348-905b-37a829ac8d07',
+        viewFields: {
+          name: { universalIdentifier: '006e43a7-482d-410d-93cf-7dff4c24c94b' },
+          icpTier: {
+            universalIdentifier: '7aae6cb6-fa97-417d-8fd9-3bfc4e8bb232',
+          },
+          icpScore: {
+            universalIdentifier: 'a94159de-607d-4e54-a5d8-83558e26ce89',
+          },
+          icpCoverage: {
+            universalIdentifier: '35544ef0-09a8-4896-9929-6d13e92962ed',
+          },
+          icpScoreReasons: {
+            universalIdentifier: 'a97622fd-deeb-4e58-8d0a-14fb5919b146',
+          },
+          accountOwner: {
+            universalIdentifier: '940559a3-dd7f-4fd6-b966-33695e871972',
+          },
+          domainName: {
+            universalIdentifier: '135431af-8afc-4fba-a2ea-58075ba03db5',
+          },
+        },
+        viewFilters: {
+          icpTierIsPriority: {
+            universalIdentifier: 'ceaff472-b447-453e-ba91-64d320da5beb',
+          },
+        },
+      },
       companyRecordPageFields: buildStandardObjectRecordPageFieldsView({
         objectUniversalIdentifier:
           STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.company,
@@ -332,9 +361,16 @@ export const STANDARD_OBJECTS = {
           'opportunities',
           'attachments',
           'timelineActivities',
+          'icpTier',
+          'icpScore',
+          'icpCoverage',
+          'icpScoreReasons',
+          'icpModelVersion',
+          'icpScoredAt',
         ],
         viewFieldGroupNames: {
           general: 'General',
+          icpFit: 'ICP fit',
           business: 'Business',
           contact: 'Contact',
           system: 'System',
@@ -934,6 +970,8 @@ export const STANDARD_OBJECTS = {
           'matchedCompany',
           'campaign',
           'updatedAt',
+          'icpTier',
+          'icpScore',
         ],
       }),
     },

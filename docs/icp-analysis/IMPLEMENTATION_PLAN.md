@@ -2,7 +2,7 @@
 
 Read with `ARCHITECTURE.md`.
 
-Status: approved. M1 to M5 done.
+Status: approved. M1 to M6 done.
 
 ## 1. Decisions
 
@@ -65,8 +65,8 @@ Upgrade commands go in the `2-33` folder with epoch-ms timestamps greater than `
 
 - `activateIcpModel` mutation and an Activate button in the analysis widget, with the activate dialog warnings.
 - Score-all job on the worker queue, skipping unchanged rows; nightly cron registered through `cron:register:all`.
-- Company create and update listener filtered to fields used by the active model; candidate scoring inside the discovery pipeline write path.
-- "Priority accounts" view on Company; tier column and sort on campaign candidate lists.
+- Company create and update listener filtered to fields used by the active model; candidates scored from their own create and update events rather than inside the discovery pipeline, which covers discovery, imports and edits alike.
+- "Priority accounts" view on Company, an "ICP fit" group in the company fields card, and tier and score columns on the candidate list, added to existing workspaces by `upgrade:2-33:add-icp-score-views`. No default sort: standard views cannot carry one.
 - Acceptance: activating scores every company and candidate in the seeded workspace; a field change rescores only that company; a second nightly run writes nothing when nothing changed; new discovery results arrive scored.
 - Tests: job tests for paging and no-op runs; listener tests; integration test for activate then read scores.
 
@@ -74,7 +74,7 @@ Upgrade commands go in the `2-33` folder with epoch-ms timestamps greater than `
 
 - Extend the prospecting tenant isolation suite to ICP models, mutations, jobs and scores (Apple and YCombinator seeded workspaces).
 - One Playwright flow: create a model, run analysis, suggest weights, activate, see a score on a company.
-- Deploy notes: run `yarn command:prod run-instance-commands` after deploying and verify the widget type exists; enable the flag for the test workspace first.
+- Deploy notes: run `yarn command:prod run-instance-commands` after deploying and verify the widget type exists; run `yarn command:prod cron:register:all` (or `cron:icp-analysis:score-all`) so the nightly rescore is scheduled; enable the flag for the test workspace first.
 
 ## 3. Next release (outline)
 

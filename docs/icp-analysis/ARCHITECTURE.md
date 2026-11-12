@@ -194,12 +194,14 @@ The editor recomputes the back-test in the browser on every weight change, using
 
 ## 8. Step 5: live scoring
 
-- **Activate** archives the previous active model, sets this one `ACTIVE` and enqueues a score-all job.
-- **Score-all job** pages through companies and prospect candidates and writes the score fields, skipping records whose score, tier, reasons and coverage did not change, so it does not flood the timeline or rewrite rows every night (the bug fixed in Deal health in `9de59ea9e`).
-- **On change**: a database event listener rescores a company when it is created or a field used by the active model changes, and the discovery pipeline scores candidates as they are written, so new campaign results arrive ranked.
-- **Nightly** cron rescores everything, which picks up time-relative attributes such as funding recency.
-- **Views**: "Priority accounts" on Company and a tier column and sort on candidate lists in each campaign.
-- Candidates with a `matchedCompany` are scored from the company's values, falling back to the candidate's own fields.
+- **Activate** stores the back-test as it stands, sets the model `ACTIVE`, archives the model it replaces and enqueues a score-all job. The activate dialog warns when `PRIORITY` does not beat the baseline win rate or AUC is below 0.6, but never blocks.
+- **Score-all job** pages through companies and prospect candidates and writes the score fields, skipping records whose score, tier, reasons, coverage and model version did not change, so it does not flood the timeline or rewrite rows every night (the bug fixed in Deal health in `9de59ea9e`). Reasons stored as null and as an empty string compare equal for the same reason.
+- **On change**: a database event listener rescores companies when they are created or when a field the active model reads changes, and candidates when they are created or their matched company, country or employee count changes. Discovery writes candidates through the repository, so they are scored as they arrive without a hook in the pipeline. The listener is registered in both the API server and the worker, because database events only reach listeners in the process that made the write. Score writes only touch score fields, which the listener ignores, so a rescore never triggers another. The listener reads the `updatedFields` Twenty computes when it emits the event. Changing a composite field such as an address through the API emits no update event in this codebase, so those changes are picked up by the nightly run rather than immediately.
+- **Writes are grouped**: records with the same outcome are written in one update per page, because every write queues webhook, trigger and timeline jobs, and many records share a score (for example every company the model knows nothing about).
+- **Nightly** cron (`cron:icp-analysis:score-all`, 03:00 UTC) enqueues a score-all job per workspace with the flag on, which picks up time-relative attributes such as funding recency.
+- **Views**: "Priority accounts" on Company (filtered to `PRIORITY`), an "ICP fit" group in the company fields card, and tier and score columns on the candidate list. Standard views cannot carry a sort, so the lists are not sorted by score by default.
+- Candidates with a `matchedCompany` are scored from the company's values, falling back to the candidate's own country and employee count. Candidate countries are ISO codes and are turned into the English country names company addresses hold. Industry stays unknown for candidates (section 12).
+- Jobs run on the workspace queue under a system auth context, so scores cover every record whatever the permissions of whoever activated the model.
 
 ## 9. User interface
 
@@ -241,5 +243,7 @@ Criteria and thresholds are saved through the normal record API. Pre-query hooks
 | Industry taxonomies differ between PDL and registries | Built-in attributes map only equivalent fields; industry criteria on candidates apply only when the same taxonomy is present, otherwise unknown |
 | Adding `LOST` collides with a workspace's own stage options | Append only when no option with that value exists; won and lost stages configurable per model |
 | Score writes flood the timeline | Skip unchanged scores; drop ICP score fields from update diffs in `timeline-activity.service.ts`, the way position fields already are |
+| Activation rewrites every record at once and floods the job queues | Skip unchanged scores and write records with the same outcome in one update per page |
+| Address and other composite field changes emit no update event | Nightly rescore catches them within a day |
 | New instance command skipped in production because 2.33 already ran | Deploy note: run `yarn command:prod run-instance-commands` after deploying and verify the widget type exists |
 | Standard fields appear in workspaces with the flag off | Fields stay empty and navigation and actions are hidden. Accepted, same as prospecting |

@@ -8,6 +8,7 @@ import {
 import { AppPath, CoreObjectNameSingular } from 'twenty-shared/types';
 
 import {
+  ACTIVATE_ICP_MODEL,
   ANALYZE_ICP_MODEL,
   DUPLICATE_ICP_MODEL,
   SUGGEST_ICP_MODEL_CRITERIA,
@@ -32,6 +33,14 @@ type SuggestIcpModelCriteriaResult = {
 
 type DuplicateIcpModelResult = {
   duplicateIcpModel: { modelId: string; version: number };
+};
+
+type ActivateIcpModelResult = {
+  activateIcpModel: {
+    modelId: string;
+    version: number;
+    archivedModelCount: number;
+  };
 };
 
 type IcpModelEvidenceResult = {
@@ -115,5 +124,30 @@ export const useIcpModelActions = () => {
     });
   };
 
-  return { analyzeModel, suggestCriteria, loadEvidence, duplicateModel };
+  const activateModel = async (modelId: string) => {
+    const activatedModel = await runReportingErrors(async () => {
+      const { data } = await apolloClient.mutate<ActivateIcpModelResult>({
+        mutation: ACTIVATE_ICP_MODEL,
+        variables: { input: { modelId } },
+      });
+
+      return data?.activateIcpModel ?? null;
+    });
+
+    if (activatedModel !== null) {
+      enqueueSuccessSnackBar({
+        message: t`Version ${activatedModel.version} is active. Companies and candidates are being scored.`,
+      });
+    }
+
+    return activatedModel;
+  };
+
+  return {
+    analyzeModel,
+    suggestCriteria,
+    loadEvidence,
+    duplicateModel,
+    activateModel,
+  };
 };

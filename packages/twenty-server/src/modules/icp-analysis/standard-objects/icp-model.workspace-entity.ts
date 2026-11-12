@@ -5,6 +5,7 @@ import {
 import { type ActorMetadata, type RichTextMetadata } from 'twenty-shared/types';
 
 import { BaseWorkspaceEntity } from 'src/engine/twenty-orm/base.workspace-entity';
+import { type IcpModelBacktestSnapshot } from 'src/modules/icp-analysis/types/icp-model-backtest-snapshot.type';
 import { type IcpModelStatus } from 'src/modules/icp-analysis/types/icp-model-status.type';
 
 export class IcpModelWorkspaceEntity extends BaseWorkspaceEntity {
@@ -19,7 +20,7 @@ export class IcpModelWorkspaceEntity extends BaseWorkspaceEntity {
   criteria: IcpCriterion[] | null;
   tierThresholds: IcpTierThresholds | null;
   analysis: Record<string, unknown> | null;
-  backtest: Record<string, unknown> | null;
+  backtest: IcpModelBacktestSnapshot | null;
   insights: RichTextMetadata | null;
   analyzedAt: Date | null;
   activatedAt: Date | null;
