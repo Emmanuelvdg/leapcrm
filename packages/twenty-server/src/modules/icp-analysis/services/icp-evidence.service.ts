@@ -1,11 +1,17 @@
 import { Injectable } from '@nestjs/common';
 
 import { STANDARD_OBJECTS } from 'twenty-shared/metadata';
+import { type RestrictedFieldsPermissions } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
-import { In } from 'typeorm';
+import { In, type ObjectLiteral } from 'typeorm';
 
 import { getFlatFieldsFromFlatObjectMetadata } from 'src/engine/api/graphql/workspace-schema-builder/utils/get-flat-fields-for-flat-object-metadata.util';
+import { getAllSelectableColumnNames } from 'src/engine/api/utils/get-all-selectable-column-names.utils';
 import { WorkspaceManyOrAllFlatEntityMapsCacheService } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.service';
+import { type FlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/types/flat-entity-maps.type';
+import { type FlatFieldMetadata } from 'src/engine/metadata-modules/flat-field-metadata/types/flat-field-metadata.type';
+import { type FlatObjectMetadata } from 'src/engine/metadata-modules/flat-object-metadata/types/flat-object-metadata.type';
+import { type WorkspaceRepository } from 'src/engine/twenty-orm/repository/workspace.repository';
 import { type RolePermissionConfig } from 'src/engine/twenty-orm/types/role-permission-config';
 import { GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
 import { CompanyWorkspaceEntity } from 'src/modules/company/standard-objects/company.workspace-entity';
@@ -51,8 +57,33 @@ const buildDealWindow = (
   };
 };
 
+const getRestrictedFields = (
+  repository: WorkspaceRepository<ObjectLiteral>,
+  objectMetadata: FlatObjectMetadata | undefined,
+): RestrictedFieldsPermissions =>
+  (isDefined(objectMetadata)
+    ? repository.objectRecordsPermissions?.[objectMetadata.id]?.restrictedFields
+    : undefined) ?? {};
+
+// A find() without a select reads every column, so one field the caller
+// cannot read would fail the whole query.
+const buildReadableSelect = (
+  repository: WorkspaceRepository<ObjectLiteral>,
+  objectMetadata: FlatObjectMetadata | undefined,
+  flatFieldMetadataMaps: FlatEntityMaps<FlatFieldMetadata>,
+): Record<string, boolean> | undefined =>
+  isDefined(objectMetadata)
+    ? getAllSelectableColumnNames({
+        restrictedFields: getRestrictedFields(repository, objectMetadata),
+        objectMetadata: {
+          objectMetadataMapItem: objectMetadata,
+          flatFieldMetadataMaps,
+        },
+      })
+    : undefined;
+
 // Must run inside a workspace context. Reads use the caller's permissions, so
-// the analysis only covers deals and companies the user can see.
+// the analysis only covers deals, companies and fields the user can see.
 @Injectable()
 export class IcpEvidenceService {
   constructor(
@@ -62,14 +93,10 @@ export class IcpEvidenceService {
 
   async getAttributeCatalog(
     workspaceId: string,
+    restrictedFields: RestrictedFieldsPermissions = {},
   ): Promise<IcpCatalogAttribute[]> {
     const { flatObjectMetadataMaps, flatFieldMetadataMaps } =
-      await this.workspaceManyOrAllFlatEntityMapsCacheService.getOrRecomputeManyOrAllFlatEntityMaps(
-        {
-          workspaceId,
-          flatMapsKeys: ['flatObjectMetadataMaps', 'flatFieldMetadataMaps'],
-        },
-      );
+      await this.getFlatMaps(workspaceId);
 
     const companyObjectMetadata =
       flatObjectMetadataMaps.byUniversalIdentifier[
@@ -84,7 +111,7 @@ export class IcpEvidenceService {
       getFlatFieldsFromFlatObjectMetadata(
         companyObjectMetadata,
         flatFieldMetadataMaps,
-      ),
+      ).filter((field) => restrictedFields[field.id]?.canRead !== false),
     );
   }
 
@@ -104,7 +131,17 @@ export class IcpEvidenceService {
   }): Promise<IcpEvidence> {
     const wonStages = model.wonStages ?? ICP_MODEL_DEFAULT_WON_STAGES;
     const lostStages = model.lostStages ?? ICP_MODEL_DEFAULT_LOST_STAGES;
-    const attributes = await this.getAttributeCatalog(workspaceId);
+
+    const { flatObjectMetadataMaps, flatFieldMetadataMaps } =
+      await this.getFlatMaps(workspaceId);
+    const opportunityObjectMetadata =
+      flatObjectMetadataMaps.byUniversalIdentifier[
+        STANDARD_OBJECTS.opportunity.universalIdentifier
+      ];
+    const companyObjectMetadata =
+      flatObjectMetadataMaps.byUniversalIdentifier[
+        STANDARD_OBJECTS.company.universalIdentifier
+      ];
 
     const opportunityRepository =
       await this.globalWorkspaceOrmManager.getRepository(
@@ -113,7 +150,24 @@ export class IcpEvidenceService {
         readPermissions,
       );
 
+    const companyRepository =
+      await this.globalWorkspaceOrmManager.getRepository(
+        workspaceId,
+        CompanyWorkspaceEntity,
+        readPermissions,
+      );
+
+    const attributes = await this.getAttributeCatalog(
+      workspaceId,
+      getRestrictedFields(companyRepository, companyObjectMetadata),
+    );
+
     const opportunities = await opportunityRepository.find({
+      select: buildReadableSelect(
+        opportunityRepository,
+        opportunityObjectMetadata,
+        flatFieldMetadataMaps,
+      ),
       where: { stage: In([...wonStages, ...lostStages]) },
     });
 
@@ -125,13 +179,11 @@ export class IcpEvidenceService {
       ),
     ];
 
-    const companyRepository =
-      await this.globalWorkspaceOrmManager.getRepository(
-        workspaceId,
-        CompanyWorkspaceEntity,
-        readPermissions,
-      );
-
+    const companySelect = buildReadableSelect(
+      companyRepository,
+      companyObjectMetadata,
+      flatFieldMetadataMaps,
+    );
     const companiesById = new Map<string, Record<string, unknown>>();
 
     for (const companyIdBatch of chunk(
@@ -139,6 +191,7 @@ export class IcpEvidenceService {
       ICP_EVIDENCE_COMPANY_BATCH_SIZE,
     )) {
       const companies = await companyRepository.find({
+        select: companySelect,
         where: { id: In(companyIdBatch) },
       });
 
@@ -154,5 +207,14 @@ export class IcpEvidenceService {
       wonStages,
       window: buildDealWindow(model, now),
     });
+  }
+
+  private getFlatMaps(workspaceId: string) {
+    return this.workspaceManyOrAllFlatEntityMapsCacheService.getOrRecomputeManyOrAllFlatEntityMaps(
+      {
+        workspaceId,
+        flatMapsKeys: ['flatObjectMetadataMaps', 'flatFieldMetadataMaps'],
+      },
+    );
   }
 }

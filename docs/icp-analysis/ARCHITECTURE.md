@@ -228,7 +228,7 @@ Criteria and thresholds are saved through the normal record API. Pre-query hooks
 ## 11. Security and tenancy
 
 - Everything is workspace data in the workspace schema. No core tables, no shared directory reads or writes, no network signal contribution.
-- Dataset rows returned to the browser contain ids, outcome, dates, amount and attribute values only, and only for opportunities and companies the user can read under their object permissions.
+- Dataset rows returned to the browser contain ids, outcome, dates, amount and attribute values only, and only for opportunities and companies the user can read under their object permissions. Company fields the user cannot read are left out of the attribute catalog and are never selected.
 - Jobs carry `workspaceId`, rebuild the system auth context and re-check that the model belongs to that workspace.
 - Tenant isolation tests follow `0079d0f65` (prospecting tenant isolation suite).
 

@@ -99,13 +99,27 @@ export class LoginPage {
   async clickLoginWithEmailIfVisible() {
     try {
       await this.loginWithEmailButton.click({ timeout: 3000 });
+
+      return;
     } catch {
       // Button not found - email field might already be visible (SSO-only or different auth flow)
+    }
+
+    // Leap CRM opens the email form from a "Sign in" button instead.
+    if (!(await this.emailField.isVisible())) {
+      await this.signInButton.click({ timeout: 30000 });
     }
   }
 
   async clickContinueButton() {
-    await this.continueButton.click();
+    if (await this.continueButton.isVisible()) {
+      await this.continueButton.click();
+
+      return;
+    }
+
+    // Leap CRM submits the email step with its "Sign in" button.
+    await this.signInButton.click();
   }
 
   async clickTermsLink() {

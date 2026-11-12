@@ -146,8 +146,11 @@ test('Build, activate and see an ICP score on a company', async ({ page }) => {
     await test.step('Create a model', async () => {
       await page.goto('/objects/icpModels');
       await page.getByRole('button', { name: 'Create new ICP Model' }).click();
-      await page.keyboard.type(MODEL_NAME);
-      await page.keyboard.press('Enter');
+      const nameInput = page.getByPlaceholder('Name').first();
+
+      await expect(nameInput).toBeFocused();
+      await nameInput.fill(MODEL_NAME);
+      await nameInput.press('Enter');
 
       await expect.poll(() => findModelId(page)).toBeDefined();
       modelId = await findModelId(page);
@@ -168,9 +171,7 @@ test('Build, activate and see an ICP score on a company', async ({ page }) => {
         page.getByText('Address country: United States').first(),
       ).toBeVisible({ timeout: 30_000 });
       await page.getByRole('button', { name: 'Save' }).click();
-      await expect(
-        page.getByRole('button', { name: 'Save' }),
-      ).not.toBeVisible();
+      await expect(page.getByRole('button', { name: 'Save' })).toBeDisabled();
     });
 
     await test.step('Activate the model', async () => {

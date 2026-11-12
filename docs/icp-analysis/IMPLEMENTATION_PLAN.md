@@ -2,7 +2,7 @@
 
 Read with `ARCHITECTURE.md`.
 
-Status: approved. M1 to M6 done; M7 tests written, not yet run.
+Status: approved. M1 to M7 done.
 
 ## 1. Decisions
 
