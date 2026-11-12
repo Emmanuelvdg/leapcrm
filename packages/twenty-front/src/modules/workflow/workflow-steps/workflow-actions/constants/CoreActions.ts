@@ -3,6 +3,7 @@ import { CODE_ACTION } from '@/workflow/workflow-steps/workflow-actions/constant
 import { CREATE_CALENDAR_EVENT_ACTION } from '@/workflow/workflow-steps/workflow-actions/constants/actions/CreateCalendarEventAction';
 import { DRAFT_EMAIL_ACTION } from '@/workflow/workflow-steps/workflow-actions/constants/actions/DraftEmailAction';
 import { HTTP_REQUEST_ACTION } from '@/workflow/workflow-steps/workflow-actions/constants/actions/HttpRequestAction';
+import { API_CONNECTION_CALL_ACTION } from '@/workflow/workflow-steps/workflow-actions/constants/actions/ApiConnectionCallAction';
 import { MCP_TOOL_CALL_ACTION } from '@/workflow/workflow-steps/workflow-actions/constants/actions/McpToolCallAction';
 import { SEND_EMAIL_ACTION } from '@/workflow/workflow-steps/workflow-actions/constants/actions/SendEmailAction';
 
@@ -15,6 +16,7 @@ export const CORE_ACTIONS: Array<{
     | 'DRAFT_EMAIL'
     | 'HTTP_REQUEST'
     | 'MCP_TOOL_CALL'
+    | 'API_CONNECTION_CALL'
     | 'CREATE_CALENDAR_EVENT'
   >;
   icon: string;
@@ -25,4 +27,5 @@ export const CORE_ACTIONS: Array<{
   CODE_ACTION,
   HTTP_REQUEST_ACTION,
   MCP_TOOL_CALL_ACTION,
+  API_CONNECTION_CALL_ACTION,
 ];

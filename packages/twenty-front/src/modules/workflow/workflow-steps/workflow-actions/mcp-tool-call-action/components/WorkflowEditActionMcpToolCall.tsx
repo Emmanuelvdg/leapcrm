@@ -7,9 +7,9 @@ import { WorkflowStepBody } from '@/workflow/workflow-steps/components/WorkflowS
 import { WorkflowStepFooter } from '@/workflow/workflow-steps/components/WorkflowStepFooter';
 import { JSON_RESPONSE_PLACEHOLDER } from '@/workflow/workflow-steps/workflow-actions/http-request-action/constants/HttpRequest';
 import { useHttpRequestOutputSchema } from '@/workflow/workflow-steps/workflow-actions/http-request-action/hooks/useHttpRequestOutputSchema';
-import { type McpToolArgumentField } from '@/workflow/workflow-steps/workflow-actions/mcp-tool-call-action/types/McpToolArgumentField';
-import { coerceMcpToolArgumentValue } from '@/workflow/workflow-steps/workflow-actions/mcp-tool-call-action/utils/coerceMcpToolArgumentValue';
-import { getMcpToolArgumentFields } from '@/workflow/workflow-steps/workflow-actions/mcp-tool-call-action/utils/getMcpToolArgumentFields';
+import { type JsonSchemaArgumentField } from '@/workflow/workflow-steps/workflow-actions/types/JsonSchemaArgumentField';
+import { coerceJsonSchemaArgumentValue } from '@/workflow/workflow-steps/workflow-actions/utils/coerceJsonSchemaArgumentValue';
+import { getJsonSchemaArgumentFields } from '@/workflow/workflow-steps/workflow-actions/utils/getJsonSchemaArgumentFields';
 import { WorkflowVariablePicker } from '@/workflow/workflow-variables/components/WorkflowVariablePicker';
 import { useQuery } from '@apollo/client/react';
 import { styled } from '@linaria/react';
@@ -124,7 +124,7 @@ export const WorkflowEditActionMcpToolCall = ({
   const connections = connectionsData?.connectedMcpServerConnections ?? [];
   const tools = toolsData?.mcpServerConnectionTools ?? [];
   const selectedTool = tools.find((tool) => tool.name === formData.toolName);
-  const argumentFields = getMcpToolArgumentFields(selectedTool?.inputSchema);
+  const argumentFields = getJsonSchemaArgumentFields(selectedTool?.inputSchema);
 
   const handleConnectionChange = (connectionId: string | null) => {
     updateFormData({ connectionId, toolName: null, arguments: {} });
@@ -135,10 +135,10 @@ export const WorkflowEditActionMcpToolCall = ({
   };
 
   const handleArgumentChange = (
-    field: McpToolArgumentField,
+    field: JsonSchemaArgumentField,
     value: string | null,
   ) => {
-    const coercedValue = coerceMcpToolArgumentValue(value, field.type);
+    const coercedValue = coerceJsonSchemaArgumentValue(value, field.type);
     const { [field.name]: _previousValue, ...otherArguments } =
       formData.arguments ?? {};
 
@@ -150,7 +150,7 @@ export const WorkflowEditActionMcpToolCall = ({
     });
   };
 
-  const renderArgumentField = (field: McpToolArgumentField) => {
+  const renderArgumentField = (field: JsonSchemaArgumentField) => {
     const label = field.isRequired ? `${field.name} *` : field.name;
     const defaultValue = formatArgumentValue(formData.arguments?.[field.name]);
     const key = `${formData.toolName}-${field.name}`;

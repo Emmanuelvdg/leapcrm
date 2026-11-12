@@ -18,6 +18,7 @@ import { WorkflowEditActionFilter } from '@/workflow/workflow-steps/workflow-act
 import { WorkflowEditActionFindRecords } from '@/workflow/workflow-steps/workflow-actions/find-records-action/components/WorkflowEditActionFindRecords';
 import { WorkflowEditActionFormFiller } from '@/workflow/workflow-steps/workflow-actions/form-action/components/WorkflowEditActionFormFiller';
 import { WorkflowEditActionHttpRequest } from '@/workflow/workflow-steps/workflow-actions/http-request-action/components/WorkflowEditActionHttpRequest';
+import { WorkflowEditActionApiConnectionCall } from '@/workflow/workflow-steps/workflow-actions/api-connection-call-action/components/WorkflowEditActionApiConnectionCall';
 import { WorkflowEditActionMcpToolCall } from '@/workflow/workflow-steps/workflow-actions/mcp-tool-call-action/components/WorkflowEditActionMcpToolCall';
 import { WorkflowEditActionIfElse } from '@/workflow/workflow-steps/workflow-actions/if-else-action/components/WorkflowEditActionIfElse';
 import { WorkflowEditActionIterator } from '@/workflow/workflow-steps/workflow-actions/iterator-action/components/WorkflowEditActionIterator';
@@ -253,6 +254,17 @@ export const WorkflowRunStepNodeDetail = ({
         case 'MCP_TOOL_CALL': {
           return (
             <WorkflowEditActionMcpToolCall
+              key={stepId}
+              action={stepDefinition.definition}
+              actionOptions={{
+                readonly: true,
+              }}
+            />
+          );
+        }
+        case 'API_CONNECTION_CALL': {
+          return (
+            <WorkflowEditActionApiConnectionCall
               key={stepId}
               action={stepDefinition.definition}
               actionOptions={{

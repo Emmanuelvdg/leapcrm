@@ -2,10 +2,10 @@ import { isNonEmptyString } from '@sniptt/guards';
 
 const containsVariable = (value: string) => value.includes('{{');
 
-// MCP servers validate arguments against their JSON Schema, so literal
+// MCP servers and REST APIs validate arguments against their JSON Schema, so literal
 // numbers, booleans and JSON must not be sent as strings. Values containing
 // variables stay strings and are resolved at run time.
-export const coerceMcpToolArgumentValue = (
+export const coerceJsonSchemaArgumentValue = (
   value: string | null,
   type: string,
 ): unknown => {

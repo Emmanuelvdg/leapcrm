@@ -599,6 +599,24 @@ export class WorkflowVersionStepOperationsWorkspaceService {
           },
         };
       }
+      case WorkflowActionType.API_CONNECTION_CALL: {
+        return {
+          builtStep: {
+            ...baseStep,
+            name: 'API Call',
+            type: WorkflowActionType.API_CONNECTION_CALL,
+            settings: {
+              ...BASE_STEP_DEFINITION,
+              expectedOutputSchema: {},
+              input: {
+                connectionId: null,
+                operationName: null,
+                arguments: {},
+              },
+            },
+          },
+        };
+      }
       case WorkflowActionType.AI_AGENT: {
         const newAgent = await this.agentService.createOneAgent(
           {

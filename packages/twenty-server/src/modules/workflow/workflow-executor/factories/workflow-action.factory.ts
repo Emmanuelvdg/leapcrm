@@ -16,6 +16,7 @@ import { HttpRequestWorkflowAction } from 'src/modules/workflow/workflow-executo
 import { IfElseWorkflowAction } from 'src/modules/workflow/workflow-executor/workflow-actions/if-else/if-else.workflow-action';
 import { CreateCalendarEventWorkflowAction } from 'src/modules/workflow/workflow-executor/workflow-actions/create-calendar-event/create-calendar-event.workflow-action';
 import { IteratorWorkflowAction } from 'src/modules/workflow/workflow-executor/workflow-actions/iterator/iterator.workflow-action';
+import { ApiConnectionCallWorkflowAction } from 'src/modules/workflow/workflow-executor/workflow-actions/api-connection-call/api-connection-call.workflow-action';
 import { McpToolCallWorkflowAction } from 'src/modules/workflow/workflow-executor/workflow-actions/mcp-tool-call/mcp-tool-call.workflow-action';
 import { LogicFunctionWorkflowAction } from 'src/modules/workflow/workflow-executor/workflow-actions/logic-function/logic-function.workflow-action';
 import { DraftEmailWorkflowAction } from 'src/modules/workflow/workflow-executor/workflow-actions/mail-sender/draft-email.workflow-action';
@@ -45,6 +46,7 @@ export class WorkflowActionFactory {
     private readonly iteratorWorkflowAction: IteratorWorkflowAction,
     private readonly httpRequestWorkflowAction: HttpRequestWorkflowAction,
     private readonly mcpToolCallWorkflowAction: McpToolCallWorkflowAction,
+    private readonly apiConnectionCallWorkflowAction: ApiConnectionCallWorkflowAction,
     private readonly sendEmailWorkflowAction: SendEmailWorkflowAction,
     private readonly draftEmailWorkflowAction: DraftEmailWorkflowAction,
     private readonly createCalendarEventWorkflowAction: CreateCalendarEventWorkflowAction,
@@ -89,6 +91,8 @@ export class WorkflowActionFactory {
         return this.httpRequestWorkflowAction;
       case WorkflowActionType.MCP_TOOL_CALL:
         return this.mcpToolCallWorkflowAction;
+      case WorkflowActionType.API_CONNECTION_CALL:
+        return this.apiConnectionCallWorkflowAction;
       case WorkflowActionType.AI_AGENT:
         return this.aiAgentWorkflowAction;
       case WorkflowActionType.EMPTY:

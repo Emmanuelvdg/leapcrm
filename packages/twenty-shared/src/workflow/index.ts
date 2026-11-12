@@ -30,6 +30,8 @@ export type {
 export { computeWorkflowLayout } from './layout/utils/compute-workflow-layout.util';
 export { workflowAiAgentActionSchema } from './schemas/ai-agent-action-schema';
 export { workflowAiAgentActionSettingsSchema } from './schemas/ai-agent-action-settings-schema';
+export { workflowApiConnectionCallActionSchema } from './schemas/api-connection-call-action-schema';
+export { workflowApiConnectionCallActionSettingsSchema } from './schemas/api-connection-call-action-settings-schema';
 export { baseTriggerSchema } from './schemas/base-trigger-schema';
 export { baseWorkflowActionSchema } from './schemas/base-workflow-action-schema';
 export { baseWorkflowActionSettingsSchema } from './schemas/base-workflow-action-settings-schema';
@@ -133,6 +135,7 @@ export type {
   AiAgentStepLogDetails,
   AiToolCallLog,
   McpToolCallStepLogDetails,
+  ApiConnectionCallStepLogDetails,
 } from './types/WorkflowRunStepLog';
 export type { WorkflowRunTraceEntry } from './types/WorkflowRunTraceEntry';
 export { buildWorkflowRunTrace } from './utils/buildWorkflowRunTrace';

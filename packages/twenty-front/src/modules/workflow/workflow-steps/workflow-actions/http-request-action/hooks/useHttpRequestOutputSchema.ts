@@ -1,4 +1,5 @@
 import {
+  type WorkflowApiConnectionCallAction,
   type WorkflowHttpRequestAction,
   type WorkflowMcpToolCallAction,
 } from '@/workflow/types/Workflow';
@@ -12,7 +13,8 @@ import { type BaseOutputSchemaV2 } from 'twenty-shared/workflow';
 
 type ActionWithExpectedOutputSchema =
   | WorkflowHttpRequestAction
-  | WorkflowMcpToolCallAction;
+  | WorkflowMcpToolCallAction
+  | WorkflowApiConnectionCallAction;
 
 type UseHttpRequestOutputSchemaProps<
   TAction extends ActionWithExpectedOutputSchema,

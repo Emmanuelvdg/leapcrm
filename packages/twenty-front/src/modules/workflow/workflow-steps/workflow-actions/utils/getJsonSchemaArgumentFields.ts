@@ -1,4 +1,4 @@
-import { type McpToolArgumentField } from '@/workflow/workflow-steps/workflow-actions/mcp-tool-call-action/types/McpToolArgumentField';
+import { type JsonSchemaArgumentField } from '@/workflow/workflow-steps/workflow-actions/types/JsonSchemaArgumentField';
 import { isDefined } from 'twenty-shared/utils';
 
 type JsonSchemaProperty = {
@@ -19,9 +19,9 @@ const getPrimaryType = (type: JsonSchemaProperty['type']): string =>
     ? type.find((candidate) => candidate !== 'null')
     : type) ?? 'string';
 
-export const getMcpToolArgumentFields = (
+export const getJsonSchemaArgumentFields = (
   inputSchema: unknown,
-): McpToolArgumentField[] => {
+): JsonSchemaArgumentField[] => {
   if (!isPlainObject(inputSchema)) {
     return [];
   }

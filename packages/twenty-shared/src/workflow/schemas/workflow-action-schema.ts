@@ -9,6 +9,7 @@ import { workflowEmptyActionSchema } from './empty-action-schema';
 import { workflowFilterActionSchema } from './filter-action-schema';
 import { workflowFindRecordsActionSchema } from './find-records-action-schema';
 import { workflowFormActionSchema } from './form-action-schema';
+import { workflowApiConnectionCallActionSchema } from './api-connection-call-action-schema';
 import { workflowHttpRequestActionSchema } from './http-request-action-schema';
 import { workflowIfElseActionSchema } from './if-else-action-schema';
 import { workflowIteratorActionSchema } from './iterator-action-schema';
@@ -35,6 +36,7 @@ export const workflowActionSchema = z.discriminatedUnion('type', [
   workflowFormActionSchema,
   workflowHttpRequestActionSchema,
   workflowMcpToolCallActionSchema,
+  workflowApiConnectionCallActionSchema,
   workflowAiAgentActionSchema,
   workflowFilterActionSchema,
   workflowIfElseActionSchema,

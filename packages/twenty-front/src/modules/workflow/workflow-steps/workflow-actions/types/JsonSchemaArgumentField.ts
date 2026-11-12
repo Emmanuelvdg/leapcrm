@@ -1,4 +1,4 @@
-export type McpToolArgumentField = {
+export type JsonSchemaArgumentField = {
   name: string;
   type: string;
   description?: string;

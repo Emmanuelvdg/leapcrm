@@ -17,6 +17,7 @@ import { HttpRequestActionModule } from 'src/modules/workflow/workflow-executor/
 import { IfElseActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/if-else/if-else-action.module';
 import { IteratorActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/iterator/iterator-action.module';
 import { LogicFunctionActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/logic-function/logic-function-action.module';
+import { ApiConnectionCallActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/api-connection-call/api-connection-call-action.module';
 import { McpToolCallActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/mcp-tool-call/mcp-tool-call-action.module';
 import { MailSenderActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/mail-sender/mail-sender-action.module';
 import { RecordCRUDActionModule } from 'src/modules/workflow/workflow-executor/workflow-actions/record-crud/record-crud-action.module';
@@ -42,6 +43,7 @@ import { WorkflowRunModule } from 'src/modules/workflow/workflow-runner/workflow
     FeatureFlagModule,
     HttpRequestActionModule,
     McpToolCallActionModule,
+    ApiConnectionCallActionModule,
     MailSenderActionModule,
     CreateCalendarEventActionModule,
     MetricsModule,

@@ -16,3 +16,8 @@ export type McpToolCallStepLogDetails = Extract<
   WorkflowRunStepLog['details'],
   { type: 'MCP_TOOL_CALL' }
 >;
+
+export type ApiConnectionCallStepLogDetails = Extract<
+  WorkflowRunStepLog['details'],
+  { type: 'API_CONNECTION_CALL' }
+>;

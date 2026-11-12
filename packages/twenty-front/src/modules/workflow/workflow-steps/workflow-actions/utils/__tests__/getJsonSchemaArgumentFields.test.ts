@@ -1,9 +1,9 @@
-import { getMcpToolArgumentFields } from '@/workflow/workflow-steps/workflow-actions/mcp-tool-call-action/utils/getMcpToolArgumentFields';
+import { getJsonSchemaArgumentFields } from '@/workflow/workflow-steps/workflow-actions/utils/getJsonSchemaArgumentFields';
 
-describe('getMcpToolArgumentFields', () => {
+describe('getJsonSchemaArgumentFields', () => {
   it('returns one field per schema property with its type and required flag', () => {
     expect(
-      getMcpToolArgumentFields({
+      getJsonSchemaArgumentFields({
         type: 'object',
         properties: {
           query: { type: 'string', description: 'Search query' },
@@ -28,7 +28,7 @@ describe('getMcpToolArgumentFields', () => {
   });
 
   it('returns no fields for a missing or property-less schema', () => {
-    expect(getMcpToolArgumentFields(null)).toEqual([]);
-    expect(getMcpToolArgumentFields({ type: 'object' })).toEqual([]);
+    expect(getJsonSchemaArgumentFields(null)).toEqual([]);
+    expect(getJsonSchemaArgumentFields({ type: 'object' })).toEqual([]);
   });
 });
