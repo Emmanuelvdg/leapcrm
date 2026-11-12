@@ -504,6 +504,22 @@ const SettingsMcpServerConnectionDetail = lazy(() =>
   ),
 );
 
+const SettingsApiConnectionNew = lazy(() =>
+  import('~/pages/settings/api-connections/SettingsApiConnectionNew').then(
+    (module) => ({
+      default: module.SettingsApiConnectionNew,
+    }),
+  ),
+);
+
+const SettingsApiConnectionDetail = lazy(() =>
+  import('~/pages/settings/api-connections/SettingsApiConnectionDetail').then(
+    (module) => ({
+      default: module.SettingsApiConnectionDetail,
+    }),
+  ),
+);
+
 const SettingsObjectNewFieldSelect = lazy(() =>
   import('~/pages/settings/data-model/new-field/SettingsObjectNewFieldSelect').then(
     (module) => ({
@@ -1010,6 +1026,14 @@ export const SettingsRoutes = ({ isAdminPageEnabled }: SettingsRoutesProps) => (
         <Route
           path={SettingsPath.McpServerConnectionDetail}
           element={<SettingsMcpServerConnectionDetail />}
+        />
+        <Route
+          path={SettingsPath.NewApiConnection}
+          element={<SettingsApiConnectionNew />}
+        />
+        <Route
+          path={SettingsPath.ApiConnectionDetail}
+          element={<SettingsApiConnectionDetail />}
         />
       </Route>
 

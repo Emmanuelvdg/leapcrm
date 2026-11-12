@@ -5,6 +5,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { WorkspaceQueryRunnerModule } from 'src/engine/api/graphql/workspace-query-runner/workspace-query-runner.module';
 import { ActorModule } from 'src/engine/core-modules/actor/actor.module';
 import { AdminPanelModule } from 'src/engine/core-modules/admin-panel/admin-panel.module';
+import { ApiConnectionModule } from 'src/engine/core-modules/api-connection/api-connection.module';
 import { ApiKeyModule } from 'src/engine/core-modules/api-key/api-key.module';
 import { SubscriptionBillingModule } from 'src/engine/core-modules/subscription-billing/subscription-billing.module';
 import { ApplicationAuthorizationModule } from 'src/engine/core-modules/application/application-authorization/application-authorization.module';
@@ -173,6 +174,7 @@ import { FileModule } from './file/file.module';
     CodeInterpreterModule.forRoot(),
     SearchModule,
     ApiKeyModule,
+    ApiConnectionModule,
     SubscriptionBillingModule,
     DpaModule,
     PageLayoutModule,

@@ -258,6 +258,59 @@ export type ApiConfig = {
   mutationMaximumAffectedRecords: Scalars['Float']['output'];
 };
 
+export type ApiConnection = {
+  __typename?: 'ApiConnection';
+  authHeaderName?: Maybe<Scalars['String']['output']>;
+  authType: ApiConnectionAuthType;
+  baseUrl: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  defaultHeaders: Scalars['JSON']['output'];
+  hasSecret: Scalars['Boolean']['output'];
+  id: Scalars['UUID']['output'];
+  lastErrorMessage?: Maybe<Scalars['String']['output']>;
+  lastTestedAt?: Maybe<Scalars['DateTime']['output']>;
+  name: Scalars['String']['output'];
+  openApiSpecUrl?: Maybe<Scalars['String']['output']>;
+  operations: Scalars['JSON']['output'];
+  status: ApiConnectionStatus;
+  testArguments?: Maybe<Scalars['JSON']['output']>;
+  testOperationName?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+/** How a workspace authenticates to an external REST API */
+export enum ApiConnectionAuthType {
+  API_KEY_HEADER = 'API_KEY_HEADER',
+  BEARER = 'BEARER',
+  NONE = 'NONE'
+}
+
+export type ApiConnectionOperationTool = {
+  __typename?: 'ApiConnectionOperationTool';
+  description: Scalars['String']['output'];
+  inputSchema: Scalars['JSON']['output'];
+  method: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  path: Scalars['String']['output'];
+};
+
+/** Connection status of an external REST API */
+export enum ApiConnectionStatus {
+  CONNECTED = 'CONNECTED',
+  ERROR = 'ERROR',
+  PENDING = 'PENDING'
+}
+
+export type ApiConnectionTestResult = {
+  __typename?: 'ApiConnectionTestResult';
+  connection: ApiConnection;
+  durationMs?: Maybe<Scalars['Int']['output']>;
+  errorMessage?: Maybe<Scalars['String']['output']>;
+  httpStatus?: Maybe<Scalars['Int']['output']>;
+  responsePreview?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
+};
+
 export type ApiKey = {
   __typename?: 'ApiKey';
   createdAt: Scalars['DateTime']['output'];
@@ -1105,6 +1158,19 @@ export type CreateAgentInput = {
   prompt: Scalars['String']['input'];
   responseFormat?: InputMaybe<Scalars['JSON']['input']>;
   roleId?: InputMaybe<Scalars['UUID']['input']>;
+};
+
+export type CreateApiConnectionInput = {
+  authHeaderName?: InputMaybe<Scalars['String']['input']>;
+  authType: ApiConnectionAuthType;
+  baseUrl: Scalars['String']['input'];
+  defaultHeaders?: InputMaybe<Scalars['JSON']['input']>;
+  name: Scalars['String']['input'];
+  openApiSpecUrl?: InputMaybe<Scalars['String']['input']>;
+  operations?: InputMaybe<Scalars['JSON']['input']>;
+  secret?: InputMaybe<Scalars['String']['input']>;
+  testArguments?: InputMaybe<Scalars['JSON']['input']>;
+  testOperationName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateApiKeyInput = {
@@ -2772,6 +2838,7 @@ export type Mutation = {
   completeBookCallOnboardingStep: OnboardingStepSuccess;
   completeFileUpload: FileWithSignedUrl;
   completeGettingStartedVideoOnboardingStep: OnboardingStepSuccess;
+  createApiConnection: ApiConnection;
   createApiKey: ApiKey;
   createApplicationRegistration: CreateApplicationRegistration;
   createApplicationRegistrationVariable: ApplicationRegistrationVariable;
@@ -2818,6 +2885,7 @@ export type Mutation = {
   createViewSort: ViewSort;
   createWebhook: Webhook;
   deactivateSkill: Skill;
+  deleteApiConnection: ApiConnection;
   deleteAppKeyValue: Scalars['Boolean']['output'];
   deleteApplicationRegistration: Scalars['Boolean']['output'];
   deleteApplicationRegistrationVariable: Scalars['Boolean']['output'];
@@ -2895,6 +2963,7 @@ export type Mutation = {
   /** @deprecated Use installApplication instead */
   installMarketplaceApp: Scalars['Boolean']['output'];
   pauseProspectingCampaign: ProspectingCampaignStatusDto;
+  previewOpenApiImport: OpenApiImportPreview;
   refreshEnterpriseValidityToken: Scalars['Boolean']['output'];
   releaseEnterpriseServerBinding: EnterpriseLicenseInfoDto;
   removeQueryFromEventStream: Scalars['Boolean']['output'];
@@ -2945,11 +3014,13 @@ export type Mutation = {
   switchSubscriptionInterval: BillingUpdate;
   syncApplication: WorkspaceMigration;
   syncMarketplaceCatalog: Scalars['Boolean']['output'];
+  testApiConnection: ApiConnectionTestResult;
   trackAnalytics: Analytics;
   transferApplicationRegistrationOwnership: ApplicationRegistration;
   triggerInstallAppsOnboardingStep: OnboardingStepSuccess;
   unarchiveChatThread: AgentChatThread;
   uninstallApplication: Scalars['Boolean']['output'];
+  updateApiConnection: ApiConnection;
   updateApiKey?: Maybe<ApiKey>;
   updateApplication: Application;
   updateApplicationRegistration: ApplicationRegistration;
@@ -3114,6 +3185,11 @@ export type MutationCompleteBookCallOnboardingStepArgs = {
 
 export type MutationCompleteFileUploadArgs = {
   fileId: Scalars['String']['input'];
+};
+
+
+export type MutationCreateApiConnectionArgs = {
+  input: CreateApiConnectionInput;
 };
 
 
@@ -3341,6 +3417,11 @@ export type MutationCreateWebhookArgs = {
 
 
 export type MutationDeactivateSkillArgs = {
+  id: Scalars['UUID']['input'];
+};
+
+
+export type MutationDeleteApiConnectionArgs = {
   id: Scalars['UUID']['input'];
 };
 
@@ -3706,6 +3787,11 @@ export type MutationPauseProspectingCampaignArgs = {
 };
 
 
+export type MutationPreviewOpenApiImportArgs = {
+  input: PreviewOpenApiImportInput;
+};
+
+
 export type MutationRemoveQueryFromEventStreamArgs = {
   input: RemoveQueryFromEventStreamInput;
 };
@@ -3950,6 +4036,11 @@ export type MutationSyncApplicationArgs = {
 };
 
 
+export type MutationTestApiConnectionArgs = {
+  id: Scalars['UUID']['input'];
+};
+
+
 export type MutationTrackAnalyticsArgs = {
   event?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -3977,6 +4068,11 @@ export type MutationUnarchiveChatThreadArgs = {
 
 export type MutationUninstallApplicationArgs = {
   universalIdentifier: Scalars['String']['input'];
+};
+
+
+export type MutationUpdateApiConnectionArgs = {
+  input: UpdateApiConnectionInput;
 };
 
 
@@ -4563,6 +4659,13 @@ export type OnboardingStepSuccess = {
   success: Scalars['Boolean']['output'];
 };
 
+export type OpenApiImportPreview = {
+  __typename?: 'OpenApiImportPreview';
+  operations: Scalars['JSON']['output'];
+  skipped: Array<Scalars['String']['output']>;
+  suggestedBaseUrl?: Maybe<Scalars['String']['output']>;
+};
+
 export enum OpenRecordIn {
   RECORD_PAGE = 'RECORD_PAGE',
   SIDE_PANEL = 'SIDE_PANEL'
@@ -4771,6 +4874,11 @@ export type PreviewMessageCampaignAudienceInput = {
   unsubscribeTopicId?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type PreviewOpenApiImportInput = {
+  specJson?: InputMaybe<Scalars['String']['input']>;
+  specUrl?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type ProspectingCampaignIdInput = {
   campaignId: Scalars['String']['input'];
 };
@@ -4853,6 +4961,9 @@ export type PublicWorkspaceDataSummary = {
 export type Query = {
   __typename?: 'Query';
   agentTurns: Array<AgentTurn>;
+  apiConnection: ApiConnection;
+  apiConnectionOperationTools: Array<ApiConnectionOperationTool>;
+  apiConnections: Array<ApiConnection>;
   apiKey?: Maybe<ApiKey>;
   apiKeys: Array<ApiKey>;
   appConnection: AppConnection;
@@ -4872,6 +4983,7 @@ export type Query = {
   checkWorkspaceSubdomainAvailability: SubdomainAvailabilityDto;
   commandMenuItem?: Maybe<CommandMenuItem>;
   commandMenuItems: Array<CommandMenuItem>;
+  connectedApiConnections: Array<ApiConnection>;
   connectedMcpServerConnections: Array<McpServerConnection>;
   currentSeatPrice?: Maybe<SeatPrice>;
   currentUser: User;
@@ -4982,6 +5094,16 @@ export type Query = {
 
 export type QueryAgentTurnsArgs = {
   agentId: Scalars['UUID']['input'];
+};
+
+
+export type QueryApiConnectionArgs = {
+  id: Scalars['UUID']['input'];
+};
+
+
+export type QueryApiConnectionOperationToolsArgs = {
+  connectionId: Scalars['UUID']['input'];
 };
 
 
@@ -5968,6 +6090,20 @@ export type UpdateAgentInput = {
   prompt?: InputMaybe<Scalars['String']['input']>;
   responseFormat?: InputMaybe<Scalars['JSON']['input']>;
   roleId?: InputMaybe<Scalars['UUID']['input']>;
+};
+
+export type UpdateApiConnectionInput = {
+  authHeaderName?: InputMaybe<Scalars['String']['input']>;
+  authType?: InputMaybe<ApiConnectionAuthType>;
+  baseUrl?: InputMaybe<Scalars['String']['input']>;
+  defaultHeaders?: InputMaybe<Scalars['JSON']['input']>;
+  id: Scalars['UUID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  openApiSpecUrl?: InputMaybe<Scalars['String']['input']>;
+  operations?: InputMaybe<Scalars['JSON']['input']>;
+  secret?: InputMaybe<Scalars['String']['input']>;
+  testArguments?: InputMaybe<Scalars['JSON']['input']>;
+  testOperationName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateApiKeyInput = {
@@ -8875,6 +9011,67 @@ export type GetWorkspaceAiProvidersQueryVariables = Exact<{ [key: string]: never
 
 export type GetWorkspaceAiProvidersQuery = { __typename?: 'Query', getWorkspaceAiProviders: Array<{ __typename?: 'WorkspaceAiProvider', id: string, providerName: string, npm: string, label: string, baseUrl?: string | null, hasApiKey: boolean, models: any, createdAt: string, updatedAt: string }> };
 
+export type ApiConnectionFragmentFragment = { __typename?: 'ApiConnection', id: string, name: string, baseUrl: string, authType: ApiConnectionAuthType, authHeaderName?: string | null, hasSecret: boolean, defaultHeaders: any, operations: any, testOperationName?: string | null, testArguments?: any | null, openApiSpecUrl?: string | null, status: ApiConnectionStatus, lastErrorMessage?: string | null, lastTestedAt?: string | null, createdAt: string, updatedAt: string };
+
+export type CreateApiConnectionMutationVariables = Exact<{
+  input: CreateApiConnectionInput;
+}>;
+
+
+export type CreateApiConnectionMutation = { __typename?: 'Mutation', createApiConnection: { __typename?: 'ApiConnection', id: string, name: string, baseUrl: string, authType: ApiConnectionAuthType, authHeaderName?: string | null, hasSecret: boolean, defaultHeaders: any, operations: any, testOperationName?: string | null, testArguments?: any | null, openApiSpecUrl?: string | null, status: ApiConnectionStatus, lastErrorMessage?: string | null, lastTestedAt?: string | null, createdAt: string, updatedAt: string } };
+
+export type DeleteApiConnectionMutationVariables = Exact<{
+  id: Scalars['UUID']['input'];
+}>;
+
+
+export type DeleteApiConnectionMutation = { __typename?: 'Mutation', deleteApiConnection: { __typename?: 'ApiConnection', id: string } };
+
+export type PreviewOpenApiImportMutationVariables = Exact<{
+  input: PreviewOpenApiImportInput;
+}>;
+
+
+export type PreviewOpenApiImportMutation = { __typename?: 'Mutation', previewOpenApiImport: { __typename?: 'OpenApiImportPreview', operations: any, skipped: Array<string>, suggestedBaseUrl?: string | null } };
+
+export type TestApiConnectionMutationVariables = Exact<{
+  id: Scalars['UUID']['input'];
+}>;
+
+
+export type TestApiConnectionMutation = { __typename?: 'Mutation', testApiConnection: { __typename?: 'ApiConnectionTestResult', success: boolean, httpStatus?: number | null, durationMs?: number | null, responsePreview?: string | null, errorMessage?: string | null, connection: { __typename?: 'ApiConnection', id: string, name: string, baseUrl: string, authType: ApiConnectionAuthType, authHeaderName?: string | null, hasSecret: boolean, defaultHeaders: any, operations: any, testOperationName?: string | null, testArguments?: any | null, openApiSpecUrl?: string | null, status: ApiConnectionStatus, lastErrorMessage?: string | null, lastTestedAt?: string | null, createdAt: string, updatedAt: string } } };
+
+export type UpdateApiConnectionMutationVariables = Exact<{
+  input: UpdateApiConnectionInput;
+}>;
+
+
+export type UpdateApiConnectionMutation = { __typename?: 'Mutation', updateApiConnection: { __typename?: 'ApiConnection', id: string, name: string, baseUrl: string, authType: ApiConnectionAuthType, authHeaderName?: string | null, hasSecret: boolean, defaultHeaders: any, operations: any, testOperationName?: string | null, testArguments?: any | null, openApiSpecUrl?: string | null, status: ApiConnectionStatus, lastErrorMessage?: string | null, lastTestedAt?: string | null, createdAt: string, updatedAt: string } };
+
+export type GetApiConnectionQueryVariables = Exact<{
+  id: Scalars['UUID']['input'];
+}>;
+
+
+export type GetApiConnectionQuery = { __typename?: 'Query', apiConnection: { __typename?: 'ApiConnection', id: string, name: string, baseUrl: string, authType: ApiConnectionAuthType, authHeaderName?: string | null, hasSecret: boolean, defaultHeaders: any, operations: any, testOperationName?: string | null, testArguments?: any | null, openApiSpecUrl?: string | null, status: ApiConnectionStatus, lastErrorMessage?: string | null, lastTestedAt?: string | null, createdAt: string, updatedAt: string } };
+
+export type GetApiConnectionOperationToolsQueryVariables = Exact<{
+  connectionId: Scalars['UUID']['input'];
+}>;
+
+
+export type GetApiConnectionOperationToolsQuery = { __typename?: 'Query', apiConnectionOperationTools: Array<{ __typename?: 'ApiConnectionOperationTool', name: string, description: string, method: string, path: string, inputSchema: any }> };
+
+export type GetApiConnectionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetApiConnectionsQuery = { __typename?: 'Query', apiConnections: Array<{ __typename?: 'ApiConnection', id: string, name: string, baseUrl: string, status: ApiConnectionStatus }> };
+
+export type GetConnectedApiConnectionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetConnectedApiConnectionsQuery = { __typename?: 'Query', connectedApiConnections: Array<{ __typename?: 'ApiConnection', id: string, name: string }> };
+
 export type ApplicationRegistrationFragmentFragment = { __typename?: 'ApplicationRegistration', id: string, universalIdentifier: string, name: string, logoUrl?: string | null, galleryImagesUrls: Array<string>, oAuthClientId: string, oAuthRedirectUris: Array<string>, oAuthScopes: Array<string>, sourceType: ApplicationRegistrationSourceType, sourcePackage?: string | null, latestAvailableVersion?: string | null, isListed: boolean, isVetted: boolean, isPreInstalled: boolean, isConfigured: boolean, ownerWorkspaceId?: string | null, createdAt: string, updatedAt: string };
 
 export type ClaimApplicationRegistrationOwnershipMutationVariables = Exact<{
@@ -10033,6 +10230,7 @@ export const MarketplaceAppDetailFieldsFragmentDoc = {"kind":"Document","definit
 export const MarketplaceAppFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MarketplaceAppFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MarketplaceApp"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"author"}},{"kind":"Field","name":{"kind":"Name","value":"category"}},{"kind":"Field","name":{"kind":"Name","value":"logoUrl"}},{"kind":"Field","name":{"kind":"Name","value":"sourcePackage"}},{"kind":"Field","name":{"kind":"Name","value":"isVetted"}}]}}]} as unknown as DocumentNode<MarketplaceAppFieldsFragment, unknown>;
 export const NavigationMenuItemFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"NavigationMenuItemFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"NavigationMenuItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"userWorkspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"targetRecordId"}},{"kind":"Field","name":{"kind":"Name","value":"targetObjectMetadataId"}},{"kind":"Field","name":{"kind":"Name","value":"viewId"}},{"kind":"Field","name":{"kind":"Name","value":"folderId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"icon"}},{"kind":"Field","name":{"kind":"Name","value":"color"}},{"kind":"Field","name":{"kind":"Name","value":"pageLayoutId"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"applicationId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<NavigationMenuItemFieldsFragment, unknown>;
 export const NavigationMenuItemQueryFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"NavigationMenuItemQueryFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"NavigationMenuItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"NavigationMenuItemFields"}},{"kind":"Field","name":{"kind":"Name","value":"targetRecordIdentifier"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"labelIdentifier"}},{"kind":"Field","name":{"kind":"Name","value":"imageIdentifier"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"NavigationMenuItemFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"NavigationMenuItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"userWorkspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"targetRecordId"}},{"kind":"Field","name":{"kind":"Name","value":"targetObjectMetadataId"}},{"kind":"Field","name":{"kind":"Name","value":"viewId"}},{"kind":"Field","name":{"kind":"Name","value":"folderId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"icon"}},{"kind":"Field","name":{"kind":"Name","value":"color"}},{"kind":"Field","name":{"kind":"Name","value":"pageLayoutId"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"applicationId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<NavigationMenuItemQueryFieldsFragment, unknown>;
+export const ApiConnectionFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ApiConnectionFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ApiConnection"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"baseUrl"}},{"kind":"Field","name":{"kind":"Name","value":"authType"}},{"kind":"Field","name":{"kind":"Name","value":"authHeaderName"}},{"kind":"Field","name":{"kind":"Name","value":"hasSecret"}},{"kind":"Field","name":{"kind":"Name","value":"defaultHeaders"}},{"kind":"Field","name":{"kind":"Name","value":"operations"}},{"kind":"Field","name":{"kind":"Name","value":"testOperationName"}},{"kind":"Field","name":{"kind":"Name","value":"testArguments"}},{"kind":"Field","name":{"kind":"Name","value":"openApiSpecUrl"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"lastErrorMessage"}},{"kind":"Field","name":{"kind":"Name","value":"lastTestedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<ApiConnectionFragmentFragment, unknown>;
 export const ApplicationRegistrationFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ApplicationRegistrationFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ApplicationRegistration"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"universalIdentifier"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"logoUrl"}},{"kind":"Field","name":{"kind":"Name","value":"galleryImagesUrls"}},{"kind":"Field","name":{"kind":"Name","value":"oAuthClientId"}},{"kind":"Field","name":{"kind":"Name","value":"oAuthRedirectUris"}},{"kind":"Field","name":{"kind":"Name","value":"oAuthScopes"}},{"kind":"Field","name":{"kind":"Name","value":"sourceType"}},{"kind":"Field","name":{"kind":"Name","value":"sourcePackage"}},{"kind":"Field","name":{"kind":"Name","value":"latestAvailableVersion"}},{"kind":"Field","name":{"kind":"Name","value":"isListed"}},{"kind":"Field","name":{"kind":"Name","value":"isVetted"}},{"kind":"Field","name":{"kind":"Name","value":"isPreInstalled"}},{"kind":"Field","name":{"kind":"Name","value":"isConfigured"}},{"kind":"Field","name":{"kind":"Name","value":"ownerWorkspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<ApplicationRegistrationFragmentFragment, unknown>;
 export const ApplicationRegistrationListItemFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ApplicationRegistrationListItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ApplicationRegistration"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"universalIdentifier"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sourceType"}},{"kind":"Field","name":{"kind":"Name","value":"logoUrl"}}]}}]} as unknown as DocumentNode<ApplicationRegistrationListItemFragment, unknown>;
 export const BillingPriceLicensedFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BillingPriceLicensedFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"BillingPriceLicensed"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stripePriceId"}},{"kind":"Field","name":{"kind":"Name","value":"unitAmount"}},{"kind":"Field","name":{"kind":"Name","value":"recurringInterval"}},{"kind":"Field","name":{"kind":"Name","value":"priceUsageType"}},{"kind":"Field","name":{"kind":"Name","value":"creditAmount"}}]}}]} as unknown as DocumentNode<BillingPriceLicensedFragmentFragment, unknown>;
@@ -10244,6 +10442,15 @@ export const AddWorkspaceAiProviderDocument = {"kind":"Document","definitions":[
 export const RemoveWorkspaceAiProviderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RemoveWorkspaceAiProvider"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"removeWorkspaceAiProvider"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}]}}]} as unknown as DocumentNode<RemoveWorkspaceAiProviderMutation, RemoveWorkspaceAiProviderMutationVariables>;
 export const UpdateWorkspaceAiProviderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateWorkspaceAiProvider"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateWorkspaceAiProviderInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateWorkspaceAiProvider"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"providerName"}},{"kind":"Field","name":{"kind":"Name","value":"npm"}},{"kind":"Field","name":{"kind":"Name","value":"label"}},{"kind":"Field","name":{"kind":"Name","value":"baseUrl"}},{"kind":"Field","name":{"kind":"Name","value":"hasApiKey"}},{"kind":"Field","name":{"kind":"Name","value":"models"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<UpdateWorkspaceAiProviderMutation, UpdateWorkspaceAiProviderMutationVariables>;
 export const GetWorkspaceAiProvidersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWorkspaceAiProviders"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getWorkspaceAiProviders"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"providerName"}},{"kind":"Field","name":{"kind":"Name","value":"npm"}},{"kind":"Field","name":{"kind":"Name","value":"label"}},{"kind":"Field","name":{"kind":"Name","value":"baseUrl"}},{"kind":"Field","name":{"kind":"Name","value":"hasApiKey"}},{"kind":"Field","name":{"kind":"Name","value":"models"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetWorkspaceAiProvidersQuery, GetWorkspaceAiProvidersQueryVariables>;
+export const CreateApiConnectionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateApiConnection"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateApiConnectionInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createApiConnection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ApiConnectionFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ApiConnectionFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ApiConnection"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"baseUrl"}},{"kind":"Field","name":{"kind":"Name","value":"authType"}},{"kind":"Field","name":{"kind":"Name","value":"authHeaderName"}},{"kind":"Field","name":{"kind":"Name","value":"hasSecret"}},{"kind":"Field","name":{"kind":"Name","value":"defaultHeaders"}},{"kind":"Field","name":{"kind":"Name","value":"operations"}},{"kind":"Field","name":{"kind":"Name","value":"testOperationName"}},{"kind":"Field","name":{"kind":"Name","value":"testArguments"}},{"kind":"Field","name":{"kind":"Name","value":"openApiSpecUrl"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"lastErrorMessage"}},{"kind":"Field","name":{"kind":"Name","value":"lastTestedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<CreateApiConnectionMutation, CreateApiConnectionMutationVariables>;
+export const DeleteApiConnectionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteApiConnection"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteApiConnection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteApiConnectionMutation, DeleteApiConnectionMutationVariables>;
+export const PreviewOpenApiImportDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"PreviewOpenApiImport"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PreviewOpenApiImportInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"previewOpenApiImport"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"operations"}},{"kind":"Field","name":{"kind":"Name","value":"skipped"}},{"kind":"Field","name":{"kind":"Name","value":"suggestedBaseUrl"}}]}}]}}]} as unknown as DocumentNode<PreviewOpenApiImportMutation, PreviewOpenApiImportMutationVariables>;
+export const TestApiConnectionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"TestApiConnection"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"testApiConnection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"httpStatus"}},{"kind":"Field","name":{"kind":"Name","value":"durationMs"}},{"kind":"Field","name":{"kind":"Name","value":"responsePreview"}},{"kind":"Field","name":{"kind":"Name","value":"errorMessage"}},{"kind":"Field","name":{"kind":"Name","value":"connection"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ApiConnectionFragment"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ApiConnectionFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ApiConnection"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"baseUrl"}},{"kind":"Field","name":{"kind":"Name","value":"authType"}},{"kind":"Field","name":{"kind":"Name","value":"authHeaderName"}},{"kind":"Field","name":{"kind":"Name","value":"hasSecret"}},{"kind":"Field","name":{"kind":"Name","value":"defaultHeaders"}},{"kind":"Field","name":{"kind":"Name","value":"operations"}},{"kind":"Field","name":{"kind":"Name","value":"testOperationName"}},{"kind":"Field","name":{"kind":"Name","value":"testArguments"}},{"kind":"Field","name":{"kind":"Name","value":"openApiSpecUrl"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"lastErrorMessage"}},{"kind":"Field","name":{"kind":"Name","value":"lastTestedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<TestApiConnectionMutation, TestApiConnectionMutationVariables>;
+export const UpdateApiConnectionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateApiConnection"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateApiConnectionInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateApiConnection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ApiConnectionFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ApiConnectionFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ApiConnection"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"baseUrl"}},{"kind":"Field","name":{"kind":"Name","value":"authType"}},{"kind":"Field","name":{"kind":"Name","value":"authHeaderName"}},{"kind":"Field","name":{"kind":"Name","value":"hasSecret"}},{"kind":"Field","name":{"kind":"Name","value":"defaultHeaders"}},{"kind":"Field","name":{"kind":"Name","value":"operations"}},{"kind":"Field","name":{"kind":"Name","value":"testOperationName"}},{"kind":"Field","name":{"kind":"Name","value":"testArguments"}},{"kind":"Field","name":{"kind":"Name","value":"openApiSpecUrl"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"lastErrorMessage"}},{"kind":"Field","name":{"kind":"Name","value":"lastTestedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<UpdateApiConnectionMutation, UpdateApiConnectionMutationVariables>;
+export const GetApiConnectionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetApiConnection"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"apiConnection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ApiConnectionFragment"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ApiConnectionFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ApiConnection"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"baseUrl"}},{"kind":"Field","name":{"kind":"Name","value":"authType"}},{"kind":"Field","name":{"kind":"Name","value":"authHeaderName"}},{"kind":"Field","name":{"kind":"Name","value":"hasSecret"}},{"kind":"Field","name":{"kind":"Name","value":"defaultHeaders"}},{"kind":"Field","name":{"kind":"Name","value":"operations"}},{"kind":"Field","name":{"kind":"Name","value":"testOperationName"}},{"kind":"Field","name":{"kind":"Name","value":"testArguments"}},{"kind":"Field","name":{"kind":"Name","value":"openApiSpecUrl"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"lastErrorMessage"}},{"kind":"Field","name":{"kind":"Name","value":"lastTestedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<GetApiConnectionQuery, GetApiConnectionQueryVariables>;
+export const GetApiConnectionOperationToolsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetApiConnectionOperationTools"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"connectionId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"apiConnectionOperationTools"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"connectionId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"connectionId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"method"}},{"kind":"Field","name":{"kind":"Name","value":"path"}},{"kind":"Field","name":{"kind":"Name","value":"inputSchema"}}]}}]}}]} as unknown as DocumentNode<GetApiConnectionOperationToolsQuery, GetApiConnectionOperationToolsQueryVariables>;
+export const GetApiConnectionsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetApiConnections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"apiConnections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"baseUrl"}},{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]} as unknown as DocumentNode<GetApiConnectionsQuery, GetApiConnectionsQueryVariables>;
+export const GetConnectedApiConnectionsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetConnectedApiConnections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"connectedApiConnections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<GetConnectedApiConnectionsQuery, GetConnectedApiConnectionsQueryVariables>;
 export const ClaimApplicationRegistrationOwnershipDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ClaimApplicationRegistrationOwnership"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"applicationRegistrationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"claimApplicationRegistrationOwnership"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"applicationRegistrationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"applicationRegistrationId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<ClaimApplicationRegistrationOwnershipMutation, ClaimApplicationRegistrationOwnershipMutationVariables>;
 export const DeleteApplicationRegistrationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteApplicationRegistration"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteApplicationRegistration"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}]}}]} as unknown as DocumentNode<DeleteApplicationRegistrationMutation, DeleteApplicationRegistrationMutationVariables>;
 export const RotateApplicationRegistrationClientSecretDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RotateApplicationRegistrationClientSecret"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"rotateApplicationRegistrationClientSecret"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clientSecret"}}]}}]}}]} as unknown as DocumentNode<RotateApplicationRegistrationClientSecretMutation, RotateApplicationRegistrationClientSecretMutationVariables>;

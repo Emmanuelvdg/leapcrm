@@ -3,6 +3,7 @@ import { type Type } from '@nestjs/common';
 import { ConnectionParametersRotationHandler } from 'src/database/commands/secret-encryption-rotation/handlers/connection-parameters-rotation.handler';
 import { SensitiveConfigStorageRotationHandler } from 'src/database/commands/secret-encryption-rotation/handlers/sensitive-config-storage-rotation.handler';
 import { type SecretEncryptionRotationHandler } from 'src/database/commands/secret-encryption-rotation/interfaces/secret-encryption-rotation-handler.interface';
+import { ApiConnectionEntity } from 'src/engine/core-modules/api-connection/entities/api-connection.entity';
 import { ApplicationRegistrationVariableEntity } from 'src/engine/core-modules/application/application-registration-variable/application-registration-variable.entity';
 import { ApplicationVariableEntity } from 'src/engine/core-modules/application/application-variable/application-variable.entity';
 import { SigningKeyEntity } from 'src/engine/core-modules/jwt/entities/signing-key.entity';
@@ -39,6 +40,17 @@ const defineRotationRegistry = <
 ) => registry;
 
 export const SECRET_ENCRYPTION_ROTATION_SITE_ENTRIES = defineRotationRegistry({
+  ApiConnectionEntity: {
+    entity: ApiConnectionEntity,
+    columnSiteNames: {
+      secret: {
+        siteName: 'api-connection-secret',
+        customHandler: undefined,
+        isWorkspaceScoped: true,
+        extraWhere: undefined,
+      },
+    },
+  },
   ApplicationRegistrationVariableEntity: {
     entity: ApplicationRegistrationVariableEntity,
     columnSiteNames: {

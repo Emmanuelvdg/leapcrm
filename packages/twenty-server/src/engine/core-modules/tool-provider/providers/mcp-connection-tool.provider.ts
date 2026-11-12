@@ -2,10 +2,16 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { ToolCategory } from 'twenty-shared/ai';
 import { PermissionFlagType } from 'twenty-shared/constants';
+import { isDefined } from 'twenty-shared/utils';
 
 import { type GenerateDescriptorOptions } from 'src/engine/core-modules/tool-provider/interfaces/generate-descriptor-options.type';
 import { type ToolProvider } from 'src/engine/core-modules/tool-provider/interfaces/tool-provider.interface';
 import { type ToolProviderContext } from 'src/engine/core-modules/tool-provider/interfaces/tool-provider-context.type';
+import {
+  buildConnectionToolId,
+  buildConnectionToolName,
+  parseConnectionToolId,
+} from 'src/engine/core-modules/tool-provider/utils/connection-tool-name.util';
 import { humanizeToolName } from 'src/engine/core-modules/tool-provider/utils/tool-set-to-descriptors.util';
 import { type ToolDescriptor } from 'src/engine/core-modules/tool-provider/types/tool-descriptor.type';
 import { type ToolIndexEntry } from 'src/engine/core-modules/tool-provider/types/tool-index-entry.type';
@@ -17,20 +23,6 @@ import { McpClientService } from 'src/engine/core-modules/mcp-connection/service
 import { McpConnectionService } from 'src/engine/core-modules/mcp-connection/services/mcp-connection.service';
 import { type McpRemoteTool } from 'src/engine/core-modules/mcp-connection/types/mcp-remote-tool.type';
 import { PermissionsService } from 'src/engine/metadata-modules/permissions/permissions.service';
-
-// Tool names must be unique across every connected server in the workspace —
-// the sanitized connection name alone can collide (two connections named the
-// same), so the connection's own id is appended as a short, always-unique
-// suffix. The dispatch-time `executionRef.toolId` instead encodes
-// `${connectionId}::${remoteToolName}` directly (not derived from `name`),
-// so this sanitization only has to satisfy readability, not round-tripping.
-const sanitizeToolNameSegment = (value: string): string =>
-  value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '_')
-    .replace(/^_+|_+$/g, '');
-
-const TOOL_ID_SEPARATOR = '::';
 
 @Injectable()
 export class McpConnectionToolProvider implements ToolProvider {
@@ -80,11 +72,13 @@ export class McpConnectionToolProvider implements ToolProvider {
           return [];
         }
 
-        const connectionSlug = sanitizeToolNameSegment(connection.name);
-
         return remoteTools.map(
           (remoteTool): ToolIndexEntry | ToolDescriptor => {
-            const name = `${connectionSlug}_${sanitizeToolNameSegment(remoteTool.name)}_${connection.id.replace(/-/g, '').slice(0, 8)}`;
+            const name = buildConnectionToolName({
+              connectionId: connection.id,
+              connectionName: connection.name,
+              toolName: remoteTool.name,
+            });
 
             const base: ToolIndexEntry = {
               name,
@@ -93,7 +87,7 @@ export class McpConnectionToolProvider implements ToolProvider {
               category: ToolCategory.MCP_SERVER,
               executionRef: {
                 kind: 'static',
-                toolId: `${connection.id}${TOOL_ID_SEPARATOR}${remoteTool.name}`,
+                toolId: buildConnectionToolId(connection.id, remoteTool.name),
               },
             };
 
@@ -115,19 +109,16 @@ export class McpConnectionToolProvider implements ToolProvider {
     args: Record<string, unknown>,
     context: ToolProviderContext,
   ): Promise<ToolOutput> {
-    const separatorIndex = toolName.indexOf(TOOL_ID_SEPARATOR);
+    const parsedToolId = parseConnectionToolId(toolName);
 
-    if (separatorIndex === -1) {
+    if (!isDefined(parsedToolId)) {
       throw new McpConnectionException(
         `Malformed MCP tool id "${toolName}"`,
         McpConnectionExceptionCode.TOOL_NOT_FOUND,
       );
     }
 
-    const connectionId = toolName.slice(0, separatorIndex);
-    const remoteToolName = toolName.slice(
-      separatorIndex + TOOL_ID_SEPARATOR.length,
-    );
+    const { connectionId, toolName: remoteToolName } = parsedToolId;
 
     const connection = await this.mcpConnectionService.findByIdOrThrow(
       connectionId,

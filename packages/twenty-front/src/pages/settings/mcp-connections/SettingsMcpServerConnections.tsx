@@ -1,3 +1,4 @@
+import { SettingsApiConnectionsTable } from '@/settings/api-connections/components/SettingsApiConnectionsTable';
 import { SettingsPageContainer } from '@/settings/components/SettingsPageContainer';
 import { SettingsPageLayout } from '@/settings/components/layout/SettingsPageLayout';
 import { SettingsMcpServerConnectionsTable } from '@/settings/mcp-connections/components/SettingsMcpServerConnectionsTable';
@@ -58,6 +59,22 @@ export const SettingsMcpServerConnections = () => {
                 size="small"
                 variant="secondary"
                 to={getSettingsPath(SettingsPath.NewMcpServerConnection)}
+              />
+            </StyledButtonContainer>
+          </Section>
+          <Section>
+            <H2Title
+              title={t`APIs`}
+              description={t`Connect REST APIs to call their operations from chat and workflows.`}
+            />
+            <SettingsApiConnectionsTable />
+            <StyledButtonContainer>
+              <Button
+                Icon={IconPlus}
+                title={t`Connect API`}
+                size="small"
+                variant="secondary"
+                to={getSettingsPath(SettingsPath.NewApiConnection)}
               />
             </StyledButtonContainer>
           </Section>

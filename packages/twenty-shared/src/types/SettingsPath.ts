@@ -68,6 +68,8 @@ export enum SettingsPath {
   Integrations = 'integrations',
   NewMcpServerConnection = 'integrations/mcp-servers/new',
   McpServerConnectionDetail = 'integrations/mcp-servers/:mcpServerConnectionId',
+  NewApiConnection = 'integrations/apis/new',
+  ApiConnectionDetail = 'integrations/apis/:apiConnectionId',
   Security = 'general#security',
   Logs = 'general#logs',
   NewSSOIdentityProvider = 'security/sso/new',

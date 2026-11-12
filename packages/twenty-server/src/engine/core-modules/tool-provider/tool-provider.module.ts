@@ -1,10 +1,12 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { ApiConnectionModule } from 'src/engine/core-modules/api-connection/api-connection.module';
 import { McpConnectionModule } from 'src/engine/core-modules/mcp-connection/mcp-connection.module';
 import { RecordCrudModule } from 'src/engine/core-modules/record-crud/record-crud.module';
 import { TOOL_PROVIDERS } from 'src/engine/core-modules/tool-provider/constants/tool-providers.token';
 import { ActionToolProvider } from 'src/engine/core-modules/tool-provider/providers/action-tool.provider';
+import { ApiConnectionToolProvider } from 'src/engine/core-modules/tool-provider/providers/api-connection-tool.provider';
 import { DashboardToolProvider } from 'src/engine/core-modules/tool-provider/providers/dashboard-tool.provider';
 import { DatabaseToolProvider } from 'src/engine/core-modules/tool-provider/providers/database-tool.provider';
 import { LogicFunctionToolProvider } from 'src/engine/core-modules/tool-provider/providers/logic-function-tool.provider';
@@ -69,6 +71,7 @@ import { ToolRegistryService } from './services/tool-registry.service';
     NavigationMenuItemModule,
     WebhookModule,
     McpConnectionModule,
+    ApiConnectionModule,
     RoleModule,
     UserRoleModule,
     EmailingModule,
@@ -88,6 +91,7 @@ import { ToolRegistryService } from './services/tool-registry.service';
     WebhookToolProvider,
     WorkflowToolProvider,
     McpConnectionToolProvider,
+    ApiConnectionToolProvider,
     {
       // TOOL_PROVIDERS contains only providers implementing ToolProvider
       // (registry tools with descriptors). The native tool binder is a
@@ -106,6 +110,7 @@ import { ToolRegistryService } from './services/tool-registry.service';
         workflowProvider: WorkflowToolProvider,
         dashboardProvider: DashboardToolProvider,
         mcpConnectionProvider: McpConnectionToolProvider,
+        apiConnectionProvider: ApiConnectionToolProvider,
       ) => [
         actionProvider,
         databaseProvider,
@@ -118,6 +123,7 @@ import { ToolRegistryService } from './services/tool-registry.service';
         workflowProvider,
         dashboardProvider,
         mcpConnectionProvider,
+        apiConnectionProvider,
       ],
       inject: [
         ActionToolProvider,
@@ -131,6 +137,7 @@ import { ToolRegistryService } from './services/tool-registry.service';
         WorkflowToolProvider,
         DashboardToolProvider,
         McpConnectionToolProvider,
+        ApiConnectionToolProvider,
       ],
     },
     ToolRegistryService,

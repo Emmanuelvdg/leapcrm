@@ -155,8 +155,8 @@ const STANDARD_PERMISSION_FLAG_METADATA: Record<
     icon: 'IconUser',
   },
   [PermissionFlagType.MCP_SERVERS]: {
-    label: 'MCP Servers',
-    description: 'Connect and manage external MCP servers',
+    label: 'Integrations',
+    description: 'Connect and manage MCP servers and REST APIs',
     icon: 'IconPlug',
   },
   [PermissionFlagType.PROSPECTING]: {

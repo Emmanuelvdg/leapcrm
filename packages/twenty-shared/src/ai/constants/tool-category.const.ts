@@ -10,4 +10,5 @@ export enum ToolCategory {
   LOGIC_FUNCTION = 'LOGIC_FUNCTION',
   ROLE = 'ROLE',
   MCP_SERVER = 'MCP_SERVER',
+  API_CONNECTION = 'API_CONNECTION',
 }

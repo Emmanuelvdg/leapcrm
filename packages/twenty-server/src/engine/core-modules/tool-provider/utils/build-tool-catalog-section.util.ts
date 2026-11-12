@@ -31,6 +31,8 @@ const getCategoryLabel = (category: ToolCategory): string => {
       return 'Role Tools (manage roles and permissions)';
     case ToolCategory.MCP_SERVER:
       return 'MCP Server Tools (connected external MCP servers)';
+    case ToolCategory.API_CONNECTION:
+      return 'API Connection Tools (connected external REST APIs)';
     default:
       return assertUnreachable(category);
   }
