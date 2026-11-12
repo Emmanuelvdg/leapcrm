@@ -2,7 +2,7 @@
 
 Read with `ARCHITECTURE.md`.
 
-Status: approved. M1 to M6 done.
+Status: approved. M1 to M6 done; M7 tests written, not yet run.
 
 ## 1. Decisions
 
@@ -72,8 +72,8 @@ Upgrade commands go in the `2-33` folder with epoch-ms timestamps greater than `
 
 ### M7 Tenancy and end to end
 
-- Extend the prospecting tenant isolation suite to ICP models, mutations, jobs and scores (Apple and YCombinator seeded workspaces).
-- One Playwright flow: create a model, run analysis, suggest weights, activate, see a score on a company.
+- Tenant isolation for ICP models, mutations, jobs and scores (Apple and YCombinator seeded workspaces), in its own spec `test/integration/icp-analysis/icp-tenant-isolation.integration-spec.ts` next to the other ICP specs rather than inside the prospecting suite.
+- One Playwright flow (`twenty-e2e-testing/tests/icp-analysis.spec.ts`): create a model, run analysis, suggest weights, activate, see a score on a company. It creates its own won and lost deals, because the seed has no lost deals or company countries.
 - Deploy notes: run `yarn command:prod run-instance-commands` after deploying and verify the widget type exists; run `yarn command:prod cron:register:all` (or `cron:icp-analysis:score-all`) so the nightly rescore is scheduled; enable the flag for the test workspace first.
 
 ## 3. Next release (outline)
