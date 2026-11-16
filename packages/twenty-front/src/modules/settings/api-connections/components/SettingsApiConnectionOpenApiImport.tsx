@@ -5,6 +5,7 @@ import { useSnackBar } from '@/ui/feedback/snack-bar-manager/hooks/useSnackBar';
 import { CombinedGraphQLErrors } from '@apollo/client/errors';
 import { useMutation } from '@apollo/client/react';
 import { styled } from '@linaria/react';
+import { plural } from '@lingui/core/macro';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useState } from 'react';
@@ -143,6 +144,7 @@ export const SettingsApiConnectionOpenApiImport = ({
   };
 
   const selectedCount = selectedNames.size;
+  const skippedCount = preview?.skipped.length ?? 0;
 
   return (
     <StyledCard>
@@ -202,14 +204,20 @@ export const SettingsApiConnectionOpenApiImport = ({
               </StyledOperationRow>
             ))}
           </StyledOperationList>
-          {preview.skipped.length > 0 && (
+          {skippedCount > 0 && (
             <StyledHint title={preview.skipped.join('\n')}>
-              {t`${preview.skipped.length} operations were skipped (hover for details).`}
+              {plural(skippedCount, {
+                one: `${skippedCount} operation was skipped (hover for details).`,
+                other: `${skippedCount} operations were skipped (hover for details).`,
+              })}
             </StyledHint>
           )}
           <StyledActions>
             <Button
-              title={t`Add ${selectedCount} operations`}
+              title={plural(selectedCount, {
+                one: `Add ${selectedCount} operation`,
+                other: `Add ${selectedCount} operations`,
+              })}
               variant="primary"
               accent="blue"
               size="small"
