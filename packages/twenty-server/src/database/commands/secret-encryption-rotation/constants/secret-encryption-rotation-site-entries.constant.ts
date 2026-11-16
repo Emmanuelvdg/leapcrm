@@ -7,9 +7,12 @@ import { ApiConnectionEntity } from 'src/engine/core-modules/api-connection/enti
 import { ApplicationRegistrationVariableEntity } from 'src/engine/core-modules/application/application-registration-variable/application-registration-variable.entity';
 import { ApplicationVariableEntity } from 'src/engine/core-modules/application/application-variable/application-variable.entity';
 import { SigningKeyEntity } from 'src/engine/core-modules/jwt/entities/signing-key.entity';
+import { McpServerConnectionEntity } from 'src/engine/core-modules/mcp-connection/entities/mcp-server-connection.entity';
 import { type ExtractEncryptedColumns } from 'src/engine/core-modules/secret-encryption/branded-strings/extract-encrypted-columns.type';
 import { TwoFactorAuthenticationMethodEntity } from 'src/engine/core-modules/two-factor-authentication/entities/two-factor-authentication-method.entity';
+import { WorkspaceAiProviderEntity } from 'src/engine/metadata-modules/ai/ai-models/entities/workspace-ai-provider.entity';
 import { ConnectedAccountEntity } from 'src/engine/metadata-modules/connected-account/entities/connected-account.entity';
+import { WhatsappChannelEntity } from 'src/engine/metadata-modules/whatsapp-channel/entities/whatsapp-channel.entity';
 
 type DedicatedRotationHandlerClass = Type<SecretEncryptionRotationHandler>;
 
@@ -96,6 +99,29 @@ export const SECRET_ENCRYPTION_ROTATION_SITE_ENTRIES = defineRotationRegistry({
       },
     },
   },
+  McpServerConnectionEntity: {
+    entity: McpServerConnectionEntity,
+    columnSiteNames: {
+      clientSecret: {
+        siteName: 'mcp-server-connection-client-secret',
+        customHandler: undefined,
+        isWorkspaceScoped: true,
+        extraWhere: undefined,
+      },
+      accessToken: {
+        siteName: 'mcp-server-connection-access-token',
+        customHandler: undefined,
+        isWorkspaceScoped: true,
+        extraWhere: undefined,
+      },
+      refreshToken: {
+        siteName: 'mcp-server-connection-refresh-token',
+        customHandler: undefined,
+        isWorkspaceScoped: true,
+        extraWhere: undefined,
+      },
+    },
+  },
   SigningKeyEntity: {
     entity: SigningKeyEntity,
     columnSiteNames: {
@@ -112,6 +138,28 @@ export const SECRET_ENCRYPTION_ROTATION_SITE_ENTRIES = defineRotationRegistry({
     columnSiteNames: {
       secret: {
         siteName: 'totp-secret',
+        customHandler: undefined,
+        isWorkspaceScoped: true,
+        extraWhere: undefined,
+      },
+    },
+  },
+  WhatsappChannelEntity: {
+    entity: WhatsappChannelEntity,
+    columnSiteNames: {
+      accessToken: {
+        siteName: 'whatsapp-channel-access-token',
+        customHandler: undefined,
+        isWorkspaceScoped: true,
+        extraWhere: undefined,
+      },
+    },
+  },
+  WorkspaceAiProviderEntity: {
+    entity: WorkspaceAiProviderEntity,
+    columnSiteNames: {
+      apiKey: {
+        siteName: 'workspace-ai-provider-api-key',
         customHandler: undefined,
         isWorkspaceScoped: true,
         extraWhere: undefined,
