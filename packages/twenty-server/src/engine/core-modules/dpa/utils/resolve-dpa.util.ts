@@ -35,7 +35,7 @@ const SUBPROCESSOR_BLOCKS: ResolvedDpaBlock[] = (
 }));
 
 const SELF_HOSTED_NOTICE =
-  'NOT A VALID AGREEMENT — SELF-HOSTED DEPLOYMENT. This Twenty instance is self-hosted. For self-hosted deployments Twenty does not host or process Customer Personal Data and is not the Processor, so this Data Processing Agreement does not apply. This copy is generated for reference only and does not constitute an executed agreement with Twenty.';
+  'NOT A VALID AGREEMENT — SELF-HOSTED DEPLOYMENT. This LeapCRM instance is self-hosted. For self-hosted deployments LeapCRM does not host or process Customer Personal Data and is not the Processor, so this Data Processing Agreement does not apply. This copy is generated for reference only and does not constitute an executed agreement with LeapCRM.';
 
 // Unknown fields are left untouched so they surface in the unresolved-merge-field test instead of vanishing silently.
 const fillMergeFields = (
@@ -60,13 +60,13 @@ const buildExecutionBlocks = (
       kind: 'signatureField',
       text: '',
       label: `Processor — ${values.PROCESSOR_ENTITY}`,
-      value: `Signed on behalf of ${values.PROCESSOR_ENTITY} (pre-signed by Twenty)\nName: ${TWENTY_PRESIGNED_SIGNATORY.name}\nTitle: ${TWENTY_PRESIGNED_SIGNATORY.title}`,
+      value: `Signed on behalf of ${values.PROCESSOR_ENTITY} (pre-signed by LeapCRM)\nName: ${TWENTY_PRESIGNED_SIGNATORY.name}\nTitle: ${TWENTY_PRESIGNED_SIGNATORY.title}`,
     },
     {
       kind: 'signatureField',
       text: '',
       label: `EU Affiliate — ${values.EU_AFFILIATE_ENTITY}`,
-      value: `Signed on behalf of ${values.EU_AFFILIATE_ENTITY} (pre-signed by Twenty)\nName: ${TWENTY_PRESIGNED_SIGNATORY.name}\nTitle: ${TWENTY_PRESIGNED_SIGNATORY.title}`,
+      value: `Signed on behalf of ${values.EU_AFFILIATE_ENTITY} (pre-signed by LeapCRM)\nName: ${TWENTY_PRESIGNED_SIGNATORY.name}\nTitle: ${TWENTY_PRESIGNED_SIGNATORY.title}`,
     },
     {
       kind: 'signatureField',

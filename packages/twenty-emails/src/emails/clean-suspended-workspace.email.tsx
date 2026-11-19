@@ -46,7 +46,7 @@ export const CleanSuspendedWorkspaceEmail = ({
       </MainText>
       <br />
       <CallToAction
-        href="https://app.theleapcrm.com/"
+        href="https://leapcrm.tech/"
         value={i18n._('Start a new workspace')}
       />
       <br />

@@ -1,3 +1,11 @@
+import {
+  DEFAULT_DPA_REGION,
+  DPA_REGION_CONFIGS,
+} from 'src/engine/core-modules/dpa/config/dpa-region-config.constant';
+import {
+  DPA_DOCUMENT_TITLE,
+  DPA_LAST_UPDATED_LABEL,
+} from 'src/engine/core-modules/dpa/constants/dpa-template-version.constant';
 import { DpaRegion } from 'src/engine/core-modules/dpa/enums/dpa-region.enum';
 import {
   type DpaResolveContext,
@@ -5,6 +13,11 @@ import {
 } from 'src/engine/core-modules/dpa/types/dpa.types';
 import { resolveDpa } from 'src/engine/core-modules/dpa/utils/resolve-dpa.util';
 import { renderDpaToHtml } from 'src/engine/core-modules/dpa/utils/render-dpa-to-html.util';
+
+// Entity and DPO values are placeholders pending legal review, so assert
+// against the config rather than freezing today's strings into the specs.
+const { PROCESSOR_ENTITY, EU_AFFILIATE_ENTITY, DPO_NAME_AND_CONTACT } =
+  DPA_REGION_CONFIGS[DEFAULT_DPA_REGION].values;
 
 // Synthetic doc to test the conditional-clause mechanism in isolation: the real template branches no clauses.
 const buildResolvedWithConditionalBlock = (
@@ -43,8 +56,8 @@ describe('renderDpaToHtml', () => {
   it('renders the title and last-updated line', () => {
     const html = renderDpaToHtml(resolveDpa(baseContext));
 
-    expect(html).toContain('Twenty Data Processing Agreement (DPA)');
-    expect(html).toContain('Last Updated: August 2026');
+    expect(html).toContain(DPA_DOCUMENT_TITLE);
+    expect(html).toContain(`Last Updated: ${DPA_LAST_UPDATED_LABEL}`);
   });
 
   it('contains no unresolved {{ }} merge fields in the output', () => {
@@ -77,7 +90,7 @@ describe('renderDpaToHtml', () => {
     expect(html).toContain('&lt;script&gt;');
   });
 
-  it('renders the executed signatory and both Twenty entities in signed mode', () => {
+  it('renders the executed signatory and both entities in signed mode', () => {
     const html = renderDpaToHtml(
       resolveDpa({
         region: DpaRegion.EU,
@@ -90,8 +103,8 @@ describe('renderDpaToHtml', () => {
 
     expect(html).toContain('Acme GmbH');
     expect(html).toContain('Jane Doe');
-    expect(html).toContain('Twenty.com PBC');
-    expect(html).toContain('Twenty.com SAS');
+    expect(html).toContain(PROCESSOR_ENTITY);
+    expect(html).toContain(EU_AFFILIATE_ENTITY);
   });
 
   it('renders a clean cloud DPA: no merge tokens, drafting notes, placeholders, or self-hosted banner', () => {
@@ -118,7 +131,7 @@ describe('renderDpaToHtml', () => {
       expect(html).not.toContain(forbidden);
     }
 
-    expect(html).toContain('Stéphanie Joly');
+    expect(html).toContain(DPO_NAME_AND_CONTACT);
     expect(
       html.match(/7\.1 Data Hosting and Localization:/g) ?? [],
     ).toHaveLength(1);

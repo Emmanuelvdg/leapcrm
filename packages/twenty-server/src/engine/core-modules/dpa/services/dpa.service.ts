@@ -115,7 +115,7 @@ export class DpaService {
   }): Promise<GenerateSignedDpaResult> {
     if (this.isSelfHosted()) {
       throw new BadRequestException(
-        'DPA signing is not available for self-hosted deployments: Twenty does not host or process Customer Personal Data and is not the Processor.',
+        'DPA signing is not available for self-hosted deployments: LeapCRM does not host or process Customer Personal Data and is not the Processor.',
       );
     }
 

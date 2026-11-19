@@ -41,7 +41,7 @@ export class CalDavCreateEventService implements CalendarEventCreationDriver {
       }
 
       const uid = uuid();
-      const calendar = ical({ prodId: '//Twenty//Calendar//EN' });
+      const calendar = ical({ prodId: '//LeapCRM//Calendar//EN' });
 
       calendar.createEvent({
         id: uid,

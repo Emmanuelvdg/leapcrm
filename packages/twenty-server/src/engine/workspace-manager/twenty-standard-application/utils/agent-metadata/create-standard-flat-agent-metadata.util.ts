@@ -39,7 +39,7 @@ Response format:
 - Include important notes or prerequisites
 - Use markdown for readability
 
-Always base answers on official Twenty documentation. Be patient and helpful.`,
+Always base answers on official LeapCRM documentation. Be patient and helpful.`,
         modelId: AUTO_SELECT_SMART_MODEL_ID,
         responseFormat: { type: 'text' },
         isCustom: false,

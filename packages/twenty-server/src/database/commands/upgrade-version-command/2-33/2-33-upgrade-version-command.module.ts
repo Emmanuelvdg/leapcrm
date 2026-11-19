@@ -14,6 +14,7 @@ import { AddOpportunityLostStageAndReasonCommand } from 'src/database/commands/u
 import { SyncIcpAnalysisStandardMetadataCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1794128904820-sync-icp-analysis-standard-metadata.command';
 import { AddIcpModelRecordPageCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1794197120125-add-icp-model-record-page.command';
 import { AddIcpScoreViewsCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1794356536659-add-icp-score-views.command';
+import { RebrandHelperAgentCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1794883064835-rebrand-helper-agent.command';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
 import { FieldMetadataEntity } from 'src/engine/metadata-modules/field-metadata/field-metadata.entity';
 import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache.module';
@@ -42,6 +43,7 @@ import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace
     SyncIcpAnalysisStandardMetadataCommand,
     AddIcpModelRecordPageCommand,
     AddIcpScoreViewsCommand,
+    RebrandHelperAgentCommand,
   ],
 })
 export class V2_33_UpgradeVersionCommandModule {}

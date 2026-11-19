@@ -1,4 +1,4 @@
-// Synced into subprocessors.json from the Trust Center; do not hand-edit the JSON.
+// Mirrors subprocessors.json, which is maintained by hand and rendered as Annex C.
 export type Subprocessor = {
   name: string;
   services: string[];

@@ -13,7 +13,7 @@ import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twent
 @Injectable()
 export class SearchHelpCenterTool implements Tool {
   description =
-    'Search Twenty documentation and help center to find information about features, setup, usage, and troubleshooting.';
+    'Search the LeapCRM documentation and help center to find information about features, setup, usage, and troubleshooting.';
   inputSchema = SearchHelpCenterInputZodSchema;
 
   constructor(
@@ -32,15 +32,19 @@ export class SearchHelpCenterTool implements Tool {
       const MINTLIFY_SUBDOMAIN =
         this.twentyConfigService.get('MINTLIFY_SUBDOMAIN');
 
-      const useDirectApi = MINTLIFY_API_KEY && MINTLIFY_SUBDOMAIN;
+      if (!MINTLIFY_API_KEY || !MINTLIFY_SUBDOMAIN) {
+        return {
+          success: false,
+          message: 'Help center search is not configured on this server',
+          error: 'MINTLIFY_API_KEY and MINTLIFY_SUBDOMAIN are not set',
+        };
+      }
 
-      const endpoint = useDirectApi
-        ? `https://api-dsc.mintlify.com/v1/search/${MINTLIFY_SUBDOMAIN}`
-        : 'https://twenty-help-search.com/search/twenty';
+      const endpoint = `https://api-dsc.mintlify.com/v1/search/${MINTLIFY_SUBDOMAIN}`;
 
       const headers = {
         'Content-Type': 'application/json',
-        ...(useDirectApi && { Authorization: `Bearer ${MINTLIFY_API_KEY}` }),
+        Authorization: `Bearer ${MINTLIFY_API_KEY}`,
       };
 
       const httpClient = this.secureHttpClientService.getHttpClient();

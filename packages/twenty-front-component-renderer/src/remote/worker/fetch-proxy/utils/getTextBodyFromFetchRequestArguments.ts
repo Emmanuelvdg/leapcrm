@@ -17,7 +17,7 @@ const getRequestInputBody = async (
 
   if (isDefined(contentType) && !isTextContentType(contentType)) {
     throw new TypeError(
-      `The front component fetch bridge only supports text request bodies for Twenty API requests, got content type: ${contentType}`,
+      `The front component fetch bridge only supports text request bodies for LeapCRM API requests, got content type: ${contentType}`,
     );
   }
 
@@ -47,6 +47,6 @@ export const getTextBodyFromFetchRequestArguments = async (
   }
 
   throw new TypeError(
-    'The front component fetch bridge only supports string and URLSearchParams request bodies for Twenty API requests',
+    'The front component fetch bridge only supports string and URLSearchParams request bodies for LeapCRM API requests',
   );
 };

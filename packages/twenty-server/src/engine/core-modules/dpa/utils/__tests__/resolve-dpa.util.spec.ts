@@ -11,46 +11,66 @@ import {
   resolveDpa,
 } from 'src/engine/core-modules/dpa/utils/resolve-dpa.util';
 
+// Entity and DPO values are placeholders pending legal review, so assert
+// against the config rather than freezing today's strings into the specs.
+const { PROCESSOR_ENTITY, EU_AFFILIATE_ENTITY, DPO_NAME_AND_CONTACT } =
+  DPA_REGION_CONFIGS[DEFAULT_DPA_REGION].values;
+
 describe('resolveDpa', () => {
   it('defaults to EU hosting without changing the Processor entity or governing law', () => {
     const resolved = resolveDpa({
       region: DEFAULT_DPA_REGION,
       mode: 'preview',
     });
+    const usValues = DPA_REGION_CONFIGS[DpaRegion.US].values;
 
     expect(resolved.region).toBe('EU');
-    expect(resolved.values.PROCESSOR_ENTITY).toBe('Twenty.com PBC');
-    expect(resolved.values.PROCESSOR_LEGAL_FORM).toContain('Delaware');
-    expect(resolved.values.EU_AFFILIATE_ENTITY).toBe('Twenty.com SAS');
-    expect(resolved.values.EU_AFFILIATE_LEGAL_FORM).toContain('France');
+    expect(resolved.values.PROCESSOR_ENTITY).toBe(usValues.PROCESSOR_ENTITY);
+    expect(resolved.values.PROCESSOR_LEGAL_FORM).toBe(
+      usValues.PROCESSOR_LEGAL_FORM,
+    );
+    expect(resolved.values.EU_AFFILIATE_ENTITY).toBe(
+      usValues.EU_AFFILIATE_ENTITY,
+    );
+    expect(resolved.values.EU_AFFILIATE_LEGAL_FORM).toBe(
+      usValues.EU_AFFILIATE_LEGAL_FORM,
+    );
     expect(resolved.values.HOSTING_REGION).toContain('Frankfurt');
-    expect(resolved.values.GOVERNING_LAW).toBe('the State of Delaware, USA');
+    expect(resolved.values.GOVERNING_LAW).toBe(usValues.GOVERNING_LAW);
     expect(resolved.sccSectionActive).toBe(true);
     expect(resolved.templateVersion).toBe(DPA_TEMPLATE_VERSION);
   });
 
   it('resolves US hosting with the same Processor and EU Affiliate', () => {
     const resolved = resolveDpa({ region: DpaRegion.US, mode: 'preview' });
+    const euValues = DPA_REGION_CONFIGS[DpaRegion.EU].values;
 
     expect(resolved.region).toBe('US');
-    expect(resolved.values.PROCESSOR_ENTITY).toBe('Twenty.com PBC');
-    expect(resolved.values.PROCESSOR_LEGAL_FORM).toContain('Delaware');
-    expect(resolved.values.EU_AFFILIATE_ENTITY).toBe('Twenty.com SAS');
+    expect(resolved.values.PROCESSOR_ENTITY).toBe(euValues.PROCESSOR_ENTITY);
+    expect(resolved.values.PROCESSOR_LEGAL_FORM).toBe(
+      euValues.PROCESSOR_LEGAL_FORM,
+    );
+    expect(resolved.values.EU_AFFILIATE_ENTITY).toBe(
+      euValues.EU_AFFILIATE_ENTITY,
+    );
     expect(resolved.values.HOSTING_REGION).toBe('United States');
     expect(resolved.sccSectionActive).toBe(true);
   });
 
-  it('keeps both Twenty entities and their roles independent of hosting region', () => {
+  it('keeps both entities and their roles independent of hosting region', () => {
     const eu = resolveDpa({ region: DpaRegion.EU, mode: 'preview' });
     const us = resolveDpa({ region: DpaRegion.US, mode: 'preview' });
 
     for (const resolved of [eu, us]) {
-      expect(resolved.blocks[0].text).toContain('between Twenty.com PBC (');
       expect(resolved.blocks[0].text).toContain(
-        'Twenty.com SAS (“Twenty SAS” or “EU Affiliate”) joins this DPA',
+        `between ${PROCESSOR_ENTITY} (`,
       );
+      expect(resolved.blocks[0].text).toContain(`${EU_AFFILIATE_ENTITY} (`);
       expect(resolved.blocks[0].text).toContain(
-        'Twenty SAS does not replace Twenty PBC as the Processor',
+        'or “EU Affiliate”) joins this DPA',
+      );
+      expect(resolved.blocks[0].text).toMatch(
+        /does not replace .+ as the Processor/,
       );
     }
   });
@@ -110,19 +130,20 @@ describe('resolveDpa', () => {
 
     const processorField = signed.blocks.find(
       (b) =>
-        b.kind === 'signatureField' && b.label === 'Processor — Twenty.com PBC',
+        b.kind === 'signatureField' &&
+        b.label === `Processor — ${PROCESSOR_ENTITY}`,
     );
     const euAffiliateField = signed.blocks.find(
       (b) =>
         b.kind === 'signatureField' &&
-        b.label === 'EU Affiliate — Twenty.com SAS',
+        b.label === `EU Affiliate — ${EU_AFFILIATE_ENTITY}`,
     );
 
     expect(processorField?.value).toContain(
-      'Signed on behalf of Twenty.com PBC',
+      `Signed on behalf of ${PROCESSOR_ENTITY}`,
     );
     expect(euAffiliateField?.value).toContain(
-      'Signed on behalf of Twenty.com SAS',
+      `Signed on behalf of ${EU_AFFILIATE_ENTITY}`,
     );
   });
 
@@ -199,8 +220,18 @@ describe('resolveDpa', () => {
   it('renders the DPO name and contact', () => {
     const text = resolvedText(DpaRegion.EU, 'signed');
 
-    expect(text).toContain('Stéphanie Joly');
-    expect(text).toContain('privacy@twenty.com');
+    expect(text).toContain(DPO_NAME_AND_CONTACT);
+  });
+
+  it('names LeapCRM as the contact and never the upstream project', () => {
+    for (const region of [DpaRegion.EU, DpaRegion.US]) {
+      for (const mode of ['preview', 'signed'] as const) {
+        const text = resolvedText(region, mode);
+
+        expect(text).toContain('privacy@theleapcrm.com');
+        expect(text).not.toMatch(/twenty/i);
+      }
+    }
   });
 
   it('states the §7.1 hosting location per region without contradicting the deployment', () => {
@@ -225,14 +256,14 @@ describe('resolveDpa', () => {
     );
   });
 
-  it('identifies PBC as Processor and data importer and SAS as EU Affiliate in Annex A', () => {
+  it('identifies the Processor as data importer and the EU Affiliate in Annex A', () => {
     for (const region of [DpaRegion.EU, DpaRegion.US]) {
       const text = resolvedText(region, 'signed');
 
-      expect(text).toContain('Data Importer (Processor): Twenty.com PBC');
-      expect(text).toContain('EU Affiliate: Twenty.com SAS');
+      expect(text).toContain(`Data Importer (Processor): ${PROCESSOR_ENTITY}`);
+      expect(text).toContain(`EU Affiliate: ${EU_AFFILIATE_ENTITY}`);
       expect(text).toContain(
-        'without replacing Twenty.com PBC as Processor or data importer',
+        `without replacing ${PROCESSOR_ENTITY} as Processor or data importer`,
       );
     }
   });
@@ -261,8 +292,8 @@ describe('resolveDpa', () => {
     expect(text).toContain('ANNEX C – List of Sub-Processors');
     expect(text).toContain('set out in Annex C');
 
-    // Derive the expected entries from the synced data rather than hardcoding
-    // vendor locations, which the trust-center sync action overwrites.
+    // Derive the expected entries from subprocessors.json rather than hardcoding
+    // vendor locations, so editing the list does not break this test.
     for (const subprocessor of subprocessors) {
       const vendorSuffix = subprocessor.vendorUrl
         ? ` (${subprocessor.vendorUrl})`

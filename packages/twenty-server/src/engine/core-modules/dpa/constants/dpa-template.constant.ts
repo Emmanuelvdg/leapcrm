@@ -213,7 +213,7 @@ export const DPA_TEMPLATE_BLOCKS: DpaTemplateBlock[] = [
   { kind: 'heading', text: '6. Sub-Processors' },
   {
     kind: 'paragraph',
-    text: '6.1 Authorized Sub-Processors. Customer provides general authorization to LeapCRM to engage third-party Sub-Processors to Process Customer Personal Data, solely for the purposes of providing and supporting the services as defined in the Agreement. LeapCRM maintains an up-to-date list of its Sub-Processors involved in the Processing of Customer Personal Data. A current and authoritative list of the Sub-Processors engaged by LeapCRM to Process Customer Personal Data — including each Sub-Processor’s function and processing location — is maintained at LeapCRM’s Trust Center (https://trust.twenty.com) and is updated from time to time; an enumerated snapshot of these Sub-Processors as of the Last Updated date is set out in Annex C. The main Sub-Processors are all bound by written agreements that impose data protection obligations no less protective than those set forth in this DPA. LeapCRM shall be responsible for the performance of its Sub-Processors to the same extent LeapCRM would be liable if performing the services directly.',
+    text: '6.1 Authorized Sub-Processors. Customer provides general authorization to LeapCRM to engage third-party Sub-Processors to Process Customer Personal Data, solely for the purposes of providing and supporting the services as defined in the Agreement. LeapCRM maintains an up-to-date list of its Sub-Processors involved in the Processing of Customer Personal Data. A current and authoritative list of the Sub-Processors engaged by LeapCRM to Process Customer Personal Data — including each Sub-Processor’s function and processing location — is set out in Annex C as of the Last Updated date and is updated from time to time. The main Sub-Processors are all bound by written agreements that impose data protection obligations no less protective than those set forth in this DPA. LeapCRM shall be responsible for the performance of its Sub-Processors to the same extent LeapCRM would be liable if performing the services directly.',
   },
   {
     kind: 'paragraph',
@@ -443,7 +443,7 @@ export const DPA_TEMPLATE_BLOCKS: DpaTemplateBlock[] = [
   },
   {
     kind: 'paragraph',
-    text: '13.7 Contact and Data Protection Officer: Customer may contact LeapCRM regarding any issues arising under this DPA at privacy@twenty.com or through its primary account representative. LeapCRM’s Data Protection Officer (or designated privacy contact) can be reached at {{DPO_NAME_AND_CONTACT}}. Customer is responsible for providing LeapCRM with up-to-date contact information for a person (or team) authorized to handle Data Protection inquiries.',
+    text: '13.7 Contact and Data Protection Officer: Customer may contact LeapCRM regarding any issues arising under this DPA at privacy@theleapcrm.com or through its primary account representative. LeapCRM’s Data Protection Officer (or designated privacy contact) can be reached at {{DPO_NAME_AND_CONTACT}}. Customer is responsible for providing LeapCRM with up-to-date contact information for a person (or team) authorized to handle Data Protection inquiries.',
   },
   {
     kind: 'paragraph',
@@ -460,7 +460,7 @@ export const DPA_TEMPLATE_BLOCKS: DpaTemplateBlock[] = [
   },
   {
     kind: 'paragraph',
-    text: 'Data Importer (Processor): {{PROCESSOR_ENTITY}}, {{PROCESSOR_LEGAL_FORM}}. Registered office: {{PROCESSOR_ADDRESS}}. {{PROCESSOR_ENTITY}} provides cloud-based CRM software and related services and Processes Customer Personal Data hosted in the {{HOSTING_REGION}}. Contact for privacy inquiries: privacy@twenty.com. {{PROCESSOR_ENTITY}} acts as Processor (and, where applicable, Service Provider under the CCPA and data importer under the SCCs). The Processor entity and governing law do not change based on hosting region.',
+    text: 'Data Importer (Processor): {{PROCESSOR_ENTITY}}, {{PROCESSOR_LEGAL_FORM}}. Registered office: {{PROCESSOR_ADDRESS}}. {{PROCESSOR_ENTITY}} provides cloud-based CRM software and related services and Processes Customer Personal Data hosted in the {{HOSTING_REGION}}. Contact for privacy inquiries: privacy@theleapcrm.com. {{PROCESSOR_ENTITY}} acts as Processor (and, where applicable, Service Provider under the CCPA and data importer under the SCCs). The Processor entity and governing law do not change based on hosting region.',
   },
   {
     kind: 'paragraph',
@@ -496,7 +496,7 @@ export const DPA_TEMPLATE_BLOCKS: DpaTemplateBlock[] = [
   },
   {
     kind: 'paragraph',
-    text: 'Sub-Processors: The current Sub-Processors are listed in Section 6.1. A current and authoritative list of Sub-Processors that Process Customer Personal Data — with each Sub-Processor’s function and processing location — is maintained at LeapCRM’s Trust Center (https://trust.twenty.com). Sub-Processors are bound by written agreements imposing data-protection obligations consistent with this DPA. Customer will be notified of any changes per Section 6.2.',
+    text: 'Sub-Processors: The current Sub-Processors are listed in Section 6.1. A current and authoritative list of Sub-Processors that Process Customer Personal Data — with each Sub-Processor’s function and processing location — is set out in Annex C. Sub-Processors are bound by written agreements imposing data-protection obligations consistent with this DPA. Customer will be notified of any changes per Section 6.2.',
   },
   {
     kind: 'paragraph',
@@ -508,7 +508,7 @@ export const DPA_TEMPLATE_BLOCKS: DpaTemplateBlock[] = [
   },
   {
     kind: 'paragraph',
-    text: 'Contact Points: For Customer: the contact information provided in the Agreement or Order (e.g. legal or privacy contact). For LeapCRM: privacy@twenty.com; Data Protection Officer / privacy contact: {{DPO_NAME_AND_CONTACT}}.',
+    text: 'Contact Points: For Customer: the contact information provided in the Agreement or Order (e.g. legal or privacy contact). For LeapCRM: privacy@theleapcrm.com; Data Protection Officer / privacy contact: {{DPO_NAME_AND_CONTACT}}.',
   },
   {
     kind: 'paragraph',
@@ -586,7 +586,7 @@ export const DPA_TEMPLATE_BLOCKS: DpaTemplateBlock[] = [
   },
   {
     kind: 'paragraph',
-    text: 'This Annex lists the Sub-Processors engaged by LeapCRM to Process Customer Personal Data as of the Last Updated date of this DPA, and serves as Annex III to the SCCs (the list of Sub-Processors referenced in Section 6.1). Each entry identifies the Sub-Processor, its processing location(s), and the nature of the Processing. The current and authoritative list is maintained at LeapCRM’s Trust Center (https://trust.twenty.com) and may change in accordance with Section 6.2 (Notice and Objection Rights).',
+    text: 'This Annex lists the Sub-Processors engaged by LeapCRM to Process Customer Personal Data as of the Last Updated date of this DPA, and serves as Annex III to the SCCs (the list of Sub-Processors referenced in Section 6.1). Each entry identifies the Sub-Processor, its processing location(s), and the nature of the Processing. This list may change in accordance with Section 6.2 (Notice and Objection Rights).',
   },
   {
     kind: 'paragraph',
