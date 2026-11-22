@@ -15,6 +15,7 @@ import { type RolePermissionConfig } from 'src/engine/twenty-orm/types/role-perm
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
 import { CallRecordingStatus } from 'src/modules/call-recording/common/enums/call-recording-status.enum';
 import { CallRecordingWorkspaceEntity } from 'src/modules/call-recording/standard-objects/call-recording.workspace-entity';
+import { CallRecordingSummaryService } from 'src/modules/call-recording/transcription/services/call-recording-summary.service';
 import { CALL_RECORDING_TRANSCRIPTION_TIMEOUT_MS } from 'src/modules/call-recording/transcription/constants/call-recording-transcription-timeout.constant';
 import { type CallRecordingTranscriptEntry } from 'src/modules/call-recording/transcription/types/call-recording-transcript-entry.type';
 import { type TranscriptionResponse } from 'src/modules/call-recording/transcription/types/transcription-response.type';
@@ -47,6 +48,7 @@ export class CallRecordingTranscriptionService {
     private readonly fileService: FileService,
     private readonly secureHttpClientService: SecureHttpClientService,
     private readonly twentyConfigService: TwentyConfigService,
+    private readonly callRecordingSummaryService: CallRecordingSummaryService,
   ) {}
 
   async transcribe({
@@ -68,18 +70,13 @@ export class CallRecordingTranscriptionService {
       return;
     }
 
+    let transcript: CallRecordingTranscriptEntry[];
+
     try {
-      const transcript = await this.requestTranscript({
+      transcript = await this.requestTranscript({
         workspaceId,
         audio: callRecording.audio[0],
       });
-
-      await this.withRepository(workspaceId, (repository) =>
-        repository.update(
-          { id: callRecordingId },
-          { transcript, status: CallRecordingStatus.COMPLETED },
-        ),
-      );
     } catch (error) {
       const reason = this.describeError(error);
 
@@ -96,7 +93,29 @@ export class CallRecordingTranscriptionService {
           },
         ),
       );
+
+      return;
     }
+
+    // Saved first so the transcript is readable while the summary is written;
+    // the recording stays PROCESSING until then.
+    await this.withRepository(workspaceId, (repository) =>
+      repository.update({ id: callRecordingId }, { transcript }),
+    );
+
+    const summary = await this.callRecordingSummaryService.summarize({
+      workspaceId,
+      transcript,
+    });
+
+    await this.withRepository(workspaceId, (repository) =>
+      repository.update(
+        { id: callRecordingId },
+        isDefined(summary)
+          ? { summary, status: CallRecordingStatus.COMPLETED }
+          : { status: CallRecordingStatus.COMPLETED },
+      ),
+    );
   }
 
   private async requestTranscript({

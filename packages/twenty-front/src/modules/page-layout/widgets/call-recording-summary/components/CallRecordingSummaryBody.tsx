@@ -52,7 +52,7 @@ export const CallRecordingSummaryBody = ({
       <CallRecordingWidgetEmptyStateDisplay
         animatedPlaceholderType="noMatchRecord"
         title={t`No Call Recording`}
-        subTitle={t`No call recording exists for this calendar event yet.`}
+        subTitle={t`No call recording exists here yet.`}
       />
     );
   }

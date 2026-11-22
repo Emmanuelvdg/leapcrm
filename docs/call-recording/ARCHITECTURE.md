@@ -1,12 +1,12 @@
-# In-app call recording and transcription
+# In-app call recording, transcription and summaries
 
-Record a meeting or upload a recording from a person, company or opportunity page, and get a timestamped transcript on the recording.
+Record a meeting or upload a recording from a person, company or opportunity page, and get a timestamped transcript and AI meeting notes on the recording.
 
 ## What users see
 
 - **Record meeting** action on person, company and opportunity record pages. It opens a side panel that records the microphone in the browser (pause, resume, stop) or takes an uploaded audio or video file.
 - Saving creates a `callRecording` linked to that record, with the audio in its `audio` field.
-- The record's Home tab lists its **Call Recordings**. Each recording has a **Transcript** tab with an audio player and the transcript, which appears once transcription finishes.
+- The record's Home tab lists its **Call Recordings**. Each recording has a **Summary** tab with AI meeting notes and a **Transcript** tab with an audio player and the transcript, which appear once processing finishes.
 
 Phone browsers stop recording when the screen locks, so long in-person meetings are better recorded with the phone's voice recorder and uploaded.
 
@@ -16,7 +16,9 @@ Phone browsers stop recording when the screen locks, so long in-person meetings 
 2. `CallRecordingTranscriptionListener` sees the create and queues `TranscribeCallRecordingJob` on `call-recording-queue`. That queue runs one job at a time, because a self-hosted model is CPU heavy.
 3. `CallRecordingTranscriptionService` sends the audio to `POST {TRANSCRIPTION_API_URL}/audio/transcriptions` (OpenAI format, `verbose_json`).
 4. Each returned segment becomes a transcript entry in the same raw shape the meeting-bot app stores, so the existing transcript widget renders it.
-5. The service sets `status = COMPLETED`, or `FAILED` with `transcript = { status: 'FAILED', reason }`. The reason is shown in the widget.
+5. The transcript is saved first, so it is readable while the summary is written. The recording stays `PROCESSING`.
+6. `CallRecordingSummaryService` sends the timestamped transcript to the workspace's fast AI model (`AUTO_SELECT_FAST_MODEL_ID`) and saves Markdown notes in `summary`: Summary, Key details (needs, budget, decision makers, timeline, objections), Next steps and Notes. Tokens are billed as `AI_WORKFLOW_TOKEN`.
+7. The service sets `status = COMPLETED`. With no AI model, no credits, or a failed AI call, the recording completes without a summary. A failed transcription sets `FAILED` with `transcript = { status: 'FAILED', reason }`, and the widget shows the reason.
 
 Recordings with an `externalBotId` come from the Recall.ai call recorder app and are left alone.
 
@@ -43,13 +45,10 @@ The 2.33 workspace command `upgrade:2-33:add-in-app-call-recording` adds the fol
 - the Call Recordings widgets and the Transcript tab
 - the Record meeting action
 
-It needs no instance command and no feature flag.
+It needs no instance command and no feature flag. `upgrade:2-33:add-call-recording-summary-tab` adds the Summary tab.
 
 ## Not in this version
 
 - Speaker labels (diarization)
-- AI summaries
 - Filling deal fields from the transcript
 - Meeting bots
-
-The `summary` field and widget already exist for a later phase.

@@ -32,6 +32,26 @@ const CALL_RECORDING_PAGE_TABS = {
       },
     },
   },
+  summary: {
+    universalIdentifier:
+      STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.callRecordingRecordPage.tabs
+        .summary.universalIdentifier,
+    title: 'Summary',
+    position: 12,
+    icon: 'IconSparkles',
+    layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
+    widgets: {
+      summary: {
+        universalIdentifier:
+          STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.callRecordingRecordPage
+            .tabs.summary.widgets.summary.universalIdentifier,
+        title: 'Summary',
+        type: WidgetType.CALL_RECORDING_SUMMARY,
+        gridPosition: GRID_POSITIONS.FULL_WIDTH,
+        position: VERTICAL_LIST_LAYOUT_POSITIONS.FIRST,
+      },
+    },
+  },
   transcript: {
     universalIdentifier:
       STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.callRecordingRecordPage.tabs

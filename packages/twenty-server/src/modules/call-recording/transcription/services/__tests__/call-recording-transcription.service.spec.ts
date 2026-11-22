@@ -1,10 +1,12 @@
 import { AxiosError, type AxiosResponse } from 'axios';
+import { type RichTextMetadata } from 'twenty-shared/types';
 
 import { type FileService } from 'src/engine/core-modules/file/services/file.service';
 import { type SecureHttpClientService } from 'src/engine/core-modules/secure-http-client/secure-http-client.service';
 import { type TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { type GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
 import { CallRecordingStatus } from 'src/modules/call-recording/common/enums/call-recording-status.enum';
+import { type CallRecordingSummaryService } from 'src/modules/call-recording/transcription/services/call-recording-summary.service';
 import { CallRecordingTranscriptionService } from 'src/modules/call-recording/transcription/services/call-recording-transcription.service';
 
 const WORKSPACE_ID = '0b0f1f55-5d55-4f26-9e1c-6f0f1b8f4a01';
@@ -31,6 +33,7 @@ const setup = ({
     TRANSCRIPTION_MODEL: 'Systran/faster-whisper-small',
   } as Record<string, string | undefined>,
   recording = buildPendingRecording() as Record<string, unknown> | null,
+  summary = null as RichTextMetadata | null,
 } = {}) => {
   const repository = {
     findOne: jest.fn().mockResolvedValue(recording),
@@ -53,20 +56,29 @@ const setup = ({
   const twentyConfigService = {
     get: jest.fn((key: string) => config[key]),
   } as unknown as TwentyConfigService;
+  const summarize = jest.fn().mockResolvedValue(summary);
+  const callRecordingSummaryService = {
+    summarize,
+  } as unknown as CallRecordingSummaryService;
 
   const service = new CallRecordingTranscriptionService(
     globalWorkspaceOrmManager,
     fileService,
     secureHttpClientService,
     twentyConfigService,
+    callRecordingSummaryService,
   );
 
-  return { service, repository, post, fileService };
+  return { service, repository, post, fileService, summarize };
 };
 
 describe('CallRecordingTranscriptionService', () => {
-  it('saves the transcript and completes the recording', async () => {
-    const { service, repository, post } = setup();
+  it('saves the transcript, then the summary, and completes the recording', async () => {
+    const summary = {
+      blocknote: '[]',
+      markdown: '## Summary\nThey asked for a quote.',
+    };
+    const { service, repository, post, summarize } = setup({ summary });
 
     post.mockResolvedValue({
       data: {
@@ -88,23 +100,48 @@ describe('CallRecordingTranscriptionService', () => {
     );
     expect((formData as FormData).get('response_format')).toBe('verbose_json');
     expect(options.headers).toBeUndefined();
-    expect(repository.update).toHaveBeenCalledWith(
-      { id: CALL_RECORDING_ID },
+
+    const transcript = [
       {
-        status: CallRecordingStatus.COMPLETED,
-        transcript: [
+        participant: {},
+        words: [
           {
-            participant: {},
-            words: [
-              {
-                text: 'Budget is around 80k.',
-                start_timestamp: { relative: 0 },
-                end_timestamp: { relative: 2.5 },
-              },
-            ],
+            text: 'Budget is around 80k.',
+            start_timestamp: { relative: 0 },
+            end_timestamp: { relative: 2.5 },
           },
         ],
       },
+    ];
+
+    expect(repository.update.mock.calls).toEqual([
+      [{ id: CALL_RECORDING_ID }, { transcript }],
+      [
+        { id: CALL_RECORDING_ID },
+        { summary, status: CallRecordingStatus.COMPLETED },
+      ],
+    ]);
+    expect(summarize).toHaveBeenCalledWith({
+      workspaceId: WORKSPACE_ID,
+      transcript,
+    });
+  });
+
+  it('completes the recording without a summary when none could be written', async () => {
+    const { service, repository, post } = setup({ summary: null });
+
+    post.mockResolvedValue({
+      data: { segments: [{ start: 0, end: 1, text: ' Hello.' }] },
+    } as AxiosResponse);
+
+    await service.transcribe({
+      workspaceId: WORKSPACE_ID,
+      callRecordingId: CALL_RECORDING_ID,
+    });
+
+    expect(repository.update).toHaveBeenLastCalledWith(
+      { id: CALL_RECORDING_ID },
+      { status: CallRecordingStatus.COMPLETED },
     );
   });
 

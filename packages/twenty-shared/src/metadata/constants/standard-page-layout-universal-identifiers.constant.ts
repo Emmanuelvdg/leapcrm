@@ -408,6 +408,12 @@ export const STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS = {
           fields: 'Fields',
         },
       },
+      summary: {
+        title: 'Summary',
+        widgets: {
+          summary: 'Summary',
+        },
+      },
       transcript: {
         title: 'Transcript',
         widgets: {
