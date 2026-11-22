@@ -2,6 +2,7 @@ import { SidePanelCommandMenuItemDisplayPage } from '@/command-menu-item/display
 import { SidePanelCommandMenuItemEditPage } from '@/command-menu-item/edit/components/SidePanelCommandMenuItemEditPage';
 import { SidePanelNavigationMenuItemEditPage } from '@/navigation-menu-item/edit/side-panel/components/SidePanelNavigationMenuItemEditPage';
 import { SidePanelNewSidebarItemPage } from '@/navigation-menu-item/edit/side-panel/components/SidePanelNewSidebarItemPage';
+import { SidePanelRecordCallRecordingPage } from '@/call-recording/components/SidePanelRecordCallRecordingPage';
 import { SidePanelEmailBlockSettingsPage } from '@/side-panel/pages/email-block-settings/components/SidePanelEmailBlockSettingsPage';
 import { SidePanelAskAiPage } from '@/side-panel/pages/ask-ai/components/SidePanelAskAiPage';
 import { SidePanelComposeEmailPage } from '@/side-panel/pages/compose-email/components/SidePanelComposeEmailPage';
@@ -92,5 +93,6 @@ export const SIDE_PANEL_PAGES_CONFIG = new Map<SidePanelPages, React.ReactNode>(
     [SidePanelPages.ComposeEmail, <SidePanelComposeEmailPage />],
     [SidePanelPages.SendCampaignTest, <SidePanelSendCampaignTestPage />],
     [SidePanelPages.EmailBlockSettings, <SidePanelEmailBlockSettingsPage />],
+    [SidePanelPages.RecordCallRecording, <SidePanelRecordCallRecordingPage />],
   ],
 );

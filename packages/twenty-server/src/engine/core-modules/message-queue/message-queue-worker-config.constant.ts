@@ -188,4 +188,14 @@ export const MESSAGE_QUEUE_WORKER_CONFIG: Record<
       boundedShutdownDrain: false,
     },
   },
+  [MessageQueue.callRecordingQueue]: {
+    priority: 5,
+    workerOptions: {
+      // Transcription is CPU heavy on a self-hosted model, so one at a time.
+      concurrency: 1,
+      lockDuration: 300_000,
+      maxStalledCount: 1,
+      boundedShutdownDrain: false,
+    },
+  },
 };

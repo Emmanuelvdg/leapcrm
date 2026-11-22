@@ -42,6 +42,8 @@ export const usePageLayoutRenderableTabs = () => {
     : getTabsRenderableForTargetObject({
         tabs: tabsWithVisibleWidgets,
         targetObjectFields: targetObjectMetadataItem?.fields,
+        targetObjectNameSingular:
+          targetRecordIdentifier?.targetObjectNameSingular,
       });
 
   const { tabsToRenderInTabList, pinnedLeftTab } = getTabsByDisplayMode({

@@ -53,6 +53,7 @@ export const STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS = {
           fields: 'Fields',
           people: 'People',
           opportunities: 'Opportunities',
+          callRecordings: 'Call Recordings',
         },
       },
       timeline: {
@@ -103,6 +104,7 @@ export const STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS = {
           company: 'Company',
           pointOfContactForOpportunities: 'Opportunities',
           listMemberships: 'Lists',
+          callRecordings: 'Call Recordings',
         },
       },
       timeline: {
@@ -160,6 +162,7 @@ export const STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS = {
           pointOfContact: 'Point of Contact',
           company: 'Company',
           owner: 'Owner',
+          callRecordings: 'Call Recordings',
         },
       },
       timeline: {
@@ -403,6 +406,12 @@ export const STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS = {
         title: 'Home',
         widgets: {
           fields: 'Fields',
+        },
+      },
+      transcript: {
+        title: 'Transcript',
+        widgets: {
+          transcript: 'Transcript',
         },
       },
       timeline: {

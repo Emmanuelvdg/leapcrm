@@ -179,5 +179,45 @@ export const computeStandardCallRecordingViewFields = (
         viewFieldGroupName: 'general',
       },
     }),
+    callRecordingRecordPageFieldsPerson: createStandardViewFieldFlatMetadata({
+      ...args,
+      objectName: 'callRecording',
+      context: {
+        viewName: 'callRecordingRecordPageFields',
+        viewFieldName: 'person',
+        fieldName: 'person',
+        position: 9,
+        isVisible: true,
+        size: 150,
+        viewFieldGroupName: 'general',
+      },
+    }),
+    callRecordingRecordPageFieldsCompany: createStandardViewFieldFlatMetadata({
+      ...args,
+      objectName: 'callRecording',
+      context: {
+        viewName: 'callRecordingRecordPageFields',
+        viewFieldName: 'company',
+        fieldName: 'company',
+        position: 10,
+        isVisible: true,
+        size: 150,
+        viewFieldGroupName: 'general',
+      },
+    }),
+    callRecordingRecordPageFieldsOpportunity:
+      createStandardViewFieldFlatMetadata({
+        ...args,
+        objectName: 'callRecording',
+        context: {
+          viewName: 'callRecordingRecordPageFields',
+          viewFieldName: 'opportunity',
+          fieldName: 'opportunity',
+          position: 11,
+          isVisible: true,
+          size: 150,
+          viewFieldGroupName: 'general',
+        },
+      }),
   };
 };

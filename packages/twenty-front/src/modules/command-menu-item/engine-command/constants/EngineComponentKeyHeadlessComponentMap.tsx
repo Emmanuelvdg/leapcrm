@@ -6,6 +6,7 @@ import { NavigationEngineCommand } from '@/command-menu-item/engine-command/comp
 import { ComposeCampaignCommand } from '@/command-menu-item/engine-command/global/components/ComposeCampaignCommand';
 import { SendMessageCampaignSingleRecordCommand } from '@/command-menu-item/engine-command/record/single-record/message-campaign/components/SendMessageCampaignSingleRecordCommand';
 import { ImportProspectCandidatesSingleRecordCommand } from '@/command-menu-item/engine-command/record/single-record/prospecting-campaign/components/ImportProspectCandidatesSingleRecordCommand';
+import { RecordMeetingSingleRecordCommand } from '@/command-menu-item/engine-command/record/single-record/call-recording/components/RecordMeetingSingleRecordCommand';
 import { ProspectingCampaignStatusSingleRecordCommand } from '@/command-menu-item/engine-command/record/single-record/prospecting-campaign/components/ProspectingCampaignStatusSingleRecordCommand';
 import { SendMessageCampaignTestSingleRecordCommand } from '@/command-menu-item/engine-command/record/single-record/message-campaign/components/SendMessageCampaignTestSingleRecordCommand';
 import { OpenEmailBlockSettingsSingleRecordCommand } from '@/command-menu-item/engine-command/record/components/OpenEmailBlockSettingsSingleRecordCommand';
@@ -280,6 +281,7 @@ export const ENGINE_COMPONENT_KEY_COMPONENT_MAP: Record<
   [EngineComponentKey.IMPORT_PROSPECT_CANDIDATES]: (
     <ImportProspectCandidatesSingleRecordCommand />
   ),
+  [EngineComponentKey.RECORD_MEETING]: <RecordMeetingSingleRecordCommand />,
 
   // Deprecated keys kept for backward compatibility until migration runs
   [EngineComponentKey.DELETE_SINGLE_RECORD]: <DeleteRecordsCommand />,

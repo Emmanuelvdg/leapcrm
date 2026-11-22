@@ -391,6 +391,11 @@ export const STANDARD_OBJECT_FIELDS = {
     calendarEvent: {
       universalIdentifier: '49e64b28-bd98-4775-80ea-4781bdd45e35',
     },
+    person: { universalIdentifier: '99f7587b-916b-4fec-9bfa-c0272d08c972' },
+    company: { universalIdentifier: 'e788db46-bbfa-4de1-9270-6b592bcaf1d7' },
+    opportunity: {
+      universalIdentifier: '08241b7a-93a1-4500-a2f8-6dad442e695b',
+    },
   },
   company: {
     ...buildStandardObjectSystemFields(
@@ -456,6 +461,9 @@ export const STANDARD_OBJECT_FIELDS = {
     },
     conversations: {
       universalIdentifier: 'ea8cb83e-5098-495c-90c1-7084141fddf4',
+    },
+    callRecordings: {
+      universalIdentifier: 'f79afdd1-4f51-48c9-9785-1c7ffbadb679',
     },
     prospectCandidates: {
       universalIdentifier: '73171e21-90a5-4f48-86ca-4718e92629ed',
@@ -928,6 +936,9 @@ export const STANDARD_OBJECT_FIELDS = {
     conversations: {
       universalIdentifier: '90e5dfb2-ef79-4c15-ab3c-e134206cf02e',
     },
+    callRecordings: {
+      universalIdentifier: 'a3dbf4a2-6de1-418e-b86f-a725db694911',
+    },
   },
   person: {
     ...buildStandardObjectSystemFields(
@@ -997,6 +1008,9 @@ export const STANDARD_OBJECT_FIELDS = {
     },
     conversations: {
       universalIdentifier: '8e056655-f194-4342-bc6f-82e60add7891',
+    },
+    callRecordings: {
+      universalIdentifier: '0d781828-9775-40f4-a9f3-47624fa09f33',
     },
     conversationParticipants: {
       universalIdentifier: '3f3faa39-e204-4f07-850a-ccee947c7841',

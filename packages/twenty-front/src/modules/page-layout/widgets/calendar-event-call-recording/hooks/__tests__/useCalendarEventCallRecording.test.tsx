@@ -129,10 +129,36 @@ describe('useCalendarEventCallRecording', () => {
           transcript: true,
           summary: true,
           createdAt: true,
+          audio: true,
         },
         skip: false,
       }),
     );
+  });
+
+  it('loads the recording itself when the page is a call recording', () => {
+    mockLayoutRenderingContext.targetRecordIdentifier = {
+      id: 'call-recording-id',
+      targetObjectNameSingular: 'callRecording',
+    };
+    findManyRecordsResult = {
+      ...findManyRecordsResult,
+      records: [readyCallRecording],
+    };
+
+    const { result } = renderHook(() =>
+      useCalendarEventCallRecording({
+        queryScope: 'call-recording-transcript',
+      }),
+    );
+
+    expect(mockUseFindManyRecords).toHaveBeenCalledWith(
+      expect.objectContaining({
+        filter: { id: { eq: 'call-recording-id' } },
+        skip: false,
+      }),
+    );
+    expect(result.current.callRecording?.id).toBe('ready-call-recording-id');
   });
 
   it('scopes the SSE query id per widget', () => {

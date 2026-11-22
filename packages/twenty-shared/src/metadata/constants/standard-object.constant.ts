@@ -249,6 +249,15 @@ export const STANDARD_OBJECTS = {
       calendarEventIdIndex: {
         universalIdentifier: '8be3cc47-9352-4a1b-ad19-bb186bc0865d',
       },
+      personIdIndex: {
+        universalIdentifier: 'bea69a5b-71f6-4d3d-8cf3-d37f2be6de05',
+      },
+      companyIdIndex: {
+        universalIdentifier: '031d835d-dd4c-45ea-9675-ded756f8c3ff',
+      },
+      opportunityIdIndex: {
+        universalIdentifier: '7f2f15b4-4b67-4517-8a68-f2c3bf1db32d',
+      },
     },
     views: {
       allCallRecordings: buildStandardObjectIndexView({
@@ -272,6 +281,9 @@ export const STANDARD_OBJECTS = {
           'recordingRequestStatus',
           'startedAt',
           'endedAt',
+          'person',
+          'company',
+          'opportunity',
           'video',
           'audio',
           'transcript',

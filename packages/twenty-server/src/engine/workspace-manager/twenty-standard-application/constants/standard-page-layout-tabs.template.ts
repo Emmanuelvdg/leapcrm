@@ -88,6 +88,10 @@ export const VERTICAL_LIST_LAYOUT_POSITIONS = {
     layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
     index: 4,
   },
+  SIXTH: {
+    layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
+    index: 5,
+  },
 } as const satisfies Record<string, PageLayoutWidgetVerticalListPosition>;
 
 export const TAB_PROPS = {

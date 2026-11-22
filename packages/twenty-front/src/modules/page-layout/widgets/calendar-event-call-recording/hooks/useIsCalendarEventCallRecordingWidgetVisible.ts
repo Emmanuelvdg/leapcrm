@@ -11,9 +11,12 @@ export const useIsCalendarEventCallRecordingWidgetVisible = (): boolean => {
       objectMetadataItem.nameSingular === CoreObjectNameSingular.CallRecording,
   );
 
-  const isCalendarEventTarget =
-    targetRecordIdentifier?.targetObjectNameSingular ===
-    CoreObjectNameSingular.CalendarEvent;
+  const targetObjectNameSingular =
+    targetRecordIdentifier?.targetObjectNameSingular;
 
-  return hasCallRecordingObjectMetadata && isCalendarEventTarget;
+  const isSupportedTarget =
+    targetObjectNameSingular === CoreObjectNameSingular.CalendarEvent ||
+    targetObjectNameSingular === CoreObjectNameSingular.CallRecording;
+
+  return hasCallRecordingObjectMetadata && isSupportedTarget;
 };

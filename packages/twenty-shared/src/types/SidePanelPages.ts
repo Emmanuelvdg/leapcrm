@@ -30,4 +30,5 @@ export enum SidePanelPages {
   ComposeEmail = 'compose-email',
   SendCampaignTest = 'send-campaign-test',
   EmailBlockSettings = 'email-block-settings',
+  RecordCallRecording = 'record-call-recording',
 }

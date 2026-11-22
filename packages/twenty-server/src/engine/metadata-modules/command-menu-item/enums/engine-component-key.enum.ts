@@ -59,6 +59,7 @@ export enum EngineComponentKey {
   RESUME_PROSPECTING_CAMPAIGN = 'RESUME_PROSPECTING_CAMPAIGN',
   CANCEL_PROSPECTING_CAMPAIGN = 'CANCEL_PROSPECTING_CAMPAIGN',
   IMPORT_PROSPECT_CANDIDATES = 'IMPORT_PROSPECT_CANDIDATES',
+  RECORD_MEETING = 'RECORD_MEETING',
 
   // TODO: Remove deprecated keys once upgrade:1-21:refactor-navigation-commands has run on all workspaces
   // Deprecated: replaced by NAVIGATION engine key with payload

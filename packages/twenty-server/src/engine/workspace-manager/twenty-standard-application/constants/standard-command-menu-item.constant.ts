@@ -1024,6 +1024,26 @@ export const STANDARD_COMMAND_MENU_ITEMS = {
     engineComponentKey: EngineComponentKey.SEND_MESSAGE_CAMPAIGN_TEST,
     hotKeys: null,
   },
+  recordMeeting: {
+    universalIdentifier: '1bd1476b-1adf-496a-9962-c46662d04fa6',
+    label: i18nLabel(
+      msg({ message: `Record meeting`, context: 'commandMenuItem.label' }),
+    ),
+    icon: 'IconMicrophone',
+    isPinned: true,
+    // Ahead of Send Email (64) so the record side panel footer labels it.
+    position: 63,
+    shortLabel: i18nLabel(
+      msg({ message: `Record`, context: 'commandMenuItem.shortLabel' }),
+    ),
+    availabilityType: CommandMenuItemAvailabilityType.RECORD_SELECTION,
+    conditionalAvailabilityExpression:
+      'pageType == "RECORD_PAGE" and (objectMetadataItem.nameSingular == "person" or objectMetadataItem.nameSingular == "company" or objectMetadataItem.nameSingular == "opportunity") and noneDefined(selectedRecords, "deletedAt")',
+    availabilityObjectMetadataUniversalIdentifier: null,
+    frontComponentUniversalIdentifier: null,
+    engineComponentKey: EngineComponentKey.RECORD_MEETING,
+    hotKeys: null,
+  },
   emailBlockSettings: {
     universalIdentifier: '5c8a2f41-97be-4f3d-9a46-2f18d17f30a2',
     label: i18nLabel(

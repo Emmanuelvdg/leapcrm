@@ -7,4 +7,11 @@ export type CalendarEventCallRecordingCandidate = {
   transcript: unknown;
   summary: { markdown: string | null } | null | undefined;
   createdAt: string | null | undefined;
+  audio?:
+    | {
+        fileId: string;
+        label: string;
+        url?: string | null;
+      }[]
+    | null;
 };

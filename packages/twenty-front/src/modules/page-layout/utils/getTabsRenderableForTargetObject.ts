@@ -2,11 +2,12 @@ import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataIte
 import { WIDGET_TYPES_REQUIRING_RELATION_FIELD } from '@/page-layout/constants/WidgetTypesRequiringRelationField';
 import { WIDGET_TYPE_TO_RELATION_FIELD_NAME } from '@/page-layout/constants/WidgetTypeToRelationFieldName';
 import { type PageLayoutTab } from '@/page-layout/types/PageLayoutTab';
-import { FieldMetadataType } from 'twenty-shared/types';
+import { CoreObjectNameSingular, FieldMetadataType } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 
 type GetTabsRenderableForTargetObjectParams = {
   tabs: PageLayoutTab[];
+  targetObjectNameSingular?: string;
   targetObjectFields:
     | Pick<FieldMetadataItem, 'name' | 'isActive' | 'type'>[]
     | undefined;
@@ -18,6 +19,7 @@ type GetTabsRenderableForTargetObjectParams = {
 export const getTabsRenderableForTargetObject = ({
   tabs,
   targetObjectFields,
+  targetObjectNameSingular,
 }: GetTabsRenderableForTargetObjectParams): PageLayoutTab[] => {
   if (!isDefined(targetObjectFields)) {
     return tabs;
@@ -38,6 +40,14 @@ export const getTabsRenderableForTargetObject = ({
       const relationFieldName = WIDGET_TYPE_TO_RELATION_FIELD_NAME[widget.type];
 
       if (!isDefined(relationFieldName)) {
+        return true;
+      }
+
+      // A call recording reads its own transcript rather than a relation.
+      if (
+        relationFieldName === 'callRecordings' &&
+        targetObjectNameSingular === CoreObjectNameSingular.CallRecording
+      ) {
         return true;
       }
 

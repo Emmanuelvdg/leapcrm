@@ -687,6 +687,35 @@ export const buildOpportunityStandardFlatFieldMetadatas = ({
     twentyStandardApplicationId,
     now,
   }),
+  callRecordings: createStandardRelationFieldFlatMetadata({
+    objectName,
+    workspaceId,
+    context: {
+      type: FieldMetadataType.RELATION,
+      morphId: null,
+      fieldName: 'callRecordings',
+      label: i18nLabel(
+        msg({ message: `Call Recordings`, context: 'fieldMetadata.label' }),
+      ),
+      description: i18nLabel(
+        msg({
+          message: `Meetings and calls recorded for the opportunity`,
+          context: 'fieldMetadata.description',
+        }),
+      ),
+      icon: 'IconMicrophone',
+      isNullable: true,
+      targetObjectName: 'callRecording',
+      targetFieldName: 'opportunity',
+      settings: {
+        relationType: RelationType.ONE_TO_MANY,
+      },
+    },
+    standardObjectMetadataRelatedEntityIds,
+    dependencyFlatEntityMaps,
+    twentyStandardApplicationId,
+    now,
+  }),
   owner: createStandardRelationFieldFlatMetadata({
     objectName,
     workspaceId,

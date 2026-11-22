@@ -196,4 +196,26 @@ describe('getTabsRenderableForTargetObject', () => {
 
     expect(result).toHaveLength(0);
   });
+
+  it('shows the transcript on a call recording page without a callRecordings relation', () => {
+    const tabs = [
+      createMockTab('transcript-tab', [
+        createMockWidget(
+          'transcript-widget',
+          WidgetType.CALL_RECORDING_TRANSCRIPT,
+        ),
+      ]),
+      createMockTab('tasks-tab', [
+        createMockWidget('tasks-widget', WidgetType.TASKS),
+      ]),
+    ];
+
+    const result = getTabsRenderableForTargetObject({
+      tabs,
+      targetObjectFields: [],
+      targetObjectNameSingular: 'callRecording',
+    });
+
+    expect(result.map((tab) => tab.id)).toEqual(['transcript-tab']);
+  });
 });

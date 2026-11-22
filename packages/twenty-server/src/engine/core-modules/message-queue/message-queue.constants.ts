@@ -21,4 +21,5 @@ export enum MessageQueue {
   aiQueue = 'ai-queue',
   aiStreamQueue = 'ai-stream-queue',
   prospectingQueue = 'prospecting-queue',
+  callRecordingQueue = 'call-recording-queue',
 }

@@ -24,6 +24,7 @@ const CALL_RECORDING_RECORD_FIELDS = {
   transcript: true,
   summary: true,
   createdAt: true,
+  audio: true,
 } as const satisfies RecordGqlOperationGqlRecordFields;
 
 const CALL_RECORDING_ORDER_BY: RecordGqlOperationOrderBy = [
@@ -70,6 +71,13 @@ export const useCalendarEventCallRecording = ({
       ? targetRecordIdentifier.id
       : undefined;
 
+  // In-app recordings render the widget on their own record page.
+  const callRecordingId =
+    targetRecordIdentifier?.targetObjectNameSingular ===
+    CoreObjectNameSingular.CallRecording
+      ? targetRecordIdentifier.id
+      : undefined;
+
   const requiredFieldMetadataItems = REQUIRED_FIELD_NAMES_BY_QUERY_SCOPE[
     queryScope
   ]
@@ -107,15 +115,18 @@ export const useCalendarEventCallRecording = ({
 
   const restriction = objectRestriction ?? fieldRestriction;
 
-  const shouldSkipQuery = !isDefined(calendarEventId) || isDefined(restriction);
-
   const callRecordingFilter = useMemo(
     () =>
       isDefined(calendarEventId)
         ? { calendarEventId: { eq: calendarEventId } }
-        : undefined,
-    [calendarEventId],
+        : isDefined(callRecordingId)
+          ? { id: { eq: callRecordingId } }
+          : undefined,
+    [calendarEventId, callRecordingId],
   );
+
+  const shouldSkipQuery =
+    !isDefined(callRecordingFilter) || isDefined(restriction);
 
   const {
     records: callRecordings,
@@ -146,7 +157,7 @@ export const useCalendarEventCallRecording = ({
   }, [refetch]);
 
   useListenToEventsForQuery({
-    queryId: `${queryScope}-${calendarEventId}`,
+    queryId: `${queryScope}-${calendarEventId ?? callRecordingId}`,
     operationSignature,
     skip: shouldSkipQuery,
     onSseReconnected: refetchCallRecordingOnSseReconnected,

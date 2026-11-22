@@ -43,6 +43,9 @@ services:
       # Prospecting discovery source; the server checks it when a campaign
       # starts and the worker uses it to query the register.
       COMPANIES_HOUSE_API_KEY: ${COMPANIES_HOUSE_API_KEY:-}
+      TRANSCRIPTION_API_URL: ${TRANSCRIPTION_API_URL:-http://speaches:8000/v1}
+      TRANSCRIPTION_API_KEY: ${TRANSCRIPTION_API_KEY:-}
+      TRANSCRIPTION_MODEL: ${TRANSCRIPTION_MODEL:-Systran/faster-whisper-small}
 
       IS_MULTIWORKSPACE_ENABLED: ${IS_MULTIWORKSPACE_ENABLED:-true}
       IS_WORKSPACE_CREATION_LIMITED_TO_SERVER_ADMINS: ${IS_WORKSPACE_CREATION_LIMITED_TO_SERVER_ADMINS:-false}
@@ -110,6 +113,9 @@ services:
       SUBSCRIPTION_STRIPE_PUBLISHABLE_KEY: ${SUBSCRIPTION_STRIPE_PUBLISHABLE_KEY}
 
       COMPANIES_HOUSE_API_KEY: ${COMPANIES_HOUSE_API_KEY:-}
+      TRANSCRIPTION_API_URL: ${TRANSCRIPTION_API_URL:-http://speaches:8000/v1}
+      TRANSCRIPTION_API_KEY: ${TRANSCRIPTION_API_KEY:-}
+      TRANSCRIPTION_MODEL: ${TRANSCRIPTION_MODEL:-Systran/faster-whisper-small}
     depends_on:
       db:
         condition: service_healthy
@@ -142,6 +148,20 @@ services:
       timeout: 5s
       retries: 10
 
+  # Self-hosted speech-to-text (MIT, faster-whisper) that transcribes call
+  # recordings. Only reachable on the internal network. Pinned by digest
+  # because the project publishes no stable CPU release tag.
+  speaches:
+    image: ghcr.io/speaches-ai/speaches:latest-cpu@sha256:21e3df06d842fb7802ab470dd77c25f0e8c0d22950e8d8c6ae886e851af53ef8
+    restart: always
+    volumes:
+      - speaches-models:/home/ubuntu/.cache/huggingface/hub
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
   # Stock image — on-demand TLS needs no DNS provider plugin, unlike a
   # wildcard cert via DNS-01.
   caddy:
@@ -163,3 +183,4 @@ volumes:
   server-local-data:
   caddy-data:
   caddy-config:
+  speaches-models:

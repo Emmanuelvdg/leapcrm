@@ -1984,6 +1984,34 @@ export class ConfigVariables {
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.LLM,
     description:
+      'Base URL of an OpenAI-compatible speech-to-text API that transcribes in-app call recordings, e.g. http://speaches:8000/v1 for the self-hosted Speaches container. Transcription is off when empty.',
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  TRANSCRIPTION_API_URL?: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.LLM,
+    isSensitive: true,
+    description:
+      'API key for the speech-to-text API. Not needed for self-hosted Speaches.',
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  TRANSCRIPTION_API_KEY?: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.LLM,
+    description:
+      'Speech-to-text model used for call recordings, e.g. Systran/faster-whisper-small on Speaches or whisper-1 on OpenAI.',
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  TRANSCRIPTION_MODEL = 'Systran/faster-whisper-small';
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.LLM,
+    description:
       'Storage path for the AI catalog override (e.g. config/ai-catalog.json). When set, the catalog is fetched from the configured storage backend at startup instead of using the built-in ai-providers.json.',
     type: ConfigVariableType.STRING,
   })

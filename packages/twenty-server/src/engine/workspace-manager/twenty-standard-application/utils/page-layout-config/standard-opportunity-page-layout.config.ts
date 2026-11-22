@@ -63,6 +63,18 @@ const OPPORTUNITY_PAGE_TABS = {
         fieldUniversalIdentifier:
           STANDARD_OBJECTS.opportunity.fields.owner.universalIdentifier,
       },
+      callRecordings: {
+        universalIdentifier:
+          STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.opportunityRecordPage.tabs
+            .home.widgets.callRecordings.universalIdentifier,
+        title: 'Call Recordings',
+        type: WidgetType.FIELD,
+        gridPosition: GRID_POSITIONS.FULL_WIDTH,
+        position: VERTICAL_LIST_LAYOUT_POSITIONS.FIFTH,
+        fieldUniversalIdentifier:
+          STANDARD_OBJECTS.opportunity.fields.callRecordings
+            .universalIdentifier,
+      },
     },
   },
   timeline: {

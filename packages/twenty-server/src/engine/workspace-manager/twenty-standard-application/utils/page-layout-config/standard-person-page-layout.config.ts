@@ -63,6 +63,17 @@ const PERSON_PAGE_TABS = {
         fieldUniversalIdentifier:
           STANDARD_OBJECTS.person.fields.listMemberships.universalIdentifier,
       },
+      callRecordings: {
+        universalIdentifier:
+          STANDARD_PAGE_LAYOUT_UNIVERSAL_IDENTIFIERS.personRecordPage.tabs.home
+            .widgets.callRecordings.universalIdentifier,
+        title: 'Call Recordings',
+        type: WidgetType.FIELD,
+        gridPosition: GRID_POSITIONS.FULL_WIDTH,
+        position: VERTICAL_LIST_LAYOUT_POSITIONS.SIXTH,
+        fieldUniversalIdentifier:
+          STANDARD_OBJECTS.person.fields.callRecordings.universalIdentifier,
+      },
     },
   },
   timeline: {
