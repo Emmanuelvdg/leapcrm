@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { basename, dirname, join } from 'path';
+import { basename, dirname, join, posix } from 'path';
 import { type Readable } from 'stream';
 
 import { FileFolder } from 'twenty-shared/types';
@@ -124,7 +124,11 @@ export class FileStorageService {
     fileFolder: FileFolder;
     relativePath: string;
   }): { onStoragePath: string; resourcePath: string } {
-    const resourcePath = join(fileFolder, relativePath).replace(/\/+/g, '/');
+    // Stored in the database and later split on '/', so it must not pick up
+    // the Windows separator in local development.
+    const resourcePath = posix
+      .join(fileFolder, relativePath)
+      .replace(/\/+/g, '/');
 
     const onStoragePath = join(
       workspaceId,
