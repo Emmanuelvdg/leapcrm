@@ -1,1 +1,1 @@
-export const DEFAULT_WORKSPACE_NAME = 'Leap CRM';
+export const DEFAULT_WORKSPACE_NAME = 'Your Jugaad CRM';

@@ -1,40 +1,34 @@
-// Leap CRM brand blue (#0037F6), forced exactly at step 9/10 (the solid/hover
-// steps used for primary buttons and active states); the surrounding steps
-// are Radix's blue ramp with hue rotated and chroma scaled to match, so the
-// whole scale reads as one coherent family instead of a single mismatched hex.
-const LEAP_BLUE_LIGHT = {
-  blue1: 'color(display-p3 0.985 0.992 1.000)',
-  blue2: 'color(display-p3 0.957 0.978 1.000)',
-  blue3: 'color(display-p3 0.904 0.955 1.000)',
-  blue4: 'color(display-p3 0.840 0.928 1.000)',
-  blue5: 'color(display-p3 0.774 0.887 1.000)',
-  blue6: 'color(display-p3 0.691 0.832 1.000)',
-  blue7: 'color(display-p3 0.583 0.761 1.000)',
-  blue8: 'color(display-p3 0.419 0.660 1.000)',
-  blue9: 'color(display-p3 0.077 0.212 0.927)',
-  blue10: 'color(display-p3 0.022 0.115 0.831)',
-  blue11: 'color(display-p3 0.194 0.337 1.000)',
-  blue12: 'color(display-p3 0.122 0.150 0.457)',
+import * as RadixColors from '@radix-ui/colors';
+
+// Your Jugaad orange (#F16205) is forced at step 9 and its hover (#D9560A) at
+// step 10, the steps used for primary buttons and active states. Step 11 is a
+// darker orange (#C03D00) so orange text keeps 4.5:1 on white and sunk
+// surfaces. The other steps are Radix's orange ramp, which shares the hue.
+const BRAND_ORANGE_LIGHT = {
+  ...RadixColors.orangeP3,
+  orange9: 'color(display-p3 0.878 0.420 0.173)',
+  orange10: 'color(display-p3 0.790 0.370 0.157)',
+  orange11: 'color(display-p3 0.696 0.278 0.114)',
 };
 
 export const ACCENT_LIGHT = {
-  primary: LEAP_BLUE_LIGHT.blue5,
-  secondary: LEAP_BLUE_LIGHT.blue5,
-  tertiary: LEAP_BLUE_LIGHT.blue3,
-  // Brand blue-tint (#e8edff): selected rows stay readable as selected.
-  quaternary: 'color(display-p3 0.913 0.929 0.994)',
-  accent3570: LEAP_BLUE_LIGHT.blue8,
-  accent4060: LEAP_BLUE_LIGHT.blue8,
-  accent1: LEAP_BLUE_LIGHT.blue1,
-  accent2: LEAP_BLUE_LIGHT.blue2,
-  accent3: LEAP_BLUE_LIGHT.blue3,
-  accent4: LEAP_BLUE_LIGHT.blue4,
-  accent5: LEAP_BLUE_LIGHT.blue5,
-  accent6: LEAP_BLUE_LIGHT.blue6,
-  accent7: LEAP_BLUE_LIGHT.blue7,
-  accent8: LEAP_BLUE_LIGHT.blue8,
-  accent9: LEAP_BLUE_LIGHT.blue9,
-  accent10: LEAP_BLUE_LIGHT.blue10,
-  accent11: LEAP_BLUE_LIGHT.blue11,
-  accent12: LEAP_BLUE_LIGHT.blue12,
+  primary: BRAND_ORANGE_LIGHT.orange5,
+  secondary: BRAND_ORANGE_LIGHT.orange5,
+  tertiary: BRAND_ORANGE_LIGHT.orange3,
+  // Brand orange tint (#FEEFE6): selected rows stay readable as selected.
+  quaternary: 'color(display-p3 0.986 0.939 0.906)',
+  accent3570: BRAND_ORANGE_LIGHT.orange8,
+  accent4060: BRAND_ORANGE_LIGHT.orange8,
+  accent1: BRAND_ORANGE_LIGHT.orange1,
+  accent2: BRAND_ORANGE_LIGHT.orange2,
+  accent3: BRAND_ORANGE_LIGHT.orange3,
+  accent4: BRAND_ORANGE_LIGHT.orange4,
+  accent5: BRAND_ORANGE_LIGHT.orange5,
+  accent6: BRAND_ORANGE_LIGHT.orange6,
+  accent7: BRAND_ORANGE_LIGHT.orange7,
+  accent8: BRAND_ORANGE_LIGHT.orange8,
+  accent9: BRAND_ORANGE_LIGHT.orange9,
+  accent10: BRAND_ORANGE_LIGHT.orange10,
+  accent11: BRAND_ORANGE_LIGHT.orange11,
+  accent12: BRAND_ORANGE_LIGHT.orange12,
 };

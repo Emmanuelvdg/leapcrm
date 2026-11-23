@@ -9,7 +9,7 @@ import { HighlightedText } from 'src/components/HighlightedText';
 import { Link } from 'src/components/Link';
 import { MainText } from 'src/components/MainText';
 import { Title } from 'src/components/Title';
-import { WhatIsLeap } from 'src/components/WhatIsLeap';
+import { WhatIsYourJugaad } from 'src/components/WhatIsYourJugaad';
 import { capitalize } from 'src/utils/capitalize';
 import { createI18nInstance } from 'src/utils/i18n.utils';
 import { type APP_LOCALES } from 'twenty-shared/translations';
@@ -45,7 +45,7 @@ export const SendInviteLinkEmail = ({
 
   return (
     <BaseEmail width={333} locale={locale}>
-      <Title value={i18n._('Join your team on Leap CRM')} />
+      <Title value={i18n._('Join your team on Your Jugaad CRM')} />
       <MainText>
         <Trans
           id="{senderName} (<0>{senderEmail}</0>) has invited you to join a workspace called <1>{workspaceName}</1>."
@@ -77,7 +77,7 @@ export const SendInviteLinkEmail = ({
         {workspace.name ? <HighlightedText value={workspace.name} /> : <></>}
         <CallToAction href={link} value={i18n._('Accept invite')} />
       </HighlightedContainer>
-      <WhatIsLeap i18n={i18n} />
+      <WhatIsYourJugaad i18n={i18n} />
     </BaseEmail>
   );
 };

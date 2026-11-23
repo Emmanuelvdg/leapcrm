@@ -1,6 +1,6 @@
 # Prospecting engine: repository audit
 
-Phase 0 deliverable for the AI Prospecting and Qualification Engine. It records what the Leap CRM fork actually contains today, verified against the code, so the design builds on real services rather than upstream Twenty documentation.
+Phase 0 deliverable for the AI Prospecting and Qualification Engine. It records what the Your Jugaad CRM fork actually contains today, verified against the code, so the design builds on real services rather than upstream Twenty documentation.
 
 Status: draft for review. Audited at commit `52ed7076b` (October 2026).
 

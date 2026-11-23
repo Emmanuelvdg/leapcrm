@@ -44,7 +44,7 @@ export const SubscriptionPaymentSuccess = () => {
       <SubTitle>{t`Confirming your subscription — this only takes a moment.`}</SubTitle>
       <StyledButtonContainer>
         <MainButton
-          title={t`Continue to Leap CRM`}
+          title={t`Continue to Your Jugaad CRM`}
           onClick={() => navigate(AppPath.Index)}
           fullWidth
         />

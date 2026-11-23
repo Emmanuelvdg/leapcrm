@@ -1,5 +1,5 @@
 // Python helper that gets prepended to user code for MCP access
-export const TWENTY_MCP_HELPER = `# Auto-injected LeapCRM MCP helper - provides access to LeapCRM tools
+export const TWENTY_MCP_HELPER = `# Auto-injected Your Jugaad CRM MCP helper - provides access to Your Jugaad CRM tools
 import os
 import json
 
@@ -10,7 +10,7 @@ except ImportError:
     _REQUESTS_AVAILABLE = False
 
 class TwentyMCP:
-    """Helper for calling LeapCRM tools from sandboxed code.
+    """Helper for calling Your Jugaad CRM tools from sandboxed code.
 
     Two categories of tools exist behind /mcp:
 
@@ -49,7 +49,7 @@ class TwentyMCP:
 
     def call_tool(self, name: str, arguments: dict = None):
         """
-        Call any LeapCRM tool by name.
+        Call any Your Jugaad CRM tool by name.
 
         Catalog tools (find_many_companies, create_one_person, …) are routed
         through execute_tool. MCP-native tools are called directly.
@@ -68,7 +68,7 @@ class TwentyMCP:
             # companies == {'records': [...], 'count': '5'}
         """
         if not self._available:
-            raise RuntimeError('LeapCRM MCP bridge not available. Missing requests library or credentials.')
+            raise RuntimeError('Your Jugaad CRM MCP bridge not available. Missing requests library or credentials.')
 
         if name in self._MCP_NATIVE_TOOLS:
             return self._raw_mcp_call(name, arguments)

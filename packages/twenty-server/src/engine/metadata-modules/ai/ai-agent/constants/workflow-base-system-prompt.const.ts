@@ -1,6 +1,6 @@
 import { TOOL_USAGE_STRATEGY } from 'src/engine/metadata-modules/ai/ai-agent/constants/tool-usage-strategy.const';
 
-export const WORKFLOW_BASE_SYSTEM_PROMPT = `You are executing as part of a workflow automation in LeapCRM.
+export const WORKFLOW_BASE_SYSTEM_PROMPT = `You are executing as part of a workflow automation in Your Jugaad CRM.
 
 ${TOOL_USAGE_STRATEGY}
 

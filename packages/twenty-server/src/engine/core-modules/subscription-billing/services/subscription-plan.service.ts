@@ -8,7 +8,7 @@ import { SubscriptionPlanEntity } from 'src/engine/core-modules/subscription-bil
 import { SubscriptionStripeService } from 'src/engine/core-modules/subscription-billing/services/subscription-stripe.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 
-const SUBSCRIPTION_PRODUCT_NAME = 'Leap CRM Subscription';
+const SUBSCRIPTION_PRODUCT_NAME = 'Your Jugaad CRM Subscription';
 
 @Injectable()
 export class SubscriptionPlanService {

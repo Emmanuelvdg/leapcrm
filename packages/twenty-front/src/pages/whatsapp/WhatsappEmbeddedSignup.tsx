@@ -193,7 +193,7 @@ export const WhatsappEmbeddedSignup = () => {
 
   return (
     <main style={{ maxWidth: 480, margin: '15vh auto', padding: 24 }}>
-      <h1>{t`Connect WhatsApp to Leap CRM`}</h1>
+      <h1>{t`Connect WhatsApp to Your Jugaad CRM`}</h1>
       <p>{t`Continue to Meta to choose the WhatsApp Business number for your workspace.`}</p>
       <button onClick={startSignup} type="button">
         {isSdkReady ? t`Continue with Meta` : t`Loading Meta...`}

@@ -17,7 +17,7 @@ Status: approved. Implementation follows the milestones in `IMPLEMENTATION_PLAN.
 
 ## 2. What the CRM can and cannot supply today
 
-| Guide input | Available in Leap today | Plan |
+| Guide input | Available in Your Jugaad today | Plan |
 | --- | --- | --- |
 | Closed-won deals | Opportunities in stage `CUSTOMER` | Won stages configurable per model |
 | Closed-lost deals | None: there is no lost stage | Add `LOST` stage and `lostReason` (section 4.3) |

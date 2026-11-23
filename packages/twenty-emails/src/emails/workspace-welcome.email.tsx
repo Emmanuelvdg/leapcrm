@@ -4,7 +4,7 @@ import { CallToAction } from 'src/components/CallToAction';
 import { Link } from 'src/components/Link';
 import { MainText } from 'src/components/MainText';
 import { Title } from 'src/components/Title';
-import { WhatIsLeap } from 'src/components/WhatIsLeap';
+import { WhatIsYourJugaad } from 'src/components/WhatIsYourJugaad';
 import { createI18nInstance } from 'src/utils/i18n.utils';
 import { type APP_LOCALES } from 'twenty-shared/translations';
 
@@ -31,7 +31,7 @@ export const WorkspaceWelcomeEmail = ({
 
   return (
     <BaseEmail width={333} locale={locale}>
-      <Title value={i18n._('Welcome to Leap CRM')} />
+      <Title value={i18n._('Welcome to Your Jugaad CRM')} />
       <MainText>
         {userFirstName?.length > 1 ? (
           <Trans id="Hi {userFirstName}," values={{ userFirstName }} />
@@ -41,7 +41,7 @@ export const WorkspaceWelcomeEmail = ({
         <br />
         <br />
         <Trans
-          id="Welcome to Leap CRM! Your workspace, <0>{workspaceDisplayName}</0>, is ready to go."
+          id="Welcome to Your Jugaad CRM! Your workspace, <0>{workspaceDisplayName}</0>, is ready to go."
           values={{ workspaceDisplayName }}
           components={{ 0: <b /> }}
         />
@@ -77,7 +77,7 @@ export const WorkspaceWelcomeEmail = ({
       <CallToAction href={link} value={i18n._('Log in to your workspace')} />
       <br />
       <br />
-      <WhatIsLeap i18n={i18n} />
+      <WhatIsYourJugaad i18n={i18n} />
     </BaseEmail>
   );
 };

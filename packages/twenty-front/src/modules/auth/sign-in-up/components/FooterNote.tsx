@@ -71,7 +71,7 @@ export const FooterNote = ({
   if (!isOnAWorkspace) {
     return (
       <StyledCopyContainer>
-        <Trans>By using Leap CRM, you agree to the</Trans>{' '}
+        <Trans>By using Your Jugaad CRM, you agree to the</Trans>{' '}
         <a
           href="https://theleapcrm.com/legal/terms"
           target="_blank"

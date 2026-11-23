@@ -43,7 +43,7 @@ export const PasswordUpdateNotifyEmail = ({
         <br />
       </MainText>
       <br />
-      <CallToAction value={i18n._('Connect to Leap CRM')} href={link} />
+      <CallToAction value={i18n._('Connect to Your Jugaad CRM')} href={link} />
       <br />
       <br />
     </BaseEmail>

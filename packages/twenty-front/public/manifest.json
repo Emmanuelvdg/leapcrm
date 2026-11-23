@@ -1,9 +1,9 @@
 {
-  "short_name": "Leap",
-  "name": "Leap CRM",
+  "short_name": "Your Jugaad",
+  "name": "Your Jugaad CRM",
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#0037f6",
+  "theme_color": "#F16205",
   "background_color": "#ffffff",
   "icons": [
     {

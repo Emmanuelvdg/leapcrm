@@ -2,7 +2,7 @@
 
 Status: approved and implemented.
 
-Leap CRM can connect external services only as MCP servers today. This adds plain REST APIs as a second kind of integration, with GetLeads as the first worked example.
+Your Jugaad CRM can connect external services only as MCP servers today. This adds plain REST APIs as a second kind of integration, with GetLeads as the first worked example.
 
 ## How MCP integrations work today
 

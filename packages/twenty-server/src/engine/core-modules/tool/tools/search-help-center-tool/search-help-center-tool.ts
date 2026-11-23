@@ -13,7 +13,7 @@ import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twent
 @Injectable()
 export class SearchHelpCenterTool implements Tool {
   description =
-    'Search the LeapCRM documentation and help center to find information about features, setup, usage, and troubleshooting.';
+    'Search the Your Jugaad CRM documentation and help center to find information about features, setup, usage, and troubleshooting.';
   inputSchema = SearchHelpCenterInputZodSchema;
 
   constructor(

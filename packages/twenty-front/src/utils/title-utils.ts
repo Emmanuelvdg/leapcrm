@@ -57,6 +57,6 @@ export const getPageTitleFromPath = (pathname: string): string => {
     case SettingsPathPrefixes.General:
       return t`General - Settings`;
     default:
-      return 'Leap CRM';
+      return 'Your Jugaad CRM';
   }
 };

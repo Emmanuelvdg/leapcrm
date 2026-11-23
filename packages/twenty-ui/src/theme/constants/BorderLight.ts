@@ -15,8 +15,8 @@ export const BORDER_LIGHT = {
     transparentStrong: TRANSPARENT_COLORS_LIGHT.gray4,
     // Form control borders need 3:1 against their background; dividers keep
     // the lighter steps above.
-    control: 'color(display-p3 0.494 0.524 0.641)',
-    focus: 'color(display-p3 0.077 0.212 0.927)',
+    control: 'color(display-p3 0.528 0.556 0.589)',
+    focus: 'color(display-p3 0.878 0.420 0.173)',
   },
   ...BORDER_COMMON,
 };

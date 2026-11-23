@@ -75,7 +75,7 @@ describe('buildWorkspaceSetupPromptText', () => {
     expect(result).toContain('what you already know about their company');
     expect(result).toContain('When their job title is in your user context');
     expect(result).toContain('when it is missing, do not guess it');
-    expect(result).not.toContain('what they want to use LeapCRM for');
+    expect(result).not.toContain('what they want to use Your Jugaad CRM for');
     expect(result).not.toContain('You do not know what this company does yet');
   });
 
@@ -246,7 +246,7 @@ describe('buildWorkspaceSetupPromptText', () => {
       const result = buildPrompt({ companyEnrichment: enrichment });
 
       expect(result).toContain(
-        'you are an AI agent who will walk them through LeapCRM',
+        'you are an AI agent who will walk them through Your Jugaad CRM',
       );
     },
   );

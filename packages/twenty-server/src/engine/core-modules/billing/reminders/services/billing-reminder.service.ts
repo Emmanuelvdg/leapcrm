@@ -323,7 +323,7 @@ export class BillingReminderService {
     switch (reminder.type) {
       case 'trial-ending':
         return {
-          subject: msg`Your Leap CRM trial is ending soon`,
+          subject: msg`Your trial of Your Jugaad CRM is ending soon`,
           emailTemplate: BillingTrialEndingEmail({
             userName,
             workspaceDisplayName,
@@ -337,7 +337,7 @@ export class BillingReminderService {
         };
       case 'trial-converting':
         return {
-          subject: msg`A heads up before your Leap CRM trial ends`,
+          subject: msg`A heads up before your trial of Your Jugaad CRM ends`,
           emailTemplate: BillingTrialConvertingEmail({
             userName,
             workspaceDisplayName,
@@ -349,7 +349,7 @@ export class BillingReminderService {
         };
       case 'subscription-renewing':
         return {
-          subject: msg`Your Leap CRM plan renews soon`,
+          subject: msg`Your plan for Your Jugaad CRM renews soon`,
           emailTemplate: BillingSubscriptionRenewingEmail({
             userName,
             workspaceDisplayName,

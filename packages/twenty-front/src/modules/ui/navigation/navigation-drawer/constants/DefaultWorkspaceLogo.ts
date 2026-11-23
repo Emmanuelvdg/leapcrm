@@ -1,1 +1,1 @@
-export const DEFAULT_WORKSPACE_LOGO = '/images/branding/leap-logo.png';
+export const DEFAULT_WORKSPACE_LOGO = '/images/branding/your-jugaad-logo.png';

@@ -52,7 +52,7 @@ describe('title-utils', () => {
     expect(getPageTitleFromPath('/settings/general')).toBe(
       'General - Settings',
     );
-    expect(getPageTitleFromPath('/')).toBe('Leap CRM');
-    expect(getPageTitleFromPath('/random')).toBe('Leap CRM');
+    expect(getPageTitleFromPath('/')).toBe('Your Jugaad CRM');
+    expect(getPageTitleFromPath('/random')).toBe('Your Jugaad CRM');
   });
 });

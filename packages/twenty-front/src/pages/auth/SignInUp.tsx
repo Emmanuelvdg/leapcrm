@@ -116,7 +116,7 @@ export const SignInUp = () => {
     }
 
     if (isGlobalScope) {
-      return t`Welcome to Leap CRM`;
+      return t`Welcome to Your Jugaad CRM`;
     }
 
     const workspaceName = workspacePublicData?.displayName;

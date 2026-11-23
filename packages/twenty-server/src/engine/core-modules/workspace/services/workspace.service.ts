@@ -499,7 +499,7 @@ export class WorkspaceService {
     const text = await renderEmail(emailTemplate, { plainText: true });
 
     const i18n = this.i18nService.getI18nInstance(user.locale);
-    const subject = i18n._(msg`Welcome to Leap CRM`);
+    const subject = i18n._(msg`Welcome to Your Jugaad CRM`);
 
     await this.emailService.send({
       from: `${this.twentyConfigService.get('EMAIL_FROM_NAME')} <${this.twentyConfigService.get('EMAIL_FROM_ADDRESS')}>`,
@@ -550,7 +550,7 @@ export class WorkspaceService {
         createdBy: {
           source: FieldActorSource.SYSTEM,
           workspaceMemberId: null,
-          name: 'Leap',
+          name: 'Your Jugaad',
           context: {},
         },
       });

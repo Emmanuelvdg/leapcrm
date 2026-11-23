@@ -181,7 +181,7 @@ export const SETTINGS_COMPOSITE_FIELD_TYPE_CONFIGS = {
       {
         primaryLinkUrl: 'theleapcrm.com',
         primaryLinkLabel: '',
-        secondaryLinks: [{ url: 'theleapcrm.com', label: 'Leap CRM' }],
+        secondaryLinks: [{ url: 'theleapcrm.com', label: 'Your Jugaad CRM' }],
       },
       {
         primaryLinkUrl: 'github.com/your-org/your-repo',

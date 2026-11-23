@@ -161,7 +161,7 @@ export class McpClientService {
         params: {
           protocolVersion: MCP_PROTOCOL_VERSION,
           capabilities: {},
-          clientInfo: { name: 'LeapCRM', version: '1.0.0' },
+          clientInfo: { name: 'Your Jugaad CRM', version: '1.0.0' },
         },
       }),
     });

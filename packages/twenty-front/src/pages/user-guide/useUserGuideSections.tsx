@@ -77,10 +77,10 @@ export const useUserGuideSections = (): UserGuideSection[] => {
       navLabel: t`Overview`,
       content: (
         <>
-          <StyledH1>{t`Welcome to Leap CRM`}</StyledH1>
+          <StyledH1>{t`Welcome to Your Jugaad CRM`}</StyledH1>
           <StyledP>
             <Trans>
-              Leap CRM organizes your business around records: companies,
+              Your Jugaad CRM organizes your business around records: companies,
               people, opportunities, tasks and notes. Every record lives in
               one place and can be linked to the others — a person belongs to
               a company, an opportunity has a point of contact, a task or
@@ -569,7 +569,7 @@ export const useUserGuideSections = (): UserGuideSection[] => {
           <StyledP>
             <Trans>
               For developers, the <StyledCode>twenty-sdk</StyledCode> CLI
-              lets you build and publish custom applications on top of Leap
+              lets you build and publish custom applications on top of Your Jugaad
               CRM — custom front-end components, server-side logic
               functions, and new object definitions — beyond what the
               in-app data model editor covers.
@@ -588,10 +588,10 @@ export const useUserGuideSections = (): UserGuideSection[] => {
       navLabel: t`Connecting an LLM`,
       content: (
         <>
-          <StyledH1>{t`Connecting an LLM to Leap CRM`}</StyledH1>
+          <StyledH1>{t`Connecting an LLM to Your Jugaad CRM`}</StyledH1>
           <StyledP>
             <Trans>
-              Leap CRM's AI chat can do more than answer questions — it can
+              Your Jugaad CRM's AI chat can do more than answer questions — it can
               build and edit workflows for you, using the same underlying
               tools as the visual workflow builder. Setting this up takes
               three steps.

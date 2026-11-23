@@ -46,7 +46,7 @@ export const NotFound = () => {
 
   return (
     <>
-      <PageTitle title={t`Page Not Found | Leap CRM`} />
+      <PageTitle title={t`Page Not Found | Your Jugaad CRM`} />
       <StyledBackDrop>
         <AnimatedPlaceholderErrorContainer>
           <AnimatedPlaceholder type="error404" />

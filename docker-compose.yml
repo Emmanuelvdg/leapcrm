@@ -2,7 +2,7 @@ name: leapcrm
 
 # Self-contained production compose file for Hostinger's Docker Manager,
 # which only runs a docker-compose.yml at the repo root and has no concept
-# of layering a second override file. Builds LeapCRM's own image (not the
+# of layering a second override file. Builds Your Jugaad CRM's own image (not the
 # upstream twentycrm/twenty image) and includes Caddy with on-demand TLS
 # (see packages/twenty-docker/Caddyfile.prod.example for the Caddyfile this
 # expects at ./Caddyfile, and packages/twenty-server/src/engine/core-modules/

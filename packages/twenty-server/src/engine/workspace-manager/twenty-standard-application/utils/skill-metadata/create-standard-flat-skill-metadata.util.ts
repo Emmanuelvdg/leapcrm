@@ -760,7 +760,7 @@ plt.savefig('/home/user/output/analysis.png')
 print('Analysis complete!')
 \`\`\`
 
-## Calling LeapCRM Tools from Python (MCP Bridge)
+## Calling Your Jugaad CRM Tools from Python (MCP Bridge)
 
 **A \`twenty\` variable is already bound in your code's scope.** Do NOT write
 \`import twenty\` — there is no Python package by that name. The helper is an

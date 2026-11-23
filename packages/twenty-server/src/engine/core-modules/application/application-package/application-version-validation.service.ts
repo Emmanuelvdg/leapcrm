@@ -180,12 +180,12 @@ export class ApplicationVersionValidationService {
         ? {
             compatible: false,
             reason: 'WORKSPACE_INCOMPATIBLE',
-            message: `App requires LeapCRM server ${requiredVersionRange} but this workspace has only completed the upgrade to ${version}.`,
+            message: `App requires Your Jugaad CRM server ${requiredVersionRange} but this workspace has only completed the upgrade to ${version}.`,
           }
         : {
             compatible: false,
             reason: 'INSTANCE_INCOMPATIBLE',
-            message: `App requires LeapCRM server ${requiredVersionRange} but this server is ${version}.`,
+            message: `App requires Your Jugaad CRM server ${requiredVersionRange} but this server is ${version}.`,
           };
     }
 

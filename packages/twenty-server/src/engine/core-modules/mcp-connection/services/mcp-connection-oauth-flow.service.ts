@@ -84,7 +84,7 @@ export class McpConnectionOAuthFlowService {
           await this.mcpDynamicClientRegistrationService.register({
             registrationEndpoint: discovered.registrationEndpoint,
             redirectUri: callbackUrl,
-            clientName: `LeapCRM: ${connection.name}`,
+            clientName: `Your Jugaad CRM: ${connection.name}`,
           });
 
         await this.mcpConnectionService.persistDynamicClientRegistration(

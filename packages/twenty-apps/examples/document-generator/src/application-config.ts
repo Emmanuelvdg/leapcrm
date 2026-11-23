@@ -19,7 +19,7 @@ export default defineApplication({
     'public/gallery/03-documents.png',
     'public/gallery/04-generated-document.png',
   ],
-  author: 'Leap',
+  author: 'Your Jugaad',
   category: 'Productivity',
   websiteUrl:
     'https://docs.theleapcrm.com/developers/extend/apps/tutorials/document-generator/overview',

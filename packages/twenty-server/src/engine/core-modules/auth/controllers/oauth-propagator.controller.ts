@@ -60,7 +60,7 @@ export class OAuthPropagatorController {
 
     if (!isValidDomain) {
       throw new ForbiddenException(
-        `${redirectUrl.hostname} is not a valid LeapCRM domain`,
+        `${redirectUrl.hostname} is not a valid Your Jugaad CRM domain`,
       );
     }
 

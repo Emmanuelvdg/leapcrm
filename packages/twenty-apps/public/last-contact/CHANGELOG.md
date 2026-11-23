@@ -5,7 +5,7 @@
 - Count WhatsApp messages as contact. A sent or received WhatsApp message updates the person's last contact, last outbound or inbound, and last contact by (the sender, or the conversation's assignee for inbound messages), and rolls up to their company and opportunities. "Last contact item" can now point at the WhatsApp message.
 - Linking a WhatsApp conversation to a person counts its latest inbound and outbound messages.
 - The install backfill includes existing WhatsApp messages.
-- Requires the LeapCRM conversation objects.
+- Requires the Your Jugaad CRM conversation objects.
 
 ## 1.2.3
 

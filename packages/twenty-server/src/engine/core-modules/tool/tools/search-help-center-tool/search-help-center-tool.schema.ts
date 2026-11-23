@@ -3,7 +3,9 @@ import { z } from 'zod';
 export const SearchHelpCenterInputZodSchema = z.object({
   query: z
     .string()
-    .describe('The search query to find relevant help articles about LeapCRM'),
+    .describe(
+      'The search query to find relevant help articles about Your Jugaad CRM',
+    ),
 });
 
 export type SearchHelpCenterInput = z.infer<

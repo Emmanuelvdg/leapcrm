@@ -105,7 +105,7 @@ export class LoginPage {
       // Button not found - email field might already be visible (SSO-only or different auth flow)
     }
 
-    // Leap CRM opens the email form from a "Sign in" button instead.
+    // Your Jugaad CRM opens the email form from a "Sign in" button instead.
     if (!(await this.emailField.isVisible())) {
       await this.signInButton.click({ timeout: 30000 });
     }
@@ -118,7 +118,7 @@ export class LoginPage {
       return;
     }
 
-    // Leap CRM submits the email step with its "Sign in" button.
+    // Your Jugaad CRM submits the email step with its "Sign in" button.
     await this.signInButton.click();
   }
 

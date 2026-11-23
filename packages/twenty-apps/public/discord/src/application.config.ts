@@ -9,9 +9,9 @@ export default defineApplication({
   universalIdentifier: APPLICATION_UNIVERSAL_IDENTIFIER,
   displayName: 'Discord',
   description:
-    'Connect Discord to LeapCRM. Workflow steps post, update, and delete bot messages and add reactions using a Discord bot token shared across the deployment.',
+    'Connect Discord to Your Jugaad CRM. Workflow steps post, update, and delete bot messages and add reactions using a Discord bot token shared across the deployment.',
   logoUrl: 'public/twenty-discord.svg',
-  author: 'Leap',
+  author: 'Your Jugaad',
   category: 'Communication',
   websiteUrl:
     'https://docs.theleapcrm.com/developers/extend/apps/getting-started',

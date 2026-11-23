@@ -22,6 +22,7 @@ export const THEME_COMMON = {
   clickableElementBackgroundTransition: 'background 0.1s ease',
   lastLayerZIndex: 2147483647,
   buttons: {
-    secondaryTextColor: ACCENT_DARK.accent11,
+    // Pale orange so shortcut hints stay readable on the orange primary button.
+    secondaryTextColor: ACCENT_DARK.accent12,
   },
 };

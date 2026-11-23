@@ -16,7 +16,7 @@ import {
 
 export default defineApplication({
   universalIdentifier: APPLICATION_UNIVERSAL_IDENTIFIER,
-  author: 'Leap',
+  author: 'Your Jugaad',
   category: 'Productivity',
   displayName: APP_DISPLAY_NAME,
   description: APP_DESCRIPTION,

@@ -154,7 +154,9 @@ export const SignInUpWithCredentials = ({
       <StyledInitButtonGroup>
         <MainButton
           title={
-            isGlobalScope ? t`Create a Leap CRM account` : t`Join workspace`
+            isGlobalScope
+              ? t`Create a Your Jugaad CRM account`
+              : t`Join workspace`
           }
           type="button"
           variant="primary"

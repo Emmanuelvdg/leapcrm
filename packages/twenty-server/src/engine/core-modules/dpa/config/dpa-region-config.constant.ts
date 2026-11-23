@@ -4,16 +4,16 @@ import { type DpaRegionConfig } from 'src/engine/core-modules/dpa/types/dpa.type
 export const DEFAULT_DPA_REGION: DpaRegion = DpaRegion.EU;
 
 // TODO: placeholder pending legal review. PROCESSOR_ENTITY/DPO_NAME_AND_CONTACT
-// use the established LeapCRM brand/support address; the bracketed fields have
-// no factual basis yet (we don't know LeapCRM's actual entity type, registered
+// use the established Your Jugaad brand/support address; the bracketed fields have
+// no factual basis yet (we don't know Your Jugaad's actual entity type, registered
 // address, governing law, or EU affiliate status) and must not be treated as
 // real until legal confirms and replaces them.
 const DPA_COMMON_VALUES = {
-  PROCESSOR_ENTITY: 'LeapCRM',
+  PROCESSOR_ENTITY: 'Your Jugaad',
   PROCESSOR_LEGAL_FORM:
     '[TO BE CONFIRMED BY LEGAL — entity type and jurisdiction of incorporation]',
   PROCESSOR_ADDRESS: '[TO BE CONFIRMED BY LEGAL — registered address]',
-  EU_AFFILIATE_ENTITY: 'LeapCRM',
+  EU_AFFILIATE_ENTITY: 'Your Jugaad',
   EU_AFFILIATE_LEGAL_FORM:
     '[TO BE CONFIRMED BY LEGAL — EU affiliate legal form, if applicable]',
   EU_AFFILIATE_ADDRESS:

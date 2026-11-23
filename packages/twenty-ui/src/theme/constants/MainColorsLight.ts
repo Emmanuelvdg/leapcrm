@@ -20,8 +20,9 @@ export const MAIN_COLORS_LIGHT = {
   turquoise: RadixColors.tealP3.teal9,
   cyan: RadixColors.cyanP3.cyan9,
   sky: RadixColors.skyP3.sky9,
-  // Leap blue, so checkboxes, focused inputs and links match the brand.
-  blue: 'color(display-p3 0.077 0.212 0.927)',
+  // The theme's blue is its interactive colour (checkboxes, focus, links), so
+  // it carries the brand orange like links and focus rings on yourjugaad.com.
+  blue: 'color(display-p3 0.878 0.420 0.173)',
 
   iris: RadixColors.irisP3.iris9,
   violet: RadixColors.violetP3.violet9,

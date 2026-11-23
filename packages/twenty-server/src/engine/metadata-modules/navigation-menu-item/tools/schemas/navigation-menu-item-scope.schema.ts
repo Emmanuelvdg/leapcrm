@@ -5,5 +5,5 @@ export const navigationMenuItemScopeSchema = z
   .describe(
     "'user' creates a personal favorite, visible only to the current user. " +
       "'workspace' creates a shared navigation menu item visible to everyone (requires the LAYOUTS permission). " +
-      'LeapCRM has no separate Favorites concept — favorites are just navigation menu items with scope=user.',
+      'Your Jugaad CRM has no separate Favorites concept — favorites are just navigation menu items with scope=user.',
   );

@@ -22,8 +22,8 @@ export const SendEmailVerificationLinkEmail = ({
     ? i18n._('Confirm your new email address')
     : i18n._('Confirm your email address');
   const bodyId = isEmailUpdate
-    ? 'We received a request to change the email address associated with your Leap CRM account. Click below to confirm this change.'
-    : 'Thanks for registering for an account on Leap CRM! Before we get started, we just need to confirm that this is you. Click below to verify your email address.';
+    ? 'We received a request to change the email address associated with your account on Your Jugaad CRM. Click below to confirm this change.'
+    : 'Thanks for registering for an account on Your Jugaad CRM! Before we get started, we just need to confirm that this is you. Click below to verify your email address.';
   const ctaLabel = isEmailUpdate
     ? i18n._('Confirm new email')
     : i18n._('Verify Email');

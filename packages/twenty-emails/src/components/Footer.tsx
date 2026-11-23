@@ -20,7 +20,7 @@ export const Footer = ({ i18n }: FooterProps) => {
             <Link
               href="https://theleapcrm.com/"
               value={i18n._('Website')}
-              aria-label={i18n._("Visit Leap's website")}
+              aria-label={i18n._("Visit Your Jugaad's website")}
             />
           </ShadowText>
         </Column>
@@ -29,7 +29,7 @@ export const Footer = ({ i18n }: FooterProps) => {
             <Link
               href="https://docs.theleapcrm.com/getting-started/introduction"
               value={i18n._('User guide')}
-              aria-label={i18n._("Read Leap's user guide")}
+              aria-label={i18n._("Read Your Jugaad's user guide")}
             />
           </ShadowText>
         </Column>
@@ -38,12 +38,12 @@ export const Footer = ({ i18n }: FooterProps) => {
             <Link
               href="https://docs.theleapcrm.com/"
               value={i18n._('Developers')}
-              aria-label={i18n._("Visit Leap's developer documentation")}
+              aria-label={i18n._("Visit Your Jugaad's developer documentation")}
             />
           </ShadowText>
         </Column>
       </Row>
-      <ShadowText>{i18n._('The Leap CRM')}</ShadowText>
+      <ShadowText>{i18n._('Your Jugaad CRM')}</ShadowText>
     </Container>
   );
 };

@@ -30,7 +30,7 @@ export default {
       label: 'Self hosted instance url',
       type: 'string',
       placeholder: 'https://crm.custom-url.com',
-      helpText: 'Set this only if you self-host LeapCRM',
+      helpText: 'Set this only if you self-host Your Jugaad CRM',
     },
   ],
   connectionLabel: '{{data.currentWorkspace.displayName}}',

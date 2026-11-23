@@ -68,7 +68,7 @@ describe('WikidataDiscoveryProvider', () => {
     const query = new URLSearchParams(requestConfig.data).get('query') ?? '';
 
     expect(requestConfig.method).toBe('POST');
-    expect(requestConfig.headers['User-Agent']).toContain('LeapCRM');
+    expect(requestConfig.headers['User-Agent']).toContain('YourJugaadCRM');
     expect(query).toContain('mwapi:search "financial services"');
     expect(query).toContain('mwapi:search "bank"');
     expect(query).toContain('?country wdt:P297 "SG"');

@@ -1,8 +1,8 @@
 // Bump BOTH values whenever the rendered legal text changes — i.e. when the
 // verbatim template OR the resolved merge-field values (entities, addresses,
 // governing law, …) change — so a version always maps to one exact agreement.
-export const DPA_TEMPLATE_VERSION = '2026-11';
+export const DPA_TEMPLATE_VERSION = '2026-11-23';
 
 export const DPA_LAST_UPDATED_LABEL = 'November 2026';
 
-export const DPA_DOCUMENT_TITLE = 'LeapCRM Data Processing Agreement (DPA)';
+export const DPA_DOCUMENT_TITLE = 'Your Jugaad Data Processing Agreement (DPA)';

@@ -59,8 +59,8 @@ const StyledPrimaryLogo = styled.div`
   width: 100%;
 `;
 
-// The default wordmark is a PNG on a white ground, so it gets a white plate
-// with clear space rather than a visible white box on tinted or dark pages.
+// The default wordmark has navy lettering on a transparent ground, so it sits
+// on a white plate with clear space to stay legible on tinted or dark pages.
 const StyledLogoPlate = styled.div`
   background-color: ${themeCssVariables.brand.logoPlate};
   border-radius: ${themeCssVariables.border.radius.md};
@@ -79,7 +79,7 @@ export const Logo = ({
   to = AppPath.SignInUp,
 }: LogoProps) => {
   const { redirectToDefaultDomain } = useRedirectToDefaultDomain();
-  const defaultPrimaryLogoUrl = `${window.location.origin}/images/branding/leap-wordmark.png`;
+  const defaultPrimaryLogoUrl = `${window.location.origin}/images/branding/your-jugaad-wordmark.png`;
 
   const primaryLogoUrl = getImageAbsoluteURI({
     imageUrl: primaryLogo ?? defaultPrimaryLogoUrl,

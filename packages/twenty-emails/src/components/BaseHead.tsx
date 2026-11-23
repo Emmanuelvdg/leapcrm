@@ -5,7 +5,7 @@ import { canvasTheme } from 'src/common-style';
 export const BaseHead = () => {
   return (
     <Head>
-      <title>Leap CRM email</title>
+      <title>Your Jugaad CRM email</title>
       <Font
         fontFamily={canvasTheme.font.family}
         fallbackFontFamily="sans-serif"

@@ -15,7 +15,7 @@ const StyledTitle = styled.div<Pick<TitleProps, 'noMarginTop'>>`
     -apple-system,
     sans-serif;
   font-size: ${themeCssVariables.font.size.xxl};
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.02em;
   margin-bottom: ${themeCssVariables.spacing[4]};
   margin-top: ${({ noMarginTop }) =>

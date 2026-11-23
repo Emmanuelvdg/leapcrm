@@ -28,5 +28,5 @@ const StyledLogo = styled.img`
 `;
 
 export const OnboardingPulsingLogo = () => (
-  <StyledLogo src="/images/branding/leap-wordmark.png" alt="" />
+  <StyledLogo src="/images/branding/your-jugaad-wordmark.png" alt="" />
 );

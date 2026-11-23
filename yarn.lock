@@ -6436,6 +6436,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fontsource/manrope@npm:^5.2.8":
+  version: 5.3.0
+  resolution: "@fontsource/manrope@npm:5.3.0"
+  checksum: 10c0/e0e16f37b953ae5cb164d7dbea3c8a3ae30d0ede291c9f774ad5b3266abeb4b9b5efec11148afe90b6a9cd8e3d141f2e02d70a813dfb524f1d7577ab393f3528
+  languageName: node
+  linkType: hard
+
 "@fontsource/sora@npm:^5.2.5":
   version: 5.3.0
   resolution: "@fontsource/sora@npm:5.3.0"
@@ -50239,6 +50246,7 @@ __metadata:
     "@fontsource/dm-mono": "npm:^5.2.7"
     "@fontsource/fraunces": "npm:^5.3.0"
     "@fontsource/inter": "npm:^5.2.8"
+    "@fontsource/manrope": "npm:^5.2.8"
     "@fontsource/sora": "npm:^5.2.5"
     "@graphiql/plugin-explorer": "npm:^5.1.2"
     "@graphiql/react": "npm:^0.37.6"

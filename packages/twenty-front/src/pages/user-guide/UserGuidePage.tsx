@@ -108,7 +108,7 @@ export const UserGuidePage = () => {
 
   return (
     <>
-      <PageTitle title={t`User Guide | Leap CRM`} />
+      <PageTitle title={t`User Guide | Your Jugaad CRM`} />
       <StyledPage>
         <StyledNav>
           <StyledNavTitle>{t`User guide`}</StyledNavTitle>

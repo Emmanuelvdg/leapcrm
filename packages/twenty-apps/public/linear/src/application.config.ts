@@ -5,10 +5,10 @@ export default defineApplication({
   universalIdentifier: APPLICATION_UNIVERSAL_IDENTIFIER,
   displayName: 'Linear',
   description:
-    'Connect Linear to LeapCRM. Each workspace member connects their own Linear account; logic functions can then create issues and read team data on their behalf.',
+    'Connect Linear to Your Jugaad CRM. Each workspace member connects their own Linear account; logic functions can then create issues and read team data on their behalf.',
   logoUrl: 'public/linear-logomark.svg',
   applicationVariables: undefined,
-  author: 'Leap',
+  author: 'Your Jugaad',
   category: 'Product management',
   emailSupport: 'support@theleapcrm.com',
   screenshots: [

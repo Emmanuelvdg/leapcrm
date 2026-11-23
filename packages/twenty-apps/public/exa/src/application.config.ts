@@ -9,8 +9,8 @@ export default defineApplication({
   universalIdentifier: APPLICATION_UNIVERSAL_IDENTIFIER,
   displayName: 'Exa',
   description:
-    'Structured web search powered by Exa. Surfaces entity-aware results (companies, people, research, news) to LeapCRM AI agents.',
-  author: 'Leap',
+    'Structured web search powered by Exa. Surfaces entity-aware results (companies, people, research, news) to Your Jugaad CRM AI agents.',
+  author: 'Your Jugaad',
   category: 'Search',
   logoUrl: 'public/exa-logomark.svg',
   websiteUrl:

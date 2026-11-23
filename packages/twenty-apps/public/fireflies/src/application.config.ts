@@ -10,9 +10,9 @@ export default defineApplication({
   universalIdentifier: APPLICATION_UNIVERSAL_IDENTIFIER,
   displayName: 'Fireflies',
   description:
-    'Sync Fireflies call transcripts and AI summaries into CallRecording records linked to matching CalendarEvents in LeapCRM, and trigger sync / list / search of Fireflies calls from workflows and the AI chat.',
+    'Sync Fireflies call transcripts and AI summaries into CallRecording records linked to matching CalendarEvents in Your Jugaad CRM, and trigger sync / list / search of Fireflies calls from workflows and the AI chat.',
   logoUrl: 'public/twenty-fireflies.svg',
-  author: 'Leap',
+  author: 'Your Jugaad',
   category: 'Productivity',
   screenshots: [
     'public/gallery/workflow-builder-actions.png',

@@ -58,7 +58,7 @@ const StyledRightSide = styled(StyledSide)`
 `;
 
 const StyledLogo = styled.div`
-  background-image: url('/images/branding/leap-logo.png');
+  background-image: url('/images/branding/your-jugaad-logo.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;

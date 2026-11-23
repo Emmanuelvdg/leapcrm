@@ -22,18 +22,24 @@ const grayScale = {
   gray0: '#ffffff',
 };
 
-const colors = {
-  blue40: '#5e90f2',
+// Your Jugaad palette from yourjugaad.com.
+const brandColors = {
+  orange: '#F16205',
+  navy: '#1B2A3A',
+  mutedInk: '#4A5664',
+  lightInk: '#7A8794',
+  warmGround: '#F7F5F1',
+  line: '#E3E2E0',
 };
 
 export const canvasTheme = {
   font: {
     colors: {
-      highlighted: grayScale.gray60,
-      primary: grayScale.gray50,
-      tertiary: grayScale.gray35,
+      highlighted: brandColors.navy,
+      primary: brandColors.mutedInk,
+      tertiary: brandColors.lightInk,
       inverted: grayScale.gray0,
-      blue: colors.blue40,
+      blue: brandColors.orange,
     },
     family: 'Trebuchet MS', // Google Inter not working, we need to use a web safe font, see https://templates.mailchimp.com/design/typography/
     weight: {
@@ -49,12 +55,12 @@ export const canvasTheme = {
     lineHeight: '20px',
   },
   border: {
-    radius: { sm: '4px', md: '8px' },
-    color: { highlighted: grayScale.gray20 },
+    radius: { sm: '4px', md: '8px', pill: '999px' },
+    color: { highlighted: brandColors.line },
   },
   background: {
-    colors: { highlight: grayScale.gray15 },
-    button: grayScale.gray60,
+    colors: { highlight: brandColors.warmGround },
+    button: brandColors.orange,
     transparent: {
       medium: 'rgba(0, 0, 0, 0.08)',
       light: 'rgba(0, 0, 0, 0.04)',

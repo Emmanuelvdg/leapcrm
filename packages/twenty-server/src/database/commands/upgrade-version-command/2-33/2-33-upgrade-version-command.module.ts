@@ -17,6 +17,7 @@ import { AddIcpScoreViewsCommand } from 'src/database/commands/upgrade-version-c
 import { RebrandHelperAgentCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1794883064835-rebrand-helper-agent.command';
 import { AddInAppCallRecordingCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1795145009176-add-in-app-call-recording.command';
 import { AddCallRecordingSummaryTabCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1795318633924-add-call-recording-summary-tab.command';
+import { RebrandToYourJugaadCommand } from 'src/database/commands/upgrade-version-command/2-33/2-33-workspace-command-1795397164952-rebrand-to-your-jugaad.command';
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
 import { FieldMetadataEntity } from 'src/engine/metadata-modules/field-metadata/field-metadata.entity';
 import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache.module';
@@ -48,6 +49,7 @@ import { WorkspaceMigrationModule } from 'src/engine/workspace-manager/workspace
     RebrandHelperAgentCommand,
     AddInAppCallRecordingCommand,
     AddCallRecordingSummaryTabCommand,
+    RebrandToYourJugaadCommand,
   ],
 })
 export class V2_33_UpgradeVersionCommandModule {}

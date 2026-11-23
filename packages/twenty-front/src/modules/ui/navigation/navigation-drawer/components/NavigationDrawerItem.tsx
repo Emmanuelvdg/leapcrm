@@ -83,7 +83,7 @@ type StyledItemProps = Pick<
 const StyledItem = styled.button<StyledItemProps>`
   align-items: center;
   background: ${({ active }) =>
-    active ? themeCssVariables.brand.leapBlue : 'transparent'};
+    active ? themeCssVariables.brand.primary : 'transparent'};
   border: ${({ isSelectedInEditMode }) =>
     isSelectedInEditMode
       ? `1px solid ${themeCssVariables.color.blue}`
@@ -95,7 +95,7 @@ const StyledItem = styled.button<StyledItemProps>`
       return themeCssVariables.font.color.tertiary;
     }
     if (active === true) {
-      return themeCssVariables.brand.onBlue;
+      return themeCssVariables.brand.onPrimary;
     }
     if (isSoon) {
       return themeCssVariables.font.color.light;
@@ -129,11 +129,11 @@ const StyledItem = styled.button<StyledItemProps>`
   &:hover {
     background: ${({ active }) =>
       active
-        ? themeCssVariables.brand.leapBlue
+        ? themeCssVariables.brand.primary
         : themeCssVariables.background.transparent.light};
     color: ${({ active, variant }) =>
       active
-        ? themeCssVariables.brand.onBlue
+        ? themeCssVariables.brand.onPrimary
         : variant === 'tertiary'
           ? themeCssVariables.font.color.tertiary
           : themeCssVariables.font.color.primary};

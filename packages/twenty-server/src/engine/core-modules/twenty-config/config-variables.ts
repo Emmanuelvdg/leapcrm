@@ -531,7 +531,7 @@ export class ConfigVariables {
     description: 'Name used in the From header for outgoing emails',
     type: ConfigVariableType.STRING,
   })
-  EMAIL_FROM_NAME = 'Felix from Leap CRM';
+  EMAIL_FROM_NAME = 'Felix from Your Jugaad';
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.EMAIL_SETTINGS,
@@ -1215,7 +1215,7 @@ export class ConfigVariables {
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description:
-      'Meta App ID for the WhatsApp Business Cloud API integration. One Meta app per LeapCRM deployment; per-channel phoneNumberId/accessToken/wabaId live on the WhatsappChannel entity instead.',
+      'Meta App ID for the WhatsApp Business Cloud API integration. One Meta app per Your Jugaad CRM deployment; per-channel phoneNumberId/accessToken/wabaId live on the WhatsappChannel entity instead.',
     type: ConfigVariableType.STRING,
   })
   @IsOptional()
@@ -2234,7 +2234,7 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.SERVER_CONFIG,
-    description: 'LeapCRM server version',
+    description: 'Your Jugaad CRM server version',
     type: ConfigVariableType.STRING,
     isEnvOnly: true,
     isHiddenInAdminPanel: true,

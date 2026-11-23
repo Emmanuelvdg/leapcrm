@@ -66,7 +66,7 @@ export const AppConnectionHeader = ({
   return (
     <StyledContainer>
       <StyledAppLogoTile>
-        <StyledAppLogo src={'/images/branding/leap-logo.png'} alt="" />
+        <StyledAppLogo src={'/images/branding/your-jugaad-logo.png'} alt="" />
       </StyledAppLogoTile>
       <StyledLinkIconContainer aria-hidden>
         <IconRefresh size={theme.icon.size.md} stroke={theme.icon.stroke.lg} />

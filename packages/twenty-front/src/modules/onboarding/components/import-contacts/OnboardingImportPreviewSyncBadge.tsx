@@ -46,7 +46,7 @@ export const OnboardingImportPreviewSyncBadge = () => {
         size={theme.icon.size.md}
         color={themeCssVariables.font.color.tertiary}
       />
-      <StyledTwentyLogo src="/images/branding/leap-logo.png" alt="" />
+      <StyledTwentyLogo src="/images/branding/your-jugaad-logo.png" alt="" />
     </StyledBadge>
   );
 };

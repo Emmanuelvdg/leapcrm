@@ -7,10 +7,10 @@ const logoStyle = {
 export const Logo = () => {
   return (
     <Img
-      src="https://leapcrm.tech/images/branding/leap-logo.png"
-      alt="Leap CRM logo"
-      width="40"
-      height="40"
+      src="https://leapcrm.tech/images/branding/your-jugaad-wordmark.png"
+      alt="Your Jugaad CRM logo"
+      width="135"
+      height="32"
       style={logoStyle}
     />
   );

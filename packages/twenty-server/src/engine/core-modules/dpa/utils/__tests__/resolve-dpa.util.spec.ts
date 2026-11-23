@@ -223,13 +223,14 @@ describe('resolveDpa', () => {
     expect(text).toContain(DPO_NAME_AND_CONTACT);
   });
 
-  it('names LeapCRM as the contact and never the upstream project', () => {
+  it('names Your Jugaad as the contact and never the upstream project', () => {
     for (const region of [DpaRegion.EU, DpaRegion.US]) {
       for (const mode of ['preview', 'signed'] as const) {
         const text = resolvedText(region, mode);
 
         expect(text).toContain('privacy@theleapcrm.com');
         expect(text).not.toMatch(/twenty/i);
+        expect(text).not.toMatch(/Leap/);
       }
     }
   });

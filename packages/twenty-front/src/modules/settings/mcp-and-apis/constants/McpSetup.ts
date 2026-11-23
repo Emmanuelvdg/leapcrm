@@ -10,7 +10,7 @@ export const MCP_SETUP = {
   },
   server: {
     name: 'twenty',
-    displayName: 'LeapCRM',
+    displayName: 'Your Jugaad CRM',
   },
   clientDocsUrls: {
     augment: 'https://docs.augmentcode.com/setup-augment/mcp',

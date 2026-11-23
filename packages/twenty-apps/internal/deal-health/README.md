@@ -42,7 +42,7 @@ Run Yarn through Corepack (`corepack yarn ...`) so the version pinned in `packag
 ```bash
 corepack yarn install
 corepack yarn test
-corepack yarn twenty remote:add     # point at your LeapCRM server with an API key
+corepack yarn twenty remote:add     # point at a Your Jugaad CRM server with an API key
 corepack yarn twenty dev
 ```
 
