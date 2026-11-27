@@ -60,4 +60,12 @@ Always pass the remote with `-r`: the default remote may be production.
 
 - Only the contact's primary email is matched; an address stored in their additional emails is not.
 - Phone matching compares the full international number, so a number saved without its country code only matches when it is at least 8 digits long.
-- Rate limiting relies on the visitor IP forwarded by the reverse proxy (`X-Forwarded-For`, `X-Real-IP` or `CF-Connecting-IP`). Without one, the per-visitor limit does not apply.
+- Rate limiting relies on the visitor IP forwarded by the reverse proxy. `X-Forwarded-For` is read first because proxies such as Caddy overwrite it, then `CF-Connecting-IP` and `X-Real-IP`. Without any of them, the per-visitor limit does not apply.
+- The embed snippet only works if the reverse proxy lets the form be framed. A proxy that adds `X-Frame-Options: DENY` to every response must skip `/s/lead-capture/forms/*`, for example in Caddy:
+
+  ```
+  header /s/lead-capture/forms/* {
+  	-X-Frame-Options
+  	-Content-Security-Policy-Report-Only
+  }
+  ```

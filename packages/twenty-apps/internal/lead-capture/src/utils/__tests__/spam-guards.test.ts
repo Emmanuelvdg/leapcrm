@@ -104,6 +104,13 @@ describe('visitor identification', () => {
     );
     expect(
       getVisitorIp({
+        'x-forwarded-for': '203.0.113.7',
+        'x-real-ip': '1.1.1.1',
+        'cf-connecting-ip': '198.51.100.2',
+      }),
+    ).toBe('203.0.113.7');
+    expect(
+      getVisitorIp({
         'cf-connecting-ip': '198.51.100.2',
         'x-real-ip': '1.1.1.1',
       }),

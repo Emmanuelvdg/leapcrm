@@ -75,12 +75,15 @@ export const isSubmittedTooFast = ({
 }): boolean =>
   renderedAtMs !== null && nowMs - renderedAtMs < MIN_FILL_SECONDS * 1000;
 
+// The production proxy (Caddy) replaces X-Forwarded-For with the real client
+// address but passes X-Real-IP and CF-Connecting-IP through untouched, so a
+// spammer could set those to dodge the rate limit.
 export const getVisitorIp = (
   headers: Record<string, string | undefined>,
 ): string | null =>
+  headers['x-forwarded-for']?.split(',')[0]?.trim() ||
   headers['cf-connecting-ip']?.trim() ||
   headers['x-real-ip']?.trim() ||
-  headers['x-forwarded-for']?.split(',')[0]?.trim() ||
   null;
 
 // Only a salted hash is kept, enough to count repeat posts from one visitor
