@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { Button } from 'twenty-ui/input';
+import { isDefined } from 'twenty-shared/utils';
 import { themeCssVariables } from 'twenty-ui/theme-constants';
 
 import { useSendWhatsappMessage } from '@/activities/conversations/hooks/useSendWhatsappMessage';
+import { useDestroyOneRecord } from '@/object-record/hooks/useDestroyOneRecord';
 
 const StyledComposerContainer = styled.div`
   align-items: flex-end;
@@ -36,16 +38,23 @@ const StyledTextArea = styled.textarea`
 type ConversationComposerProps = {
   conversationId?: string;
   personId?: string;
+  draftMessageId?: string;
+  initialBody?: string;
   onMessageSent: (conversationId: string) => void;
 };
 
 export const ConversationComposer = ({
   conversationId,
   personId,
+  draftMessageId,
+  initialBody,
   onMessageSent,
 }: ConversationComposerProps) => {
-  const [body, setBody] = useState('');
+  const [body, setBody] = useState(initialBody ?? '');
   const { sendWhatsappMessage, loading } = useSendWhatsappMessage();
+  const { destroyOneRecord: destroyConversationMessage } = useDestroyOneRecord({
+    objectNameSingular: 'conversationMessage',
+  });
 
   const canSend = body.trim().length > 0 && !loading;
 
@@ -62,6 +71,11 @@ export const ConversationComposer = ({
 
     if (result.success) {
       setBody('');
+
+      // The draft has become a sent message, so it must not reload next time.
+      if (isDefined(draftMessageId)) {
+        await destroyConversationMessage(draftMessageId);
+      }
 
       if (result.conversationId) {
         onMessageSent(result.conversationId);
@@ -83,6 +97,8 @@ export const ConversationComposer = ({
         onChange={(event) => setBody(event.target.value)}
         onKeyDown={handleKeyDown}
         placeholder={t`Write a WhatsApp message…`}
+        // A prepared draft is focused so it scrolls into view, ready to send.
+        autoFocus={isDefined(draftMessageId)}
       />
       <Button
         title={t`Send`}

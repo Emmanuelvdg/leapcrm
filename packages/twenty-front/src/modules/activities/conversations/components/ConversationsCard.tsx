@@ -8,6 +8,7 @@ import { SkeletonLoader } from '@/activities/components/SkeletonLoader';
 import { ConversationComposer } from '@/activities/conversations/components/ConversationComposer';
 import { ConversationRow } from '@/activities/conversations/components/ConversationRow';
 import { ConversationThread } from '@/activities/conversations/components/ConversationThread';
+import { type ConversationMessageRecord } from '@/activities/conversations/types/ConversationMessageRecord';
 import { type ConversationRecord } from '@/activities/conversations/types/ConversationRecord';
 import { useFindManyRecords } from '@/object-record/hooks/useFindManyRecords';
 import { useTargetRecord } from '@/ui/layout/contexts/useTargetRecord';
@@ -33,6 +34,8 @@ export const ConversationsCard = () => {
   const [selectedConversationId, setSelectedConversationId] = useState<
     string | null
   >(null);
+  const [hasLeftDraftConversation, setHasLeftDraftConversation] =
+    useState(false);
 
   const { records: conversations, loading } =
     useFindManyRecords<ConversationRecord>({
@@ -49,12 +52,38 @@ export const ConversationsCard = () => {
       },
     });
 
-  if (selectedConversationId) {
+  const conversationIds = conversations.map((conversation) => conversation.id);
+
+  const { records: pendingDrafts } =
+    useFindManyRecords<ConversationMessageRecord>({
+      objectNameSingular: 'conversationMessage',
+      filter: {
+        conversationId: { in: conversationIds },
+        isDraft: { eq: true },
+      },
+      orderBy: [{ updatedAt: 'DescNullsLast' }],
+      limit: 1,
+      skip: conversationIds.length === 0,
+      recordGqlFields: { id: true, conversationId: true },
+    });
+
+  // A pending draft (for example one prepared by Deal coach) opens its
+  // conversation directly, until the user goes back to the list.
+  const openConversationId =
+    selectedConversationId ??
+    (hasLeftDraftConversation
+      ? null
+      : (pendingDrafts[0]?.conversationId ?? null));
+
+  if (openConversationId) {
     return (
       <StyledContainer>
         <ConversationThread
-          conversationId={selectedConversationId}
-          onBack={() => setSelectedConversationId(null)}
+          conversationId={openConversationId}
+          onBack={() => {
+            setSelectedConversationId(null);
+            setHasLeftDraftConversation(true);
+          }}
         />
       </StyledContainer>
     );

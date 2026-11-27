@@ -7,4 +7,7 @@ export type ConversationMessageRecord = ObjectRecord & {
   receivedAt: string | null;
   deliveryStatus: string | null;
   conversationId: string;
+  isDraft?: boolean | null;
+  createdAt?: string;
+  updatedAt?: string;
 };

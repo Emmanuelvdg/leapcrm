@@ -38,6 +38,9 @@ const StyledMessageList = styled.div`
   padding: ${themeCssVariables.spacing[2]} ${themeCssVariables.spacing[4]};
 `;
 
+const getMessageTimestamp = (message: ConversationMessageRecord): string =>
+  message.sentAt ?? message.receivedAt ?? message.createdAt ?? '';
+
 type ConversationThreadProps = {
   conversationId: string;
   onBack: () => void;
@@ -64,8 +67,24 @@ export const ConversationThread = ({
         receivedAt: true,
         deliveryStatus: true,
         conversationId: true,
+        isDraft: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
+
+  // Incoming messages only carry receivedAt and outgoing ones only sentAt, so
+  // ordering by either column alone groups all of one direction first.
+  const sentMessages = messages
+    .filter((message) => message.isDraft !== true)
+    .sort((first, second) =>
+      getMessageTimestamp(first).localeCompare(getMessageTimestamp(second)),
+    );
+  const latestDraft = messages
+    .filter((message) => message.isDraft === true)
+    .sort((first, second) =>
+      (second.updatedAt ?? '').localeCompare(first.updatedAt ?? ''),
+    )[0];
 
   return (
     <StyledContainer>
@@ -77,13 +96,17 @@ export const ConversationThread = ({
         {loading ? (
           <SkeletonLoader />
         ) : (
-          messages.map((message) => (
+          sentMessages.map((message) => (
             <ConversationMessageBubble key={message.id} message={message} />
           ))
         )}
       </StyledMessageList>
       <ConversationComposer
+        // Remounting on a new draft loads its text into the composer.
+        key={latestDraft?.id ?? 'no-draft'}
         conversationId={conversationId}
+        draftMessageId={latestDraft?.id}
+        initialBody={latestDraft?.body ?? undefined}
         onMessageSent={handleMessageSent}
       />
     </StyledContainer>

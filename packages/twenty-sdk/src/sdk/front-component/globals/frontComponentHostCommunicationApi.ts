@@ -35,6 +35,7 @@ export type OpenSidePanelPageParams =
       threadId?: string;
       defaultTo?: string;
       defaultSubject?: string;
+      defaultBody?: string;
       defaultInReplyTo?: string;
       pageTitle?: string;
       pageIcon?: string;

@@ -222,6 +222,12 @@ export const useFrontComponentExecutionContext = ({
           threadId: params.threadId,
           defaultTo: params.defaultTo,
           defaultSubject: params.defaultSubject,
+          // Read defensively: apps built against an SDK release without
+          // defaultBody still compile, and the host accepts it from newer ones.
+          defaultBody:
+            'defaultBody' in params && typeof params.defaultBody === 'string'
+              ? params.defaultBody
+              : undefined,
           defaultInReplyTo: params.defaultInReplyTo,
           pageTitle: params.pageTitle,
           pageIcon: isDefined(params.pageIcon)

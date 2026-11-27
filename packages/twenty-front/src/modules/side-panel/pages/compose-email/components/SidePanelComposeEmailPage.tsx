@@ -6,6 +6,7 @@ import { SIDE_PANEL_FOCUS_ID } from '@/side-panel/constants/SidePanelFocusId';
 import { useSidePanelHistory } from '@/side-panel/hooks/useSidePanelHistory';
 import { composeEmailConnectedAccountIdComponentState } from '@/side-panel/pages/compose-email/states/composeEmailConnectedAccountIdComponentState';
 import { composeEmailContextRecordComponentState } from '@/side-panel/pages/compose-email/states/composeEmailContextRecordComponentState';
+import { composeEmailDefaultBodyComponentState } from '@/side-panel/pages/compose-email/states/composeEmailDefaultBodyComponentState';
 import { composeEmailDefaultInReplyToComponentState } from '@/side-panel/pages/compose-email/states/composeEmailDefaultInReplyToComponentState';
 import { composeEmailDefaultSubjectComponentState } from '@/side-panel/pages/compose-email/states/composeEmailDefaultSubjectComponentState';
 import { composeEmailDefaultToComponentState } from '@/side-panel/pages/compose-email/states/composeEmailDefaultToComponentState';
@@ -43,6 +44,9 @@ export const SidePanelComposeEmailPage = () => {
   const composeEmailDefaultSubject = useAtomComponentStateValue(
     composeEmailDefaultSubjectComponentState,
   );
+  const composeEmailDefaultBody = useAtomComponentStateValue(
+    composeEmailDefaultBodyComponentState,
+  );
   const composeEmailDefaultInReplyTo = useAtomComponentStateValue(
     composeEmailDefaultInReplyToComponentState,
   );
@@ -56,6 +60,7 @@ export const SidePanelComposeEmailPage = () => {
     connectedAccountId: composeEmailConnectedAccountId ?? '',
     defaultTo: composeEmailDefaultTo ?? '',
     defaultSubject: composeEmailDefaultSubject ?? '',
+    defaultBody: composeEmailDefaultBody ?? '',
     defaultInReplyTo: composeEmailDefaultInReplyTo ?? undefined,
     onSent: goBackFromSidePanel,
   });
