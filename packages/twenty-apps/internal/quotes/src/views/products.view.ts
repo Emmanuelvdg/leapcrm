@@ -1,0 +1,78 @@
+import { defineView, ViewType } from 'twenty-sdk/define';
+
+import {
+  PRODUCT_IS_ACTIVE_FIELD_UNIVERSAL_IDENTIFIER,
+  PRODUCT_LINE_FIELD_UNIVERSAL_IDENTIFIER,
+  PRODUCT_NAME_FIELD_UNIVERSAL_IDENTIFIER,
+  PRODUCT_OBJECT_UNIVERSAL_IDENTIFIER,
+  PRODUCT_SKU_FIELD_UNIVERSAL_IDENTIFIER,
+  PRODUCT_TAX_RATE_FIELD_UNIVERSAL_IDENTIFIER,
+  PRODUCT_UNIT_PRICE_FIELD_UNIVERSAL_IDENTIFIER,
+  PRODUCTS_VIEW_ACTIVE_UNIVERSAL_IDENTIFIER,
+  PRODUCTS_VIEW_LINE_UNIVERSAL_IDENTIFIER,
+  PRODUCTS_VIEW_NAME_UNIVERSAL_IDENTIFIER,
+  PRODUCTS_VIEW_PRICE_UNIVERSAL_IDENTIFIER,
+  PRODUCTS_VIEW_SKU_UNIVERSAL_IDENTIFIER,
+  PRODUCTS_VIEW_TAX_RATE_UNIVERSAL_IDENTIFIER,
+  PRODUCTS_VIEW_UNIVERSAL_IDENTIFIER,
+} from 'src/constants/universal-identifiers';
+
+const column = (
+  universalIdentifier: string,
+  fieldMetadataUniversalIdentifier: string,
+  position: number,
+  size: number,
+) => ({
+  universalIdentifier,
+  fieldMetadataUniversalIdentifier,
+  position,
+  isVisible: true,
+  size,
+});
+
+export default defineView({
+  universalIdentifier: PRODUCTS_VIEW_UNIVERSAL_IDENTIFIER,
+  name: 'Catalogue',
+  objectUniversalIdentifier: PRODUCT_OBJECT_UNIVERSAL_IDENTIFIER,
+  type: ViewType.TABLE,
+  icon: 'IconPackage',
+  position: 0,
+  fields: [
+    column(
+      PRODUCTS_VIEW_NAME_UNIVERSAL_IDENTIFIER,
+      PRODUCT_NAME_FIELD_UNIVERSAL_IDENTIFIER,
+      0,
+      220,
+    ),
+    column(
+      PRODUCTS_VIEW_SKU_UNIVERSAL_IDENTIFIER,
+      PRODUCT_SKU_FIELD_UNIVERSAL_IDENTIFIER,
+      1,
+      120,
+    ),
+    column(
+      PRODUCTS_VIEW_LINE_UNIVERSAL_IDENTIFIER,
+      PRODUCT_LINE_FIELD_UNIVERSAL_IDENTIFIER,
+      2,
+      150,
+    ),
+    column(
+      PRODUCTS_VIEW_PRICE_UNIVERSAL_IDENTIFIER,
+      PRODUCT_UNIT_PRICE_FIELD_UNIVERSAL_IDENTIFIER,
+      3,
+      140,
+    ),
+    column(
+      PRODUCTS_VIEW_TAX_RATE_UNIVERSAL_IDENTIFIER,
+      PRODUCT_TAX_RATE_FIELD_UNIVERSAL_IDENTIFIER,
+      4,
+      120,
+    ),
+    column(
+      PRODUCTS_VIEW_ACTIVE_UNIVERSAL_IDENTIFIER,
+      PRODUCT_IS_ACTIVE_FIELD_UNIVERSAL_IDENTIFIER,
+      5,
+      100,
+    ),
+  ],
+});
