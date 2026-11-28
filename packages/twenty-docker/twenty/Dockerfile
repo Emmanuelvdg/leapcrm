@@ -67,8 +67,10 @@ COPY ./packages/twenty-ui /app/packages/twenty-ui
 COPY ./packages/twenty-shared /app/packages/twenty-shared
 COPY ./packages/twenty-sdk /app/packages/twenty-sdk
 COPY ./packages/twenty-client-sdk /app/packages/twenty-client-sdk
-RUN npx nx run twenty-front:lingui:extract && \
-    npx nx run twenty-front:lingui:compile
+# One Nx task at a time and no Lingui worker threads: on the 8 GB production
+# VPS the parallel default ran out of memory and the kernel killed the build.
+RUN NX_PARALLEL=1 npx nx run twenty-front:lingui:extract --workers=1 && \
+    NX_PARALLEL=1 npx nx run twenty-front:lingui:compile
 # To skip the memory-intensive frontend build, pre-build on the host:
 #   npx nx build twenty-front
 # The check below will use packages/twenty-front/build/ if it already exists.
